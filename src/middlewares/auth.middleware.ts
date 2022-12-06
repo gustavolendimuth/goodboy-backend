@@ -1,0 +1,17 @@
+import { NextFunction, Request, Response } from 'express';
+import { IError } from '../interfaces';
+import { getUser } from '../services/users.service';
+import * as jwtUtils from '../utils/jwtUtils';
+
+export default async (req: Request, _res:Response, next: NextFunction) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    const err:IError = new Error('Token not found');
+    err.statusCode = 401;
+    throw err;
+  }
+  req.body.login = jwtUtils.validateToken(authorization);
+  await getUser(req.body.login.data);
+
+  next();
+};
