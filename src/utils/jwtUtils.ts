@@ -3,9 +3,11 @@ import jwt from 'jsonwebtoken';
 import { IError, IUser } from '../interfaces';
 
 export const createToken = (data:IUser):string => {
-  const jwtSecret = 'secret';
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) throw new Error('JWT_SECRET not found');
+  
   const token = jwt.sign({ data }, jwtSecret, {
-    // expiresIn: '15d',
+    expiresIn: '15d',
     algorithm: 'HS256',
   });
 
@@ -14,12 +16,14 @@ export const createToken = (data:IUser):string => {
 
 export const validateToken = (token: string) => {
   try {
-    const jwtSecret = 'secret';
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) throw new Error('JWT_SECRET not found');
+    
     const response = jwt.verify(token, jwtSecret);
     
     return response;
   } catch (e) {
-    const err: IError = new Error('Invalid token');
+    const err: IError = new Error('Token inválido');
     err.statusCode = 401;
     throw err;
   }

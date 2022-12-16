@@ -1,16 +1,18 @@
-import { Model, STRING, UUID } from "sequelize";
+import { Model, STRING, UUIDV4, BOOLEAN } from "sequelize";
 import db from './';
 
 class UserModel extends Model {
-  declare id: string
-  declare email: string
-  declare name: string
-  declare password: string
+  declare id: string;
+  declare email: string;
+  declare name: string;
+  declare magicLink: string;
+  declare magicLinkExpired: boolean;
+  declare role: string;
 }
 
 UserModel.init({
   id: {
-    type: UUID,
+    type: UUIDV4,
     allowNull: false,
     primaryKey: true,
   },
@@ -19,8 +21,21 @@ UserModel.init({
     allowNull: false,
   },
   email: STRING,
-  password: STRING
-}, 
+  magicLink: {
+    type: UUIDV4,
+    allowNull: true,
+  },
+  magicLinkExpired: {
+    type: BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  role: {
+    type: STRING,
+    allowNull: false,
+    defaultValue: 'user'
+  }
+},
 {
   underscored: true,
   modelName: 'users',

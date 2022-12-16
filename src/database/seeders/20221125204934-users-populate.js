@@ -8,7 +8,7 @@ module.exports = {
       id: 'd45735b1-27a9-49d9-9fd3-476cec88bd9e',
       email: 'gustavolendimuth@gmail.com',
       name: 'Gustavo Lendimuth',
-      password: '10203040'
+      role: 'admin',
     }], {});
   },
 

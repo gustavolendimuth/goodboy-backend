@@ -1,6 +1,5 @@
 import { ValidationError } from 'joi';
 import { JwtPayload } from 'jsonwebtoken';
-import ItemsModel from '../database/models/ItemsModel';
 import UserModel from '../database/models/UserModel';
 
 export interface IProduct {
@@ -14,8 +13,8 @@ export interface IProduct {
 export interface IUser {
   id?: string,
   email: string,
-  name?: string,
-  password?: string
+  name: string,
+  role?: string
 }
 
 export interface IError extends Error {
@@ -47,7 +46,8 @@ export interface IOrders {
 
 export interface ILogin {
   email: string,
-  password: string
+  magicLink: string,
+  token: string
 }
 
 export interface IGetUser {
@@ -85,9 +85,7 @@ export interface ILoginPayload extends UserModel {
   token: string,
   data: IUser
 }
-export interface UserPayload extends UserModel {
-
-}
+export type UserPayload = UserModel
 
 export interface IProcessPayment {
   status_detail: string,

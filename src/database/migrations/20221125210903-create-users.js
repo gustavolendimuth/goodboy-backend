@@ -19,9 +19,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password: {
+      magicLink: {
+        type: Sequelize.UUID,
+        allowNull: true,
+        field: 'magic_link'
+      },
+      magicLinkExpired: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        field: 'magic_link_expired'
+      },
+      role: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false,
+        defaultValue: 'user'
       },
       createdAt: {
         type: "TIMESTAMP",

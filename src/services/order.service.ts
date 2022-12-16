@@ -20,7 +20,7 @@ export const createOrder = async (body:IOrder) => {
   return response;
 }
 
-export const getOrder = async (body:IOrder, id:number) => {
+export const getOrder = async (body:IOrder, id:string) => {
   const response = await OrderModel.findOne({
     where: {
       [Op.and]: [
@@ -39,7 +39,7 @@ export const getOrder = async (body:IOrder, id:number) => {
   return response;
 }
 
-export const getAllOrders = async (body: IOrder) => {
+export const getOrders = async (body: IOrder) => {
   const response = await OrderModel.findAll({
     attributes: { exclude: ['userId'] },
     where: { userId: body.login?.data.id },
