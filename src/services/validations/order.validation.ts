@@ -7,7 +7,7 @@ const schema = Joi.object({
   payedAmount: Joi.number().min(1).required(),
   paymentMethod: Joi.string().required(),
   paymentId: Joi.number().required(),
-  feeAmount: Joi.number().min(1).required(),
+  feeAmount: Joi.number().required(),
   userId: Joi.string().length(36),
   user: Joi.object({
     id: Joi.string().length(36),

@@ -36,9 +36,6 @@ export const processPayment = async (body:never) => {
     // const email = data.payer.email;
     const name = email.split('@')[0];
 
-    console.log(email);
-    
-
     const user:IUser = { id: uuidv4(), email, name };
     const order:IOrder = {
       id: uuidv4(),
@@ -61,7 +58,7 @@ export const processPayment = async (body:never) => {
 
     return data;
   }).catch((error) => {
-    console.log(error);
+    // console.log(error);
     throw error;
   });
 }
