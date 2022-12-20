@@ -11,7 +11,7 @@ import processPaymentRouter from './routes/process.payment.route';
 import dotenv from 'dotenv';
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: [process.env.FRONTEND_URL ?? 'http://localhost:3000'],
   optionsSuccessStatus: 200
 }
 
