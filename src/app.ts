@@ -6,7 +6,7 @@ import userRouter from './routes/user.router';
 // import authMiddleware from './middlewares/auth.middleware';
 import orderRouter from './routes/order.route';
 import ordersRouter from './routes/orders.route';
-// import cors from 'cors';
+import cors from 'cors';
 import processPaymentRouter from './routes/process.payment.route';
 
 // const corsOptions = {
@@ -16,7 +16,7 @@ import processPaymentRouter from './routes/process.payment.route';
 
 
 const app = express();
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => res.send('Hello World!'));
