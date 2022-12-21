@@ -12,14 +12,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  optionsSuccessStatus: 200
-}
+// const corsOptions = {
+//   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+//   optionsSuccessStatus: 200
+// }
 
 
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 app.use('/login', loginRouter);
