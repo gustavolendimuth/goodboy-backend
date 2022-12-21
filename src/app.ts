@@ -1,5 +1,5 @@
 import 'express-async-errors';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import errorMiddleware from './middlewares/error.middleware';
 import loginRouter from './routes/login.route';
 import userRouter from './routes/user.router';
@@ -14,12 +14,11 @@ import processPaymentRouter from './routes/process.payment.route';
 //   optionsSuccessStatus: 200
 // }
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req:Request, res:Response) => res.send('Hello World!'));
 app.use('/login', loginRouter);
 app.use('/user', userRouter);
 app.use('/process_payment', processPaymentRouter);

@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "outDir": "build",
-
+    "rootDir": "src",
     "incremental": true,
+    "moduleResolution": "node",
     "target": "es6",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "include": ["src/**/*"]
 }
