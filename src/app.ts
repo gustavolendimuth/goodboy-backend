@@ -8,9 +8,6 @@ import orderRouter from './routes/order.route';
 import ordersRouter from './routes/orders.route';
 import cors from 'cors';
 import processPaymentRouter from './routes/process.payment.route';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 // const corsOptions = {
 //   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
