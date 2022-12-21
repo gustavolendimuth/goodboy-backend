@@ -13,7 +13,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const corsOptions = {
-  origin: [process.env.FRONTEND_URL || 'http://localhost:3000'],
+  origin: 'https://goodboy.lendimuth.design',
   optionsSuccessStatus: 200
 }
 
