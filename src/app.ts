@@ -6,20 +6,20 @@ import userRouter from './routes/user.router';
 import authMiddleware from './middlewares/auth.middleware';
 import orderRouter from './routes/order.route';
 import ordersRouter from './routes/orders.route';
-import cors from 'cors';
+// import cors from 'cors';
 import processPaymentRouter from './routes/process.payment.route';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const corsOptions = {
-  origin: 'https://goodboy.lendimuth.design',
-  optionsSuccessStatus: 200
-}
+// const corsOptions = {
+//   origin: 'https://goodboy.lendimuth.design',
+//   optionsSuccessStatus: 200
+// }
 
 
 const app = express();
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/login', loginRouter);
