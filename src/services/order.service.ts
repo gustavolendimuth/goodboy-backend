@@ -3,10 +3,10 @@ import ItemsModel from '../database/models/ItemsModel';
 import OrderModel from "../database/models/OrderModel";
 import UserModel from '../database/models/UserModel';
 import { IError, IOrder } from "../interfaces";
-// import { validateOrder } from './validations/order.validation';
+import { validateOrder } from './validations/order.validation';
 
 export const createOrder = async (body:IOrder) => {
-  // validateOrder(body);
+  validateOrder(body);
   const response = await OrderModel.create({...body}, {
     include: [ItemsModel, UserModel]
   });

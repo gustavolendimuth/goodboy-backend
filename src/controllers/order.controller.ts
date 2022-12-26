@@ -7,7 +7,7 @@ export const getOrder = async (req: Request, res: Response) => {
   res.status(200).json(response);
 }
 
-export const createOrder = async (req: Request, res: Response) => {
+export const createOrder = async (req: Request, res: Response) => {  
   const response = await orderService.createOrder(req.body);
   res.status(200).json(response);
 }

@@ -11,7 +11,6 @@ export default async (req: Request, _res:Response, next: NextFunction) => {
     throw err;
   }
   req.body.login = jwtUtils.validateToken(authorization);
-  console.log(req.body.login);
   
   // await getUser(req.body.login.data);
 
