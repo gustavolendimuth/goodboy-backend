@@ -3,7 +3,7 @@ import { ILogin, JoiError } from '../../interfaces';
 
 const validateLogin = (body: ILogin) => {
   const schema = Joi.object({
-    email: Joi.string().email()
+    email: Joi.string().email().required()
       .messages({ 
         'any.required': '"email" is required',
         'string.empty': '"email" is required',

@@ -6,6 +6,8 @@ import { IError, IOrder } from "../interfaces";
 import { validateOrder } from './validations/order.validation';
 
 export const createOrder = async (body:IOrder) => {
+  console.log(body);
+  
   validateOrder(body);
   const response = await OrderModel.create({...body}, {
     include: [ItemsModel, UserModel]

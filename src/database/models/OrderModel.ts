@@ -1,5 +1,4 @@
-import { DECIMAL } from 'sequelize';
-import { Model, STRING, INTEGER, UUID } from "sequelize";
+import { Model, STRING, INTEGER, UUID, DECIMAL } from "sequelize";
 import db from '.';
 import ItemsModel from "./ItemsModel";
 import UserModel from "./UserModel";

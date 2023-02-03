@@ -10,7 +10,7 @@ import cors from 'cors';
 import processPaymentRouter from './routes/process.payment.route';
 
 const corsOptions = {
-  origin: ['http://localhost:3000', process.env.FRONTEND_URL || ''],
+  origin: [process.env.FRONTEND_URL || 'http://localhost:3000'],
   optionsSuccessStatus: 200
 }
 
@@ -22,8 +22,8 @@ app.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 app.use('/login', loginRouter);
 app.use('/user', userRouter);
 app.use('/process_payment', processPaymentRouter);
-app.use(authMiddleware)
 app.use('/order', orderRouter);
+app.use(authMiddleware)
 app.use('/orders', ordersRouter);
 
 app.use(errorMiddleware);
