@@ -9,7 +9,7 @@ import throwError from '../utils/throwError';
 import * as jwtUtils from '../utils/jwtUtils';
 
 const login = async (body: ILogin) => {
-  validateLogin(body);
+  // validateLogin(body);
   const { email, magicLink, token } = body;
 
   if (token) {

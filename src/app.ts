@@ -20,6 +20,7 @@ app.use(express.json());
 
 app.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 app.use('/login', loginRouter);
+// app.use('/validate_token', loginRouter);
 app.use('/user', userRouter);
 app.use('/process_payment', processPaymentRouter);
 app.use('/order', orderRouter);
