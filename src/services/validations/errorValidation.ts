@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const validateError = (error:any) => {
   let errorMessage = 'Unknown error cause';
   let errorStatus = 400;

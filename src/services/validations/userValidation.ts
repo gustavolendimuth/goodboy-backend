@@ -3,17 +3,17 @@ import { IErrType, IUser, JoiError } from '../../interfaces';
 
 const schema = Joi.object({
   email: Joi.string().email().required(),
-  name: Joi.string(),
+  name: Joi.string().allow(null).allow(''),
   magicLink: Joi.string().length(36),
 });
 
 const validateUser = (body: IUser): void => {
-  const { error, value } = schema.validate(body);
+  const { error } = schema.validate(body);
   
   const err = error as JoiError;
   if (err) {
-    const errType: string = err.details[0].type;
-    const errCode: IErrType = {
+    const errType:string = err.details[0].type;
+    const errCode:IErrType = {
       'string.base': 422,
       'any.required': 400,
       'string.empty': 400,

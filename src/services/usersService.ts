@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import UserModel from '../database/models/UserModel';
 import { IError, IGetUser, IUser } from '../interfaces';
 import { createToken } from '../utils/jwtUtils';
-import validateUser from './validations/users.validation';
+import validateUser from './validations/userValidation';
 
 export const getUser = async (body: IGetUser) => {
   const { email } = body;

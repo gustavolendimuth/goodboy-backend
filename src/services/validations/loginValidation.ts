@@ -1,5 +1,6 @@
 import Joi from 'joi';
-import { ILogin, JoiError } from '../../interfaces';
+import { ILogin } from '../../interfaces';
+import HttpException from '../../utils/httpException';
 
 const validateLogin = (body: ILogin) => {
   const schema = Joi.object({
@@ -14,10 +15,8 @@ const validateLogin = (body: ILogin) => {
   });
 
   const { error, value } = schema.validate(body);
-  const err = error as JoiError;
-  if (err) {
-    err.statusCode = 400;
-    throw err;
+  if (error) {
+    throw new HttpException(400, error?.message)
   }
 
   return value;

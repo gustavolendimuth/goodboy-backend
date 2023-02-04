@@ -3,23 +3,17 @@ import ItemsModel from '../database/models/ItemsModel';
 import OrderModel from "../database/models/OrderModel";
 import UserModel from '../database/models/UserModel';
 import { IError, IOrder } from "../interfaces";
-import { validateOrder } from './validations/order.validation';
+import HttpException from '../utils/httpException';
 
 export const createOrder = async (body:IOrder) => {
-  console.log(body);
-  
-  validateOrder(body);
-  const response = await OrderModel.create({...body}, {
+  try {
+  return await OrderModel.create({...body}, {
     include: [ItemsModel, UserModel]
   });
-
-  if (!response) {
-    const err: IError = new Error("Order not created");
-    err.statusCode = 401;
-    throw err;
+  } catch (error) {
+    console.log(error);
+    throw new HttpException(401, "Pedido não criado");
   }
-
-  return response;
 }
 
 export const getOrder = async (body:IOrder, id:string) => {

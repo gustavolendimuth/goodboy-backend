@@ -12,7 +12,7 @@ module.exports = {
       },
       paymentId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         field: 'payment_id',
         unique: true
       },

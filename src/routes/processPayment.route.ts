@@ -1,5 +1,5 @@
 import express from 'express';
-import { processPayment } from '../controllers/process.payment.controller';
+import { processPayment } from '../controllers/processPaymentController';
 
 const processPaymentRouter = express.Router();
 

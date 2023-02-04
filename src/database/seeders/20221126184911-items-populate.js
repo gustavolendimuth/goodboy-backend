@@ -10,7 +10,6 @@ module.exports = {
       quantity: 1,
       unit_price: 1200.50,
       order_id: 'f48d8529-5c25-4977-a8d7-0c8294779c83',
-      description: 'Prancha de surf de 6 pés'
     }], {});
   },
 

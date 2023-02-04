@@ -25,7 +25,6 @@ ItemsModel.init({
   title: STRING,
   quantity: INTEGER,
   unitPrice: DECIMAL,
-  description: STRING,
   orderId: {
     type: UUID
   }

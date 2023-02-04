@@ -2,14 +2,14 @@
 import UserModel from '../database/models/UserModel';
 import { ILogin, IError } from '../interfaces';
 import { createToken } from '../utils/jwtUtils';
-import validateLogin from './validations/login.validation';
+import validateLogin from './validations/loginValidation';
 import { v4 as uuidv4 } from 'uuid';
 import sendMagicLink from '../utils/sendMagicLink';
-import throwError from '../utils/throwError';
 import * as jwtUtils from '../utils/jwtUtils';
+import HttpException from '../utils/httpException';
 
 const login = async (body: ILogin) => {
-  // validateLogin(body);
+  validateLogin(body);
   const { email, magicLink, token } = body;
 
   if (token) {
@@ -23,8 +23,7 @@ const login = async (body: ILogin) => {
 
 
   if (!response) {
-    throwError(401, 'Nenhuma compra realizada com este email');
-    return;
+    throw new HttpException(401, 'Nenhuma compra realizada com este email');
   }
 
   if (!magicLink) {
@@ -35,7 +34,7 @@ const login = async (body: ILogin) => {
   }
 
   if (response.magicLinkExpired || response.magicLink !== magicLink) {
-    throwError(401, 'Link de login expirado. Faça login novamente');
+    throw new HttpException(401, 'Link de login expirado. Faça login novamente');
   }
 
   response.set({ magicLinkExpired: true });

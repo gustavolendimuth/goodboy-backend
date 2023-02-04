@@ -26,7 +26,6 @@ module.exports = {
         allowNull: false,
         field: 'unit_price'
       },
-      description: Sequelize.STRING,
       orderId: {
         allowNull: false,
         type: Sequelize.UUID,

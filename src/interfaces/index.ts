@@ -65,7 +65,7 @@ export interface Items {
   title: string,
   quantity: number,
   unit_price: number,
-  description: string
+  description?: string
 } 
 
 export interface IOrder {

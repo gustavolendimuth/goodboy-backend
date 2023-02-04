@@ -1,4 +1,4 @@
-import { Model, STRING, INTEGER, UUID, DECIMAL } from "sequelize";
+import { Model, STRING, BIGINT, UUID, DECIMAL } from "sequelize";
 import db from '.';
 import ItemsModel from "./ItemsModel";
 import UserModel from "./UserModel";
@@ -20,7 +20,7 @@ OrderModel.init({
     allowNull: false,
   },
   paymentId: {
-    type: INTEGER,
+    type: BIGINT,
     allowNull: false,
     unique: true
   },

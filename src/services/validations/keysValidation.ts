@@ -8,12 +8,12 @@ export default () => {
     if (!MERCADO_PAGO_ACCESS_TOKEN) {
     const err:IError = new Error("Error: access token not defined");
     console.log(err);
-    process.exit(1);
+    process.exit(0);
   }
 
     if (!MERCADO_PAGO_PUBLIC_KEY) {
     const err:IError = new Error("Error: public key not defined");
     console.log(err);
-    process.exit(1);
+    process.exit(0);
   }
 }

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import loginService from '../services/login.service';
+import loginService from '../services/loginService';
 
 const login = async (req: Request, res: Response) => {
   const { body } = req;
