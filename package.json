@@ -4,11 +4,10 @@
   "description": "API for Mercado Pago checkout",
   "main": "build/index.js",
   "scripts": {
-    "start": "tsc && node build/index.js",
-    "dev": "nodemon src/index.ts",
-    "build": "npx -y tsc",
-    "postbuild": "npm run db:migrate",
-    "db:reset": "npx -y tsc && npm run db:reset",
+    "start": "node ./build/index.js",
+    "dev": "nodemon ./src/index.ts",
+    "build": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "db:reset": "tsc && npm run db:migrate",
     "db:migrate": "sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
