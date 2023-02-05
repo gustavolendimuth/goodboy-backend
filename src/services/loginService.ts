@@ -9,7 +9,7 @@ import * as jwtUtils from '../utils/jwtUtils';
 import HttpException from '../utils/httpException';
 
 const login = async (body: ILogin) => {
-  validateLogin(body);
+  // validateLogin(body);
   const { email, magicLink, token } = body;
 
   if (token) {

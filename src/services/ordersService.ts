@@ -1,7 +1,6 @@
 import ItemsModel from '../database/models/ItemsModel';
 import OrderModel from "../database/models/OrderModel";
-import { IError } from "../interfaces";
-// import { validateOrder } from './validations/order.validation';
+import HttpException from '../utils/httpException';
 
 export const getAllOrders = async () => {
   const response = await OrderModel.findAll({
@@ -10,8 +9,8 @@ export const getAllOrders = async () => {
   });
 
   if (!response) {
-    const err: IError = new Error("Order not found");
-    err.statusCode = 401;
+    const err = new HttpException(404, 'Nenhum pedido encontrado');
+    console.log(err);
     throw err;
   }
 

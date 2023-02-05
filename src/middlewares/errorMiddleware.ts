@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import errorLog from '../utils/errorLog';
 import HttpException from '../utils/httpException';
 
-export const errorMiddleware = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  const { statusCode, message, stack } = err as HttpException;
+export const errorMiddleware = (err: HttpException, _req: Request, res: Response, _next: NextFunction) => {
+  const { statusCode, message, stack } = err;
 
   errorLog(
     JSON.stringify(
