@@ -92,3 +92,25 @@ export interface IProcessPayment {
   status: string,
   id: number
 }
+
+export interface SettingsItems {
+    id: string,
+    title: string,
+    quantity: number,
+    unit_price: number,
+    currency_id: string,
+  }
+
+export interface Preference {
+  items: SettingsItems[],
+  back_urls: {
+    success: string,
+    failure: string,
+    pending: string
+},
+  binary_mode: boolean,
+  auto_return: string,
+  installments: number,
+  statement_descriptor: string
+}
+

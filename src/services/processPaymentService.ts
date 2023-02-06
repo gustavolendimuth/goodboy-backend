@@ -8,26 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/httpException';
 
-export const processPayment = async (body:never) => {
+export const processPayment = async (body:any) => {
   validateKeys();
   const mercadoPagoAccessToken:string = process.env.MERCADO_PAGO_ACCESS_TOKEN || '';
   const { formData, items } = body;
   const { payer: { email } } = formData as any;
-  let result;  
-
-//   const preference = {
-//   // o "purpose": "wallet_purchase" permite apenas pagamentos logados
-//   // para permitir pagamentos como guest, você pode omitir essa propriedade
-//   "items": items,
-// };
-
-// mercadopago.preferences.create(preference)
-//   .then(function (response) {
-//     // Este valor é o preferenceId que será enviado para o Brick na inicialização
-//     const preferenceId = response.body.id;
-//   }).catch(function (error) {
-//     console.log(error);
-//   });
+  let result;
 
   try {
   mercadopago.configurations.setAccessToken(mercadoPagoAccessToken);
