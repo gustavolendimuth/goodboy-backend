@@ -12,7 +12,7 @@ export const createOrder = async (body:IOrder) => {
   });
   } catch (error) {
     console.log(error);
-    throw new HttpException(401, "Pedido não criado");
+    throw new HttpException(400, "Pedido não criado");
   }
 }
 

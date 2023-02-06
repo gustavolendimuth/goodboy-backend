@@ -53,6 +53,6 @@ export const processPayment = async (body:any) => {
   return transaction;
   } catch (error:any) {
     console.log(error);
-    throw new HttpException(401, 'Erro ao criar o pedido');
+    throw new HttpException(400, 'Erro ao criar o pedido');
   }
 }
