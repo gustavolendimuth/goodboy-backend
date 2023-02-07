@@ -1,12 +1,12 @@
 import 'express-async-errors';
 import express from 'express';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import router from './routes/routes';
 
-const corsOptions = {
-  origin: [process.env.FRONTEND_URL || 'http://localhost:3000'],
+const corsOptions:CorsOptions = {
+  origin: [process.env.FRONTEND_URL || '', 'http://localhost:3000'],
   optionsSuccessStatus: 200
 }
 
