@@ -7,6 +7,7 @@ import { IOrder, IUser } from '../interfaces';
 import { v4 as uuidv4 } from 'uuid';
 import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/httpException';
+import errorLog from '../utils/errorLog';
 
 export const processPayment = async (body:any) => {
   validateKeys();
@@ -18,8 +19,11 @@ export const processPayment = async (body:any) => {
   try {
   mercadopago.configurations.setAccessToken(mercadoPagoAccessToken);
   result = await mercadopago.payment.save(formData);
-  } catch(error) {
-    console.log(error);
+  if (!result) {
+    throw new Error();
+  }
+  } catch(error:any) {
+    errorLog(error);
     throw new HttpException(401, 'Erro ao processar pagamento no Mercado Pago');
   }
 
@@ -52,7 +56,7 @@ export const processPayment = async (body:any) => {
   }
   return transaction;
   } catch (error:any) {
-    console.log(error);
+    errorLog(error);
     throw new HttpException(400, 'Erro ao criar o pedido');
   }
 }
