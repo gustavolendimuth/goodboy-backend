@@ -8,6 +8,7 @@ import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/httpException';
 import errorLog from '../utils/errorLog';
 import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
+import testeLog from '../utils/testeLog';
 
 export const processPayment = async (body:ProcessPaymentBody) => {
   const orderId = uuidv4();
@@ -40,5 +41,6 @@ export const processPayment = async (body:ProcessPaymentBody) => {
 };
 
 export const processPaymentUpdate = async (body:any) => {
-  errorLog(body);
+  testeLog(body);
+  return { message: 'ok' };
 };

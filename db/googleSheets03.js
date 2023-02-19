@@ -11,27 +11,25 @@ function getDataFromMySQL() {
   const conn = Jdbc.getConnection(url, user, password);
   const stmt = conn.createStatement();
 
-  function addMinutes(date, minutes) {
-    date.setTime(date.getTime() + minutes * 60000);
-
-    return date;
-  }
-
   // get the start date and end date from cells in the Google Sheets spreadsheet
   const sheet = SpreadsheetApp.getActiveSheet();
   const startCell = sheet.getRange('K2');
   const endCell = sheet.getRange('L2');
   const startDate = startCell.isBlank() ? null : new Date(startCell.getValue());
-  const endDate = endCell.isBlank() ? null : addMinutes(new Date(endCell.getValue()), 1439);
+  const endDate = endCell.isBlank() ? null : new Date(endCell.getValue());
 
   // format the dates as English timestamp strings
   const startTimestamp = startDate ? Math.floor(startDate.getTime() / 1000) : null;
   const endTimestamp = endDate ? Math.floor(endDate.getTime() / 1000) : null;
 
+  // format the dates as MySQL-compatible strings
+  const startDateStr = startDate ? Utilities.formatDate(startDate, 'GMT', 'yyyy-MM-dd') : null;
+  const endDateStr = endDate ? Utilities.formatDate(endDate, 'GMT', 'yyyy-MM-dd') : null;
+
   // construct the SQL query with the start and end dates, if specified
-  let sqlQuery = "SELECT o.payment_id, u.email, GROUP_CONCAT(i.title SEPARATOR ', '), o.payment_method, o.total_amount, o.fee_amount, net_received_amount, o.status, SUBSTR(DATE_FORMAT(CONVERT_TZ(o.created_at,'+00:00','-03:00'), '%d/%m/%Y %H:%i'), -16) FROM orders AS o INNER JOIN users AS u ON o.user_id = u.id INNER JOIN items AS i ON i.order_id = o.id";
+  let sqlQuery = "SELECT o.payment_id, u.email, GROUP_CONCAT(i.title SEPARATOR ', '), o.payment_method, o.total_amount, o.fee_amount, net_received_amount, o.status, DATE_FORMAT(o.created_at, '%d/%m/%Y') FROM orders AS o INNER JOIN users AS u ON o.user_id = u.id INNER JOIN items AS i ON i.order_id = o.id";
   if (startTimestamp && endTimestamp) {
-    sqlQuery += ` WHERE o.created_at BETWEEN FROM_UNIXTIME(${startTimestamp}) AND FROM_UNIXTIME(${endTimestamp})`;
+    sqlQuery += ` WHERE o.created_at BETWEEN ${startDateStr} AND ${endDateStr}`;
   }
 
   sqlQuery += ' GROUP BY o.payment_id';

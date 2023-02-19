@@ -13,6 +13,6 @@ export const processPayment = async (req: Request, res:Response) => {
 
 export const processPaymentUpdate = async (req: Request, res:Response) => {
   const { body } = req as never;
-  await processPaymentService.processPaymentUpdate(body);
-  res.status(201);
+  const response = await processPaymentService.processPaymentUpdate(body);
+  res.status(201).json(response);
 };
