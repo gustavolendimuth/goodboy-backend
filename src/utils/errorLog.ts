@@ -13,8 +13,8 @@ if (!host) throw new HttpException(401, 'EMAIL_HOST not found');
 
 export default async (err:Error) => {
   const { message, stack } = err;
-  const errMessage = JSON.stringify(`<h1>${message}</h1><p>${stack?.replace(/\n/g, "<br />")}</p>`);
-  
+  const errMessage = JSON.stringify(`<h1>${message}</h1><p>${stack?.replace(/\n/g, '<br />')}</p>`);
+
   console.log(err);
 
   const transporter = nodemailer.createTransport({
@@ -23,16 +23,15 @@ export default async (err:Error) => {
     secure, // true for 465, false for other ports
     auth: {
       user,
-      pass
-    }
+      pass,
+    },
   });
 
   await transporter.sendMail({
     from: `"Good Boy" <${user}>`, // sender address
     to: email, // list of receivers
-    subject: "Log de erro", // Subject line
+    subject: 'Log de erro', // Subject line
     text: errMessage, // plain text body
-    html: errMessage // html body
+    html: errMessage, // html body
   });
-}
-
+};

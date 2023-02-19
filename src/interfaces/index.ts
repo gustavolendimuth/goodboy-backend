@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ValidationError } from 'joi';
 import { JwtPayload } from 'jsonwebtoken';
+import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import UserModel from '../database/models/UserModel';
 
 export interface IProduct {
@@ -65,27 +69,29 @@ export interface Items {
   title: string,
   quantity: number,
   unit_price: number,
-  description?: string
-} 
+  currency_id?: string,
+}
 
 export interface IOrder {
   id?: string,
   user?: IUser,
-  items: Items[],
-  status: string,
-  payedAmount: number,
-  paymentMethod: string,
-  paymentId: number,
-  login?: LoginPayload,
-  feeAmount: number,
   userId?: string
+  paymentId?: number,
+  preferenceId?: string,
+  items: Items[],
+  totalAmount: number,
+  feeAmount?: number,
+  netReceivedAmount?: number,
+  paymentMethod: string,
+  status: string,
+  login?: LoginPayload,
 }
 
 export interface ILoginPayload extends UserModel {
   token: string,
   data: IUser
 }
-export type UserPayload = UserModel
+export type UserPayload = UserModel;
 
 export interface IProcessPayment {
   status_detail: string,
@@ -93,24 +99,29 @@ export interface IProcessPayment {
   id: number
 }
 
-export interface SettingsItems {
-    id: string,
-    title: string,
-    quantity: number,
-    unit_price: number,
-    currency_id: string,
-  }
-
 export interface Preference {
-  items: SettingsItems[],
+  items: Items[],
   back_urls: {
     success: string,
     failure: string,
     pending: string
-},
+  },
   binary_mode: boolean,
   auto_return: string,
   installments: number,
   statement_descriptor: string
 }
 
+export interface ProcessPaymentBody {
+  items: Items[],
+  formData: CreatePaymentPayload,
+  preferenceId?: string,
+}
+
+export interface CreateOrderData {
+  order:any,
+  id?:string,
+  items:Items[],
+  email:string,
+  preferenceId?:string
+}

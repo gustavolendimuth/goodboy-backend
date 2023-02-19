@@ -9,7 +9,6 @@ import processPaymentRouter from './processPayment.route';
 
 const router = express.Router();
 
-
 router.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 
 router.use('/login', loginRouter);
@@ -18,7 +17,7 @@ router.use('/user', userRouter);
 router.use('/process_payment', processPaymentRouter);
 router.use('/preference', preferenceRouter);
 router.use('/order', orderRouter);
-router.use(authMiddleware)
+router.use(authMiddleware);
 router.use('/orders', ordersRouter);
 
 export default router;

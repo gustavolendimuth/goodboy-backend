@@ -10,29 +10,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID
       },
-      paymentId: {
-        allowNull: false,
-        type: Sequelize.BIGINT,
-        field: 'payment_id',
-        unique: true
-      },
-      payedAmount: {
-        allowNull: false,
-        type: Sequelize.DECIMAL(10, 2),
-        field: 'payed_amount'
-      },
-      paymentMethod: {
-        allowNull: false,
-        type: Sequelize.STRING,
-        field: 'payment_method'
-      },
-      feeAmount: {
-        allowNull: false,
-        type: Sequelize.DECIMAL(10, 2),
-        field: 'fee_amount'
-      },
       userId: {
-        allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: 'users',
@@ -42,9 +20,35 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      preferenceId: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        field: 'preference_id',
+        unique: true
+      },
+      paymentId: {
+        type: Sequelize.BIGINT,
+        field: 'payment_id',
+        unique: true
+      },
+      totalAmount: {
+        type: Sequelize.DECIMAL(10, 2),
+        field: 'total_amount'
+      },
+      feeAmount: {
+        type: Sequelize.DECIMAL(10, 2),
+        field: 'fee_amount'
+      },
+      netReceivedAmount: {
+        type: Sequelize.DECIMAL(10, 2),
+        field: 'net_received_amount'
+      },
+      paymentMethod: {
+        type: Sequelize.STRING,
+        field: 'payment_method'
+      },
       status: {
         type: Sequelize.STRING,
-        allowNull: false,
         defaultValue: 'pending'
       },
       createdAt: {

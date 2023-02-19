@@ -1,5 +1,6 @@
+/* eslint-disable import/prefer-default-export */
 import ItemsModel from '../database/models/ItemsModel';
-import OrderModel from "../database/models/OrderModel";
+import OrderModel from '../database/models/OrderModel';
 import HttpException from '../utils/httpException';
 
 export const getAllOrders = async () => {
@@ -15,4 +16,4 @@ export const getAllOrders = async () => {
   }
 
   return response;
-}
+};

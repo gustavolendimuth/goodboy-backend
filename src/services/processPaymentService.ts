@@ -1,62 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mercadopago from "mercadopago";
-import validateKeys from './validations/keysValidation';
-import { createOrder } from './orderService';
-import { getUser } from './usersService';
-import { IOrder, IUser } from '../interfaces';
+/* eslint-disable import/prefer-default-export */
+
 import { v4 as uuidv4 } from 'uuid';
+import { createOrder, updateOrder } from './orderService';
+import { ProcessPaymentBody } from '../interfaces';
 import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/httpException';
 import errorLog from '../utils/errorLog';
+import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
 
-export const processPayment = async (body:any) => {
-  validateKeys();
-  const mercadoPagoAccessToken:string = process.env.MERCADO_PAGO_ACCESS_TOKEN || '';
-  const { formData, items } = body;
-  const { payer: { email } } = formData as any;
-  let result;
+export const processPayment = async (body:ProcessPaymentBody) => {
+  const orderId = uuidv4();
+  const { formData, items, preferenceId } = body;
+  const { payer: { email } } = formData;
+  let orderData;
+  let response;
 
-  try {
-  mercadopago.configurations.setAccessToken(mercadoPagoAccessToken);
-  result = await mercadopago.payment.save(formData);
-  if (!result) {
-    throw new Error();
-  }
-  } catch(error:any) {
-    errorLog(error);
-    throw new HttpException(401, 'Erro ao processar pagamento no Mercado Pago');
-  }
+  orderData = await createOrderData({ order: formData, items, email, preferenceId, id: orderId });
+  validateOrder(orderData);
+  await createOrder(orderData);
 
   try {
-    const transaction = result.response ;
-    if (transaction.status === 'approved') {
-    // const email = data.payer.email;
-    const name = email.split('@')[0];
-
-    const user:IUser = { id: uuidv4(), email, name };
-    const order:IOrder = {
-      id: uuidv4(),
-      items,
-      status: transaction.status,
-      payedAmount: transaction.transaction_details?.total_paid_amount,
-      paymentMethod: transaction.payment_type_id,
-      paymentId: transaction.id,
-      feeAmount: transaction.fee_details[0]?.amount,
-    };
-
-    const result = await getUser({ email });
-    if (!result) {
-      order.user = user;
-    } else {
-      order.userId = result.id;
-    }
-
-    validateOrder(order);
-    createOrder(order);
-  }
-  return transaction;
+    response = (await mercadopagoSave(formData)).response;
   } catch (error:any) {
     errorLog(error);
-    throw new HttpException(400, 'Erro ao criar o pedido');
+    throw new HttpException(400, 'Erro ao processar o pagamento no Mercado Pago, tente mais tarde');
   }
-}
+
+  try {
+    orderData = await createOrderData({ order: response, items, email, id: orderId });
+    validateOrder(orderData);
+    updateOrder(orderData, orderId);
+    // if (response.status) await deleteOrder(orderId);
+    return response;
+  } catch (error:any) {
+    errorLog(error);
+    throw new HttpException(400, 'Erro ao criar o pedido, tente mais tarde');
+  }
+};
+
+export const processPaymentUpdate = async (body:any) => {
+  errorLog(body);
+};
