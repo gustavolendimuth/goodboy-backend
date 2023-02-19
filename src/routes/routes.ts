@@ -6,6 +6,7 @@ import ordersRouter from './ordersRoute';
 import preferenceRouter from './preferenceRoute';
 import authMiddleware from '../middlewares/authMiddleware';
 import processPaymentRouter from './processPayment.route';
+import webhookRouter from './webhookRoute';
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.use('/login', loginRouter);
 // app.use('/validate_token', loginRouter);
 router.use('/user', userRouter);
 router.use('/process_payment', processPaymentRouter);
+router.use('/webhook', webhookRouter);
 router.use('/preference', preferenceRouter);
 router.use('/order', orderRouter);
 router.use(authMiddleware);
