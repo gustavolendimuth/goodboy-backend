@@ -9,7 +9,7 @@ export const createOrder = async (body:IOrder) => OrderModel.create({ ...body },
   include: [ItemsModel, UserModel],
 });
 
-export const updateOrder = async (body:IOrder, id:string) => OrderModel.update({ ...body }, { where: { id } });
+export const updateOrder = async (body:IOrder, id:string) => OrderModel.update(body, { where: { id } });
 
 export const getOrder = async (body:IOrder, id:string) => OrderModel.findOne({
   where: {

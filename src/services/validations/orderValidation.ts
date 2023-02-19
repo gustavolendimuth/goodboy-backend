@@ -5,7 +5,7 @@ import errorLog from '../../utils/errorLog';
 import HttpException from '../../utils/httpException';
 
 const orderSchema = Joi.object({
-  id: Joi.string().length(36).required(),
+  id: Joi.string().length(36),
   userId: Joi.string().length(36),
   user: Joi.object({
     id: Joi.string().length(36).required(),
