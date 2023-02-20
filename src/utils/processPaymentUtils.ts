@@ -27,24 +27,23 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
 
 export const createOrderData = async (data:CreateOrderData) => {
   let response;
-  const { order, id, items, email, preferenceId } = data;
-  const name = email.split('@')[0];
-
-  const netReceivedAmount = order.transaction_details
-  && (order?.transaction_details?.total_paid_amount || 0) - (order?.fee_details[0]?.amount || 0);
+  const { order, id, items, email: userEmail, preferenceId } = data;
+  const name = userEmail.split('@')[0];
 
   const result:IOrder = {
     id,
     items,
-    status: order?.status || 'pending',
+    status: order?.status || 'created',
     totalAmount: order?.transaction_details?.total_paid_amount
     || order?.transaction_amount,
-    netReceivedAmount,
+    netReceivedAmount: order?.transaction_details?.net_received_amount,
     preferenceId,
-    paymentMethod: order?.payment_type_id,
+    paymentMethod: order?.payment_method_id,
     paymentId: order?.id,
     feeAmount: order.fee_details && order.fee_details[0]?.amount,
   };
+
+  const email = order?.payer?.email || userEmail;
 
   try {
     response = await getUser({ email });

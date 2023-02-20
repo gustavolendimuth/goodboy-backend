@@ -30,7 +30,7 @@ export const processPayment = async (body:ProcessPaymentBody) => {
   try {
     orderData = await createOrderData({ order: response, items, email });
     validateOrder(orderData);
-    updateOrder(orderData, orderId);
+    updateOrder({ data: orderData, id: orderId });
     // if (response.status) await deleteOrder(orderId);
     return response;
   } catch (error:any) {

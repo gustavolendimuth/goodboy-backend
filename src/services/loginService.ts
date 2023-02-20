@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import UserModel from '../database/models/UserModel';
-import { ILogin, IError } from '../interfaces';
-import { createToken } from '../utils/jwtUtils';
-import validateLogin from './validations/loginValidation';
 import { v4 as uuidv4 } from 'uuid';
+import UserModel from '../database/models/UserModel';
+import { ILogin } from '../interfaces';
+import { createToken } from '../utils/jwtUtils';
+// import validateLogin from './validations/loginValidation';
 import sendMagicLink from '../utils/sendMagicLink';
 import * as jwtUtils from '../utils/jwtUtils';
 import HttpException from '../utils/httpException';
@@ -17,10 +17,8 @@ const login = async (body: ILogin) => {
     return { message: 'Login efetuado com sucesso' };
   }
 
-  let err;
   const newMagicLink = uuidv4();
   const response = await UserModel.findOne({ where: { email } });
-
 
   if (!response) {
     throw new HttpException(401, 'Nenhuma compra realizada com este email');
@@ -39,7 +37,7 @@ const login = async (body: ILogin) => {
 
   response.set({ magicLinkExpired: true });
   await response.save();
-  const result = createToken({ name: response.name, email: response.email, role: response.role, id: response.id});
+  const result = createToken({ name: response.name, email: response.email, role: response.role, id: response.id });
   return { token: result };
 };
 
