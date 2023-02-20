@@ -27,8 +27,10 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
 
 export const createOrderData = async (data:CreateOrderData) => {
   let response;
-  const { order, id, items, email: userEmail, preferenceId } = data;
-  const name = userEmail.split('@')[0];
+  const { order, id, items, email, preferenceId } = data;
+  const name = email?.split('@')[0];
+
+  console.log(data);
 
   const result:IOrder = {
     id,
@@ -40,10 +42,8 @@ export const createOrderData = async (data:CreateOrderData) => {
     preferenceId,
     paymentMethod: order?.payment_method_id,
     paymentId: order?.id,
-    feeAmount: order.fee_details && order.fee_details[0]?.amount,
+    feeAmount: order?.fee_details && order.fee_details[0]?.amount,
   };
-
-  const email = order?.payer?.email || userEmail;
 
   try {
     response = await getUser({ email });

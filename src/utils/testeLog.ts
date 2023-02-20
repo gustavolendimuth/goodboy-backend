@@ -13,7 +13,8 @@ const email = process.env.ERROR_LOG_EMAIL;
 if (!host) throw new HttpException(401, 'EMAIL_HOST not found');
 
 export default async (body:any) => {
-  const message = JSON.stringify(body);
+  let message = body;
+  if (typeof body !== 'string') message = JSON.stringify(body);
 
   console.log(body);
 

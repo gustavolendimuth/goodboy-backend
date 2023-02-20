@@ -78,7 +78,7 @@ export interface IOrder {
   userId?: string
   paymentId?: number,
   preferenceId?: string,
-  items: Items[],
+  items?: Items[],
   totalAmount: number,
   feeAmount?: number,
   netReceivedAmount?: number,
@@ -121,7 +121,7 @@ export interface ProcessPaymentBody {
 export interface CreateOrderData {
   order:any,
   id?:string,
-  items:Items[],
+  items?:Items[],
   email:string,
   preferenceId?:string
 }
