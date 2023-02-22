@@ -32,6 +32,6 @@ export const ipn = async (id:string, topic:string) => {
     return { message: 'nothing to update' };
   } catch (error:any) {
     errorLog(error);
-    throw new HttpException(400, 'Erro ao atualizar pedido');
+    throw new HttpException(400, 'Erro ao criar o pedido');
   }
 };
