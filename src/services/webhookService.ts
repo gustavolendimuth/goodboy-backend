@@ -6,6 +6,8 @@ import testeLog from '../utils/testeLog';
 import { updateOrder } from './orderService';
 
 export const webhook = async (body:WebhookBody) => {
+  testeLog(body);
+
   if (body.action === 'payment.updated') {
     const response = await fetchPayment.get(body.data.id);
 

@@ -5,6 +5,8 @@ import testeLog from '../utils/testeLog';
 import { createOrder, updateOrder } from './orderService';
 
 export const ipn = async (id:string, topic:string) => {
+  testeLog(topic);
+
   if (topic === 'payment') {
     const response = await fetchPayment.get(id);
 
