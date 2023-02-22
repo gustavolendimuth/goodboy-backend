@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import Joi from 'joi';
-import { IOrder } from '../../interfaces';
+import { Order } from '../../interfaces';
 import errorLog from '../../utils/errorLog';
 import HttpException from '../../utils/httpException';
 
@@ -28,7 +28,7 @@ const orderSchema = Joi.object({
   ).required(),
 });
 
-export const validateOrder = (body: IOrder): void => {
+export const validateOrder = (body: Order): void => {
   const { error } = orderSchema.validate(body);
   if (error) {
     errorLog(error);
