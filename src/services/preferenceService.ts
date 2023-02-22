@@ -27,6 +27,7 @@ const preferenceService = async (body:any) => {
   // o "purpose": "wallet_purchase" permite apenas pagamentos logados
   // para permitir pagamentos como guest, você pode omitir essa propriedade
     items: settingsItems,
+    purpose: 'wallet_purchase',
     back_urls: {
       success: backUrl,
       failure: backUrl,
@@ -36,6 +37,7 @@ const preferenceService = async (body:any) => {
     auto_return: 'all',
     installments: 1,
     statement_descriptor: 'Good Boy',
+    notification_url: `${process.env.BACKEND_URL}/ipn?source_news=ipn`,
   };
 
   return mercadopago.preferences.create(preference)

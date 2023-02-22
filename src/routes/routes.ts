@@ -7,17 +7,19 @@ import preferenceRouter from './preferenceRoute';
 import authMiddleware from '../middlewares/authMiddleware';
 import processPaymentRouter from './processPayment.route';
 import webhookRouter from './webhookRoute';
+import ipnRouter from './ipnRoute';
 
 const router = express.Router();
 
 router.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 
-router.use('/login', loginRouter);
 // app.use('/validate_token', loginRouter);
 router.use('/user', userRouter);
+router.use('/preference', preferenceRouter);
 router.use('/process_payment', processPaymentRouter);
 router.use('/webhook', webhookRouter);
-router.use('/preference', preferenceRouter);
+router.use('/ipn', ipnRouter);
+router.use('/login', loginRouter);
 router.use('/order', orderRouter);
 router.use(authMiddleware);
 router.use('/orders', ordersRouter);

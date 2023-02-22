@@ -11,20 +11,17 @@ export const createOrder = async (body:IOrder) => OrderModel.create({ ...body },
 
 export const updateOrder = async (body:{ data:IOrder, id?:string, paymentId?:number }) => {
   const { data, id, paymentId } = body;
-  if (paymentId) {
-    return OrderModel.update(data, { where: { paymentId } });
-  }
-  return OrderModel.update(data, { where: { id } });
+  return OrderModel.update(data, { where: {
+    [Op.or]: [{ id }, { paymentId }],
+  } });
 };
 
-export const getOrder = async (body:IOrder, id:string) => OrderModel.findOne({
-  where: {
-    [Op.and]: [
-      { userId: body.login?.data.id },
-      { id },
-    ],
-  },
-});
+export const getOrder = async (body:{ id?:string, preferenceId?:string }) => {
+  const { id, preferenceId } = body;
+  return OrderModel.findOne({ where: {
+    [Op.or]: [{ id }, { preferenceId }],
+  } });
+};
 
 export const getOrders = async (body: IOrder) => OrderModel.findAll({
   attributes: { exclude: ['userId'] },

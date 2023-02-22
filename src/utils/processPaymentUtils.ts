@@ -28,7 +28,9 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
 export const createOrderData = async (data:CreateOrderData) => {
   let response;
   const { order, id, items, email, preferenceId } = data;
-  const name = email?.split('@')[0];
+
+  const userEmail = email || order?.payer?.email;
+  const name = userEmail?.split('@')[0];
 
   console.log(data);
 
@@ -36,24 +38,25 @@ export const createOrderData = async (data:CreateOrderData) => {
     id,
     items,
     status: order?.status || 'created',
-    totalAmount: order?.transaction_details?.total_paid_amount
-    || order?.transaction_amount,
+    totalAmount: order?.transaction_details?.total_paid_amount || order?.transaction_amount,
     netReceivedAmount: order?.transaction_details?.net_received_amount,
     preferenceId,
-    paymentMethod: order?.payment_method_id,
+    paymentMethod: order?.payment_type_id === 'bank_transfer' ? order?.payment_method_id : order?.payment_type_id,
     paymentId: order?.id,
     feeAmount: order?.fee_details && order.fee_details[0]?.amount,
   };
 
   try {
-    response = await getUser({ email });
+    if (userEmail) response = await getUser({ email });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
   }
 
+  if (!userEmail) return result;
+
   if (!response) {
-    result.user = { id: uuidv4(), email, name };
+    result.user = { id: uuidv4(), email: userEmail, name };
   } else {
     result.userId = response.id;
   }

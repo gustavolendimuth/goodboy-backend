@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
-import * as orderService from "../services/ordersService";
+/* eslint-disable import/prefer-default-export */
+import { Request, Response } from 'express';
+import * as orderService from '../services/ordersService';
 
 export const getAllOrders = async (req: Request, res: Response) => {
   const response = await orderService.getAllOrders();
   res.status(200).json(response);
-}
+};
