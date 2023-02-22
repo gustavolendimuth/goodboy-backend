@@ -12,7 +12,7 @@ export const webhook = async (body:WebhookBody) => {
     if (body.action === 'payment.updated') {
       const response = await fetchPayment.get(body.data.id);
 
-      const result = await createOrderData({ order: response.data, email: response?.data?.payer?.email });
+      const result = await createOrderData({ orderData: response.data, email: response?.data?.payer?.email });
       await updateOrder({ data: result, paymentId: response.data.id });
       return { message: 'order updated' };
     }

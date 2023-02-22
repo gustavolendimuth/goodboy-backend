@@ -5,7 +5,7 @@
 import mercadopago from 'mercadopago';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateOrderData, IOrder } from '../interfaces';
+import { CreateOrderData, Order } from '../interfaces';
 import { getUser } from '../services/usersService';
 import validateKeys from '../services/validations/validateKeys';
 import errorLog from './errorLog';
@@ -29,10 +29,10 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
 
 export const createOrderData = async (data:CreateOrderData) => {
   let response;
-  const { order, id, items, email } = data;
-  let itemsData = order?.additional_info.items;
+  const { orderData, id, items, email } = data;
+  let itemsData = orderData?.additional_info.items;
 
-  const userEmail = email || order?.payer?.email;
+  const userEmail = email || orderData?.payer?.email;
   const name = userEmail?.split('@')[0];
 
   if (!items) {
@@ -44,15 +44,16 @@ export const createOrderData = async (data:CreateOrderData) => {
     }));
   }
 
-  const result:IOrder = {
+  const order:Order = {
     id,
     items: items || itemsData,
-    status: order?.status || 'created',
-    totalAmount: order?.transaction_details?.total_paid_amount || order?.transaction_amount,
-    netReceivedAmount: order?.transaction_details?.net_received_amount,
-    paymentMethod: order?.payment_type_id === 'bank_transfer' ? order?.payment_method_id : order?.payment_type_id,
-    paymentId: order?.id,
-    feeAmount: order?.fee_details && order.fee_details[0]?.amount,
+    status: orderData?.status || 'created',
+    totalAmount: orderData?.transaction_details?.total_paid_amount || orderData?.transaction_amount,
+    netReceivedAmount: orderData?.transaction_details?.net_received_amount,
+    paymentMethod: orderData?.payment_type_id === 'bank_transfer'
+      ? orderData?.payment_method_id : orderData?.payment_type_id,
+    paymentId: orderData?.id,
+    feeAmount: orderData?.fee_details && orderData.fee_details[0]?.amount,
   };
 
   try {
@@ -62,12 +63,12 @@ export const createOrderData = async (data:CreateOrderData) => {
     throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
   }
 
-  if (!userEmail) return result;
+  if (!userEmail) return order;
 
   if (!response) {
-    result.user = { id: uuidv4(), email: userEmail, name };
+    order.user = { id: uuidv4(), email: userEmail, name };
   } else {
-    result.userId = response.id;
+    order.userId = response.id;
   }
-  return result;
+  return order;
 };

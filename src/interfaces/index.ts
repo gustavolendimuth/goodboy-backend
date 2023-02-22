@@ -72,7 +72,7 @@ export interface Items {
   currency_id?: string,
 }
 
-export interface IOrder {
+export interface Order {
   id?: string,
   user?: IUser,
   userId?: string
@@ -119,7 +119,7 @@ export interface ProcessPaymentBody {
 }
 
 export interface CreateOrderData {
-  order:any,
+  orderData:any,
   id?:string,
   items?:Items[],
   email:string,

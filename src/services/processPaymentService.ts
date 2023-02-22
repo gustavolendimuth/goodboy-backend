@@ -16,7 +16,7 @@ export const processPayment = async (body:ProcessPaymentBody) => {
   let orderData;
   let response;
 
-  orderData = await createOrderData({ order: formData, items, email, id: orderId });
+  orderData = await createOrderData({ orderData: formData, items, email, id: orderId });
   validateOrder(orderData);
   await createOrder(orderData);
 
@@ -28,7 +28,7 @@ export const processPayment = async (body:ProcessPaymentBody) => {
   }
 
   try {
-    orderData = await createOrderData({ order: response, items, email });
+    orderData = await createOrderData({ orderData: response, items, email });
     validateOrder(orderData);
     updateOrder({ data: orderData, id: orderId });
     // if (response.status === '') await deleteOrder(orderId);
