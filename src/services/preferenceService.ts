@@ -27,7 +27,7 @@ const preferenceService = async (body:any) => {
   // o "purpose": "wallet_purchase" permite apenas pagamentos logados
   // para permitir pagamentos como guest, você pode omitir essa propriedade
     items: settingsItems,
-    purpose: 'wallet_purchase',
+    // purpose: 'wallet_purchase',
     back_urls: {
       success: backUrl,
       failure: backUrl,
