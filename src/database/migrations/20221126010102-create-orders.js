@@ -20,12 +20,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      preferenceId: {
-        allowNull: false,
-        type: Sequelize.STRING,
-        field: 'preference_id',
-        unique: true
-      },
       paymentId: {
         type: Sequelize.BIGINT,
         field: 'payment_id',

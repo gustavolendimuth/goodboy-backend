@@ -11,12 +11,12 @@ import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
 
 export const processPayment = async (body:ProcessPaymentBody) => {
   const orderId = uuidv4();
-  const { formData, items, preferenceId } = body;
+  const { formData, items } = body;
   const { payer: { email } } = formData;
   let orderData;
   let response;
 
-  orderData = await createOrderData({ order: formData, items, email, preferenceId, id: orderId });
+  orderData = await createOrderData({ order: formData, items, email, id: orderId });
   validateOrder(orderData);
   await createOrder(orderData);
 
@@ -31,7 +31,7 @@ export const processPayment = async (body:ProcessPaymentBody) => {
     orderData = await createOrderData({ order: response, items, email });
     validateOrder(orderData);
     updateOrder({ data: orderData, id: orderId });
-    // if (response.status) await deleteOrder(orderId);
+    // if (response.status === '') await deleteOrder(orderId);
     return response;
   } catch (error:any) {
     errorLog(error);

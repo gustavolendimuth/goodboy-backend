@@ -123,7 +123,6 @@ export interface CreateOrderData {
   id?:string,
   items?:Items[],
   email:string,
-  preferenceId?:string
 }
 
 export interface WebhookBody {

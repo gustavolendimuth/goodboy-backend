@@ -12,7 +12,6 @@ const orderSchema = Joi.object({
     email: Joi.string().email().required(),
     name: Joi.string().min(3).required(),
   }),
-  preferenceId: Joi.string(),
   paymentId: Joi.number(),
   totalAmount: Joi.number(),
   feeAmount: Joi.number(),

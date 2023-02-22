@@ -21,11 +21,6 @@ OrderModel.init(
       primaryKey: true,
       allowNull: false,
     },
-    preferenceId: {
-      type: STRING,
-      allowNull: false,
-      unique: true,
-    },
     paymentId: {
       type: BIGINT,
       unique: true,
