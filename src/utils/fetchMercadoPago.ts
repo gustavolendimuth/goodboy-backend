@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import axios from 'axios';
+import 'dotenv/config';
 
 const { MERCADOPAGO_ACCESS_TOKEN } = process.env;
 
