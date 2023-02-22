@@ -3,7 +3,7 @@ import * as orderService from '../services/orderService';
 
 export const getOrder = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const response = await orderService.getOrder({ id });
+  const response = await orderService.getOrder({ paymentId: Number(id) });
   res.status(200).json(response);
 };
 

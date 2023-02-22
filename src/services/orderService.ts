@@ -10,14 +10,15 @@ export const createOrder = async (body:Order) => OrderModel.create({ ...body }, 
 });
 
 export const updateOrder = async (body:{ data:Order, id?:string, paymentId?:number }) => {
-  const { data, id, paymentId } = body;
+  const { data, id = '0', paymentId = '0' } = body;
+
   return OrderModel.update(data, { where: {
     [Op.or]: [{ id }, { paymentId }],
   } });
 };
 
 export const getOrder = async (body:{ id?:string, paymentId?:number }) => {
-  const { id, paymentId } = body;
+  const { paymentId = '0', id = '0' } = body;
   return OrderModel.findOne({ where: {
     [Op.or]: [{ id }, { paymentId }],
   } });

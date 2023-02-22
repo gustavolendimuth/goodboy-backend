@@ -43,7 +43,7 @@ export interface JoiError extends ValidationError {
 }
 
 export interface IOrders {
-  id?: number,
+  id?: string,
   userId: string,
   productsIds: [number]
 }
@@ -91,7 +91,7 @@ export interface ILoginPayload extends UserModel {
   token: string,
   data: IUser
 }
-export type UserPayload = UserModel;
+// export type UserPayload = UserModel;
 
 export interface IProcessPayment {
   status_detail: string,

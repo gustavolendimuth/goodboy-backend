@@ -14,14 +14,15 @@ export const ipn = async (id:string, topic:string) => {
   try {
     if (topic === 'payment') {
       const payment = await fetchPayment.get(id);
+      const order = await getOrder({ paymentId: Number(id) });
 
       const orderData = await createOrderData({
         orderData: payment.data,
         email: payment?.data?.payer?.email,
-        id: uuidv4(),
+        id: !order ? uuidv4() : undefined,
       });
 
-      if (await getOrder({ paymentId: Number(id) })) {
+      if (order) {
         await updateOrder({ data: orderData, paymentId: Number(id) });
         return { message: 'order updated' };
       }
