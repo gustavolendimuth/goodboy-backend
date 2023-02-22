@@ -32,11 +32,9 @@ export const createOrderData = async (data:CreateOrderData) => {
   const userEmail = email || order?.payer?.email;
   const name = userEmail?.split('@')[0];
 
-  console.log(data);
-
   const result:IOrder = {
     id,
-    items,
+    items: items || order?.items,
     status: order?.status || 'created',
     totalAmount: order?.transaction_details?.total_paid_amount || order?.transaction_amount,
     netReceivedAmount: order?.transaction_details?.net_received_amount,

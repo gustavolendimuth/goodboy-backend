@@ -8,11 +8,12 @@ import { createOrderData } from '../utils/processPaymentUtils';
 import { createOrder } from './orderService';
 
 export const ipn = async (id:string, topic:string) => {
+  console.log(id, topic);
+
   try {
     if (topic === 'payment') {
       const payment = await fetchPayment.get(id);
       const result = await createOrderData({ order: payment.data, email: payment?.data?.payer?.email, id: uuidv4() });
-      console.log(result);
       await createOrder(result);
       return { message: 'order created' };
     }
