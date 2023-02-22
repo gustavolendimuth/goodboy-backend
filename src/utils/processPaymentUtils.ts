@@ -57,7 +57,7 @@ export const createOrderData = async (data:CreateOrderData) => {
   };
 
   try {
-    if (userEmail) response = await getUser({ email });
+    if (userEmail) response = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');

@@ -54,7 +54,7 @@ export interface ILogin {
   token: string
 }
 
-export interface IGetUser {
+export interface GetUser {
   id?: string,
   email?: string,
   password?: string
@@ -122,7 +122,7 @@ export interface CreateOrderData {
   orderData:any,
   id?:string,
   items?:Items[],
-  email:string,
+  email?:string,
 }
 
 export interface WebhookBody {

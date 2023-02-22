@@ -1,14 +1,13 @@
-import { Op } from 'sequelize';
 import UserModel from '../database/models/UserModel';
-import { IError, IGetUser, IUser } from '../interfaces';
+import { IError, GetUser, IUser } from '../interfaces';
 import { createToken } from '../utils/jwtUtils';
 import validateUser from './validations/userValidation';
 
-export const getUser = async (body: IGetUser) => {
+export const getUser = async (body: GetUser) => {
   const { email } = body;
-  const response = await UserModel.findOne({ 
-    where: { email }
-  })
+  const response = await UserModel.findOne({
+    where: { email },
+  });
 
   if (!response) {
     const err:IError = new Error('User not found');
@@ -20,11 +19,11 @@ export const getUser = async (body: IGetUser) => {
 
 export const createUser = async (body:IUser) => {
   validateUser(body);
-  
-  const response = await UserModel.create({ ...body },  { fields: ['email', 'name', 'password'] })
-  
+
+  const response = await UserModel.create({ ...body }, { fields: ['email', 'name', 'password'] });
+
   const { password: p, createdAt, updatedAt, ...userWithoutPassword } = response.dataValues;
   const token = createToken(userWithoutPassword);
 
-  return { token,  dataValues: userWithoutPassword };
+  return { token, dataValues: userWithoutPassword };
 };

@@ -18,7 +18,6 @@ export const ipn = async (id:string, topic:string) => {
 
       const orderData = await createOrderData({
         orderData: payment.data,
-        email: payment?.data?.payer?.email,
         id: !order ? uuidv4() : undefined,
       });
 
