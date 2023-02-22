@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import mercadopago from 'mercadopago';
 import { CreatePreferencePayload } from 'mercadopago/models/preferences/create-payload.model';
 import { Preference } from '../interfaces';
+import errorLog from '../utils/errorLog';
+import HttpException from '../utils/httpException';
 
-const preferenceService = async (body:any) => {
+export default async (body:any) => {
   const { items } = body;
-  let preferenceId:string;
   const backUrl = 'https://goodboy.net.br/checkout/compra';
 
   mercadopago.configure({
@@ -41,14 +41,9 @@ const preferenceService = async (body:any) => {
   };
 
   return mercadopago.preferences.create(preference)
-    .then((response) => {
-    // Este valor é o preferenceId que será enviado para o Brick na inicialização
-      preferenceId = response.body.id;
-      return preferenceId;
-    }).catch((error) => {
-      console.log(error);
-      throw new Error('Erro ao criar preferência de pagamento');
+    .then((response) => response.body.id)
+    .catch((error) => {
+      errorLog(error);
+      throw new HttpException(400, 'Erro ao criar preferência de pagamento');
     });
 };
-
-export default preferenceService;

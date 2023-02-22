@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/prefer-default-export */
 import { v4 as uuidv4 } from 'uuid';
@@ -17,10 +18,10 @@ export const ipn = async (id:string, topic:string) => {
       await createOrder(result);
       return { message: 'order created' };
     }
-
-    return { message: 'nothing to update' };
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, 'Erro ao criar o pedido');
   }
+
+  return { message: 'nothing to update' };
 };

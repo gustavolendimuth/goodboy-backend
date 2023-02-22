@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import mercadopago from 'mercadopago';
@@ -28,13 +30,23 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
 export const createOrderData = async (data:CreateOrderData) => {
   let response;
   const { order, id, items, email } = data;
+  let itemsData = order?.additional_info.items;
 
   const userEmail = email || order?.payer?.email;
   const name = userEmail?.split('@')[0];
 
+  if (!items) {
+    itemsData = itemsData?.map((item:{ id:string, quantity:string, title:string, unit_price:string }) => ({
+      productId: item.id,
+      title: item.title,
+      quantity: Number(item.quantity),
+      unitPrice: Number(item.unit_price),
+    }));
+  }
+
   const result:IOrder = {
     id,
-    items: items || order?.items,
+    items: items || itemsData,
     status: order?.status || 'created',
     totalAmount: order?.transaction_details?.total_paid_amount || order?.transaction_amount,
     netReceivedAmount: order?.transaction_details?.net_received_amount,
