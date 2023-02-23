@@ -27,28 +27,27 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
   }
 };
 
-export const createOrderData = async (data:CreateOrderData) => {
+export const createOrderIpn = async (data:CreateOrderData) => {
+  const { orderData, id } = data;
+
   let response;
-  const { orderData, id, items, email } = data;
   let itemsData = orderData?.additional_info.items;
 
-  const userEmail = email || orderData?.payer?.email;
+  const userEmail = orderData?.payer?.email;
   const name = userEmail?.split('@')[0];
 
-  if (!items) {
-    itemsData = itemsData?.map((item:{ id:string, quantity:string, title:string, unit_price:string }) => ({
-      productId: item.id,
-      title: item.title,
-      quantity: Number(item.quantity),
-      unitPrice: Number(item.unit_price),
-    }));
-  }
+  itemsData = itemsData?.map((item:{ id:string, quantity:string, title:string, unit_price:string }) => ({
+    productId: item.id,
+    title: item.title,
+    quantity: Number(item.quantity),
+    unitPrice: Number(item.unit_price),
+  }));
 
   const order:Order = {
     id,
-    items: items || itemsData,
+    items: itemsData,
     status: orderData?.status || 'created',
-    totalAmount: orderData?.transaction_details?.total_paid_amount || orderData?.transaction_amount,
+    totalAmount: orderData?.transaction_details?.total_paid_amount,
     netReceivedAmount: orderData?.transaction_details?.net_received_amount,
     paymentMethod: orderData?.payment_type_id === 'bank_transfer'
       ? orderData?.payment_method_id : orderData?.payment_type_id,
@@ -64,6 +63,40 @@ export const createOrderData = async (data:CreateOrderData) => {
   }
 
   if (!userEmail) return order;
+
+  if (!response) {
+    order.user = { id: uuidv4(), email: userEmail, name };
+  } else {
+    order.userId = response.id;
+  }
+  return order;
+};
+
+export const createOrderData = async (data:CreateOrderData) => {
+  const { orderData, id, items, email } = data;
+
+  let response;
+  const userEmail = email || orderData?.payer?.email;
+  const name = userEmail?.split('@')[0];
+
+  const order:Order = {
+    id,
+    items,
+    status: orderData?.status || 'created',
+    totalAmount: orderData?.transaction_details?.total_paid_amount,
+    netReceivedAmount: orderData?.transaction_details?.net_received_amount,
+    paymentMethod: orderData?.payment_type_id === 'bank_transfer'
+      ? orderData?.payment_method_id : orderData?.payment_type_id,
+    paymentId: orderData?.id,
+    feeAmount: orderData?.fee_details && orderData.fee_details[0]?.amount,
+  };
+
+  try {
+    response = await getUser({ email });
+  } catch (error:any) {
+    errorLog(error);
+    throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
+  }
 
   if (!response) {
     order.user = { id: uuidv4(), email: userEmail, name };

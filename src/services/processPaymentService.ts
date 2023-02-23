@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/prefer-default-export */
 
@@ -13,12 +14,12 @@ export const processPayment = async (body:ProcessPaymentBody) => {
   const orderId = uuidv4();
   const { formData, items } = body;
   const { payer: { email } } = formData;
-  let orderData;
+  let order;
   let response;
 
-  orderData = await createOrderData({ orderData: formData, items, email, id: orderId });
-  validateOrder(orderData);
-  await createOrder(orderData);
+  order = await createOrderData({ orderData: formData, items, email, id: orderId });
+  validateOrder(order);
+  await createOrder(order);
 
   try {
     response = (await mercadopagoSave(formData)).response;
@@ -28,9 +29,9 @@ export const processPayment = async (body:ProcessPaymentBody) => {
   }
 
   try {
-    orderData = await createOrderData({ orderData: response, items, email });
-    validateOrder(orderData);
-    updateOrder({ data: orderData, id: orderId });
+    order = await createOrderData({ orderData: response, items, email });
+    validateOrder(order);
+    updateOrder({ data: order, id: orderId });
     // if (response.status === '') await deleteOrder(orderId);
     return response;
   } catch (error:any) {
