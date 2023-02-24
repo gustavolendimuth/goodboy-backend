@@ -5,7 +5,6 @@ import { ValidationError } from 'joi';
 import { JwtPayload } from 'jsonwebtoken';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import UserModel from '../database/models/UserModel';
-import '../utils/OrderClass';
 
 export interface IProduct {
   id?: number,
@@ -96,7 +95,7 @@ export interface Order {
 }
 
 export interface OrderClassParams {
-  itemsData: Item[],
+  itemsData?: Item[],
   id?: string,
   orderData?: OrderData,
   user?:IUser,

@@ -5,7 +5,7 @@ import { Order, IUser, OrderClassParams, Item } from '../interfaces';
 
 export default class OrderClass implements Order {
   id?: string;
-  items: Item[];
+  items?: Item[];
   status?: string;
   totalAmount?: number;
   netReceivedAmount?: number;

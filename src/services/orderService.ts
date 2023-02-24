@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Op } from 'sequelize';
 import ItemsModel from '../database/models/ItemsModel';
 import OrderModel from '../database/models/OrderModel';
 import UserModel from '../database/models/UserModel';
@@ -10,18 +9,14 @@ export const createOrder = async (body:Order) => OrderModel.create({ ...body }, 
 });
 
 export const updateOrder = async (body:{ data:Order, id?:string, paymentId?:number }) => {
-  const { data, id = '0', paymentId = '0' } = body;
+  const { data, id, paymentId } = body;
 
-  return OrderModel.update(data, { where: {
-    [Op.or]: [{ id }, { paymentId }],
-  } });
+  return OrderModel.update(data, { where: id ? { id } : { paymentId } });
 };
 
 export const getOrder = async (body:{ id?:string, paymentId?:number }) => {
   const { paymentId = '0', id = '0' } = body;
-  return OrderModel.findOne({ where: {
-    [Op.or]: [{ id }, { paymentId }],
-  } });
+  return OrderModel.findOne({ where: id ? { id } : { paymentId } });
 };
 
 export const getOrders = async (body: Order) => OrderModel.findAll({

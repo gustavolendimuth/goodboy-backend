@@ -13,6 +13,8 @@ import HttpException from './HttpException';
 import OrderClass from './OrderClass';
 import OrderItemClass from './OrderItemClass';
 
+const errUser = 'Erro ao buscar usuário, tente mais tarde';
+
 export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
   validateKeys();
   const mercadoPagoAccessToken:string = process.env.MERCADO_PAGO_ACCESS_TOKEN || '';
@@ -29,8 +31,7 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
   }
 };
 
-export const createOrderIpn = async (data:CreateOrderParams) => {
-  const { orderData, id } = data;
+export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
   let response;
 
   if (!orderData || !orderData.additional_info.items) {
@@ -46,7 +47,7 @@ export const createOrderIpn = async (data:CreateOrderParams) => {
     if (userEmail) response = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
-    throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
+    throw new HttpException(400, errUser);
   }
 
   const params:OrderClassParams = { itemsData, id, orderData };
@@ -62,21 +63,18 @@ export const createOrderIpn = async (data:CreateOrderParams) => {
   return new OrderClass(params);
 };
 
-export const createOrderData = async (data:CreateOrderParams) => {
-  const { orderData, id, email } = data;
-  const { items } = data;
-
+export const createOrderData = async ({ orderData, id, email, items }:CreateOrderParams) => {
   let response;
   const userEmail = email || orderData?.payer?.email;
   const name = userEmail?.split('@')[0];
 
-  if (!items || !userEmail || !name) throw new HttpException(400, 'Erro ao criar pedido, tente mais tarde');
+  if (!items || !userEmail || !name) throw new HttpException(400, errUser);
 
   try {
     if (userEmail) response = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
-    throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
+    throw new HttpException(400, errUser);
   }
 
   const itemsData = items.map((item:MercadoPagoItem) => new OrderItemClass(item));
@@ -92,4 +90,9 @@ export const createOrderData = async (data:CreateOrderParams) => {
   }
 
   return new OrderClass(params);
+};
+
+export const createOrderWebhook = async ({ orderData }:CreateOrderParams) => {
+  const { user, ...rest } = new OrderClass({ orderData });
+  return rest;
 };
