@@ -43,8 +43,6 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
   const userEmail = orderData.payer.email;
   const name = userEmail?.split('@')[0];
 
-  console.log('email', userEmail);
-
   try {
     response = await getUser({ email: userEmail });
   } catch (error:any) {
@@ -54,17 +52,13 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
 
   const params:OrderClassParams = { itemsData, id, orderData };
 
-  if (!response) {
+  if (!response || userEmail) {
     params.user = { id: uuidv4(), email: userEmail, name };
-  } else {
-    params.userId = response.id;
-    const { user, ...rest } = new OrderClass(params);
-    console.log('rest', rest);
-
-    return rest;
   }
 
-  return new OrderClass(params);
+  params.userId = response?.id;
+  const { user, ...rest } = new OrderClass(params);
+  return rest;
 };
 
 export const createOrderData = async ({ orderData, id, email, items }:CreateOrderParams) => {

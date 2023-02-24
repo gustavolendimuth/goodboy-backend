@@ -2,12 +2,20 @@
 import axios from 'axios';
 import 'dotenv/config';
 
+const headers = { Authorization: `Bearer ${process.env.MERCADO_PAGO_ACCESS_TOKEN}` };
+const url = 'https://api.mercadopago.com';
+
 export const fetchPayment = axios.create({
-  baseURL: 'https://api.mercadopago.com/v1/payments/',
-  headers: { Authorization: `Bearer ${process.env.MERCADO_PAGO_ACCESS_TOKEN}` },
+  baseURL: `${url}/v1/payments/`,
+  headers,
 });
 
 export const fetchOrder = axios.create({
-  baseURL: 'https://api.mercadopago.com/merchant_orders/',
-  headers: { Authorization: `Bearer ${process.env.MERCADO_PAGO_ACCESS_TOKEN}` },
+  baseURL: `${url}/merchant_orders/`,
+  headers,
+});
+
+export const fetchUser = axios.create({
+  baseURL: `${url}/v1/customers/`,
+  headers,
 });

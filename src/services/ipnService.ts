@@ -13,6 +13,10 @@ export const ipn = async (id:string, topic:string) => {
     if (topic === 'payment') {
       const payment = await fetchPayment.get(id);
       const order = await getOrder({ paymentId: Number(id) });
+      // let payer;
+      // if (!payment.data.payer.email) {
+      //   payer = fetchUser.get(payment.data.payer.id);
+      // }
 
       const orderData = await createOrderIpn({ orderData: payment.data, id: !order ? uuidv4() : undefined });
 
