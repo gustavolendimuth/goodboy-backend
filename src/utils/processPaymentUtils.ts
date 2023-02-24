@@ -39,12 +39,14 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
   }
 
   const { items } = orderData.additional_info;
-  const itemsData = items && items.map((item) => new OrderItemClass(item));
+  const itemsData = items?.map((item) => new OrderItemClass(item));
   const userEmail = orderData.payer.email;
   const name = userEmail?.split('@')[0];
 
+  console.log('email', userEmail);
+
   try {
-    if (userEmail) response = await getUser({ email: userEmail });
+    response = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, errUser);
@@ -57,6 +59,8 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
   } else {
     params.userId = response.id;
     const { user, ...rest } = new OrderClass(params);
+    console.log('rest', rest);
+
     return rest;
   }
 
