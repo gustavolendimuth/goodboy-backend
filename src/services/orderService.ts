@@ -15,7 +15,7 @@ export const updateOrder = async (body:{ data:Order, id?:string, paymentId?:numb
 };
 
 export const getOrder = async (body:{ id?:string, paymentId?:number }) => {
-  const { paymentId = '0', id = '0' } = body;
+  const { paymentId, id } = body;
   return OrderModel.findOne({ where: id ? { id } : { paymentId } });
 };
 
