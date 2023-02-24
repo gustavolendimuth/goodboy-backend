@@ -4,22 +4,33 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { createOrder, updateOrder } from './orderService';
-import { ProcessPaymentBody } from '../interfaces';
+import { CreateOrderParams } from '../interfaces';
 import { validateOrder } from './validations/orderValidation';
-import HttpException from '../utils/httpException';
+import HttpException from '../utils/HttpException';
 import errorLog from '../utils/errorLog';
 import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
 
-export const processPayment = async (body:ProcessPaymentBody) => {
-  const orderId = uuidv4();
+export const processPayment = async (body:CreateOrderParams) => {
+  const id = uuidv4();
   const { formData, items } = body;
+
+  if (!formData) throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
+
   const { payer: { email } } = formData;
   let order;
   let response;
 
-  order = await createOrderData({ orderData: formData, items, email, id: orderId });
-  validateOrder(order);
-  await createOrder(order);
+  if (!formData) throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
+
+  try {
+    order = await createOrderData({ formData, items, email, id });
+
+    validateOrder(order);
+    await createOrder(order);
+  } catch (error:any) {
+    errorLog(error);
+    throw new HttpException(400, 'Erro ao criar o pedido, tente mais tarde');
+  }
 
   try {
     response = (await mercadopagoSave(formData)).response;
@@ -31,8 +42,7 @@ export const processPayment = async (body:ProcessPaymentBody) => {
   try {
     order = await createOrderData({ orderData: response, items, email });
     validateOrder(order);
-    updateOrder({ data: order, id: orderId });
-    // if (response.status === '') await deleteOrder(orderId);
+    updateOrder({ data: order, id });
     return response;
   } catch (error:any) {
     errorLog(error);

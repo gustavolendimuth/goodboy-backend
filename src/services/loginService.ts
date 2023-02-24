@@ -6,7 +6,7 @@ import { createToken } from '../utils/jwtUtils';
 // import validateLogin from './validations/loginValidation';
 import sendMagicLink from '../utils/sendMagicLink';
 import * as jwtUtils from '../utils/jwtUtils';
-import HttpException from '../utils/httpException';
+import HttpException from '../utils/HttpException';
 
 const login = async (body: ILogin) => {
   // validateLogin(body);

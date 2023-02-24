@@ -2,7 +2,7 @@
 import ItemsModel from '../database/models/ItemsModel';
 import OrderModel from '../database/models/OrderModel';
 import errorLog from '../utils/errorLog';
-import HttpException from '../utils/httpException';
+import HttpException from '../utils/HttpException';
 
 export const getAllOrders = async () => {
   const response = await OrderModel.findAll({

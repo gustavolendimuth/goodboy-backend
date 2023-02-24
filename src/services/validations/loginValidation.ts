@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { ILogin } from '../../interfaces';
-import HttpException from '../../utils/httpException';
+import HttpException from '../../utils/HttpException';
 
 const validateLogin = (body: ILogin) => {
   const schema = Joi.object({

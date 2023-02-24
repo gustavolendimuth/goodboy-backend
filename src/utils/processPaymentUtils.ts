@@ -5,11 +5,13 @@
 import mercadopago from 'mercadopago';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateOrderData, Order } from '../interfaces';
+import { CreateOrderParams, MercadoPagoItem, OrderClassParams } from '../interfaces';
 import { getUser } from '../services/usersService';
 import validateKeys from '../services/validations/validateKeys';
 import errorLog from './errorLog';
-import HttpException from './httpException';
+import HttpException from './HttpException';
+import OrderClass from './OrderClass';
+import OrderItemClass from './OrderItemClass';
 
 export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
   validateKeys();
@@ -27,33 +29,18 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
   }
 };
 
-export const createOrderIpn = async (data:CreateOrderData) => {
+export const createOrderIpn = async (data:CreateOrderParams) => {
   const { orderData, id } = data;
-
   let response;
-  let itemsData = orderData?.additional_info.items;
 
-  const userEmail = orderData?.payer?.email;
+  if (!orderData || !orderData.additional_info.items) {
+    throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
+  }
+
+  const { items } = orderData.additional_info;
+  const itemsData = items && items.map((item) => new OrderItemClass(item));
+  const userEmail = orderData.payer.email;
   const name = userEmail?.split('@')[0];
-
-  itemsData = itemsData?.map((item:{ id:string, quantity:string, title:string, unit_price:string }) => ({
-    productId: item.id,
-    title: item.title,
-    quantity: Number(item.quantity),
-    unitPrice: Number(item.unit_price),
-  }));
-
-  const order:Order = {
-    id,
-    items: itemsData,
-    status: orderData?.status || 'created',
-    totalAmount: orderData?.transaction_details?.total_paid_amount,
-    netReceivedAmount: orderData?.transaction_details?.net_received_amount,
-    paymentMethod: orderData?.payment_type_id === 'bank_transfer'
-      ? orderData?.payment_method_id : orderData?.payment_type_id,
-    paymentId: orderData?.id,
-    feeAmount: orderData?.fee_details && orderData.fee_details[0]?.amount,
-  };
 
   try {
     if (userEmail) response = await getUser({ email: userEmail });
@@ -62,46 +49,47 @@ export const createOrderIpn = async (data:CreateOrderData) => {
     throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
   }
 
-  if (!userEmail) return order;
+  const params:OrderClassParams = { itemsData, id, orderData };
 
   if (!response) {
-    order.user = { id: uuidv4(), email: userEmail, name };
+    params.user = { id: uuidv4(), email: userEmail, name };
   } else {
-    order.userId = response.id;
+    params.userId = response.id;
+    const { user, ...rest } = new OrderClass(params);
+    return rest;
   }
-  return order;
+
+  return new OrderClass(params);
 };
 
-export const createOrderData = async (data:CreateOrderData) => {
-  const { orderData, id, items, email } = data;
+export const createOrderData = async (data:CreateOrderParams) => {
+  const { orderData, id, email } = data;
+  const { items } = data;
 
   let response;
   const userEmail = email || orderData?.payer?.email;
   const name = userEmail?.split('@')[0];
 
-  const order:Order = {
-    id,
-    items,
-    status: orderData?.status || 'created',
-    totalAmount: orderData?.transaction_details?.total_paid_amount,
-    netReceivedAmount: orderData?.transaction_details?.net_received_amount,
-    paymentMethod: orderData?.payment_type_id === 'bank_transfer'
-      ? orderData?.payment_method_id : orderData?.payment_type_id,
-    paymentId: orderData?.id,
-    feeAmount: orderData?.fee_details && orderData.fee_details[0]?.amount,
-  };
+  if (!items || !userEmail || !name) throw new HttpException(400, 'Erro ao criar pedido, tente mais tarde');
 
   try {
-    response = await getUser({ email });
+    if (userEmail) response = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, 'Erro ao buscar usuário, tente mais tarde');
   }
 
+  const itemsData = items.map((item:MercadoPagoItem) => new OrderItemClass(item));
+
+  const params:OrderClassParams = { itemsData, id, orderData };
+
   if (!response) {
-    order.user = { id: uuidv4(), email: userEmail, name };
+    params.user = { id: uuidv4(), email: userEmail, name };
   } else {
-    order.userId = response.id;
+    params.userId = response.id;
+    const { user, ...rest } = new OrderClass(params);
+    return rest;
   }
-  return order;
+
+  return new OrderClass(params);
 };

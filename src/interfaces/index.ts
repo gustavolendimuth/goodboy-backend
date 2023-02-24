@@ -5,6 +5,7 @@ import { ValidationError } from 'joi';
 import { JwtPayload } from 'jsonwebtoken';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import UserModel from '../database/models/UserModel';
+import '../utils/OrderClass';
 
 export interface IProduct {
   id?: number,
@@ -64,12 +65,19 @@ export interface IErrType {
   [key: string]: number
 }
 
-export interface Items {
-  id?: number,
+export interface MercadoPagoItem {
+  id: number,
   title: string,
   quantity: number,
   unit_price: number,
   currency_id?: string,
+}
+
+export interface Item {
+  productId: number;
+  title: string;
+  quantity: number;
+  unitPrice: number;
 }
 
 export interface Order {
@@ -78,13 +86,37 @@ export interface Order {
   userId?: string
   paymentId?: number,
   preferenceId?: string,
-  items?: Items[],
-  totalAmount: number,
+  items?: Item[],
+  totalAmount?: number,
   feeAmount?: number,
   netReceivedAmount?: number,
-  paymentMethod: string,
-  status: string,
+  paymentMethod?: string,
+  status?: string,
   login?: LoginPayload,
+}
+
+export interface OrderClassParams {
+  itemsData: Item[],
+  id?: string,
+  orderData?: OrderData,
+  user?:IUser,
+  userId?:string
+}
+
+export interface OrderData {
+  status?: string;
+  transaction_details?: {
+    total_paid_amount?: number;
+    net_received_amount?: number;
+  };
+  additional_info: { items: MercadoPagoItem[] };
+  payer: { email: string }
+  payment_type_id?: string;
+  payment_method_id?: string;
+  id?: number;
+  fee_details?: {
+    amount?: number;
+  }[];
 }
 
 export interface ILoginPayload extends UserModel {
@@ -100,7 +132,7 @@ export interface IProcessPayment {
 }
 
 export interface Preference {
-  items: Items[],
+  items: MercadoPagoItem[],
   back_urls: {
     success: string,
     failure: string,
@@ -113,15 +145,16 @@ export interface Preference {
 }
 
 export interface ProcessPaymentBody {
-  items: Items[],
+  items: MercadoPagoItem[],
   formData: CreatePaymentPayload,
   preferenceId?: string,
 }
 
-export interface CreateOrderData {
-  orderData:any,
+export interface CreateOrderParams {
+  formData?:CreatePaymentPayload,
+  orderData?:OrderData,
   id?:string,
-  items?:Items[],
+  items?:MercadoPagoItem[],
   email?:string,
 }
 

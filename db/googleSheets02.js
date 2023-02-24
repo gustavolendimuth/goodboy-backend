@@ -29,7 +29,8 @@ function getDataFromMySQL() {
   const endTimestamp = endDate ? Math.floor(endDate.getTime() / 1000) : null;
 
   // construct the SQL query with the start and end dates, if specified
-  let sqlQuery = "SELECT o.payment_id, u.email, GROUP_CONCAT(i.title SEPARATOR ', '), o.payment_method, o.total_amount, o.fee_amount, net_received_amount, o.status, SUBSTR(DATE_FORMAT(CONVERT_TZ(o.created_at,'+00:00','-03:00'), '%d/%m/%Y %H:%i'), -16) FROM orders AS o INNER JOIN users AS u ON o.user_id = u.id INNER JOIN items AS i ON i.order_id = o.id";
+  let sqlQuery = "SELECT o.payment_id, u.email, GROUP_CONCAT(CONCAT(i.title, ' (', i.quantity,' x' ' R$', FORMAT(i.unit_price, 2, 'pt_BR'), ')') SEPARATOR ', '), o.payment_method, FORMAT(o.total_amount, 2, 'pt_BR'), FORMAT(o.fee_amount, 2, 'pt_BR'), FORMAT(net_received_amount, 2, 'pt_BR'), o.status, SUBSTR(DATE_FORMAT(CONVERT_TZ(o.created_at,'+00:00','-03:00'), '%d/%m/%Y %H:%i'), -16) FROM orders AS o INNER JOIN users AS u ON o.user_id = u.id INNER JOIN items AS i ON i.order_id = o.id";
+
   if (startTimestamp && endTimestamp) {
     sqlQuery += ` WHERE o.created_at BETWEEN FROM_UNIXTIME(${startTimestamp}) AND FROM_UNIXTIME(${endTimestamp})`;
   }
@@ -60,6 +61,12 @@ function getDataFromMySQL() {
   stmt.close();
   conn.close();
   sheet.autoResizeColumns(1, numCols + 1);
+
+  const maxWidth = 400;
+  const itemsColumn = sheet.getColumnWidth(3);
+  if (itemsColumn > maxWidth) {
+    sheet.setColumnWidth(3, maxWidth);
+  }
 
   Logger.log(`${row - 2} rows imported.`);
 }

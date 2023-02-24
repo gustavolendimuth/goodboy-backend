@@ -3,9 +3,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import mercadopago from 'mercadopago';
 import { CreatePreferencePayload } from 'mercadopago/models/preferences/create-payload.model';
-import { Preference } from '../interfaces';
+import { Item, Preference } from '../interfaces';
 import errorLog from '../utils/errorLog';
-import HttpException from '../utils/httpException';
+import HttpException from '../utils/HttpException';
 
 export default async (body:any) => {
   const { items } = body;
@@ -15,13 +15,7 @@ export default async (body:any) => {
     access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN || '',
   });
 
-  const settingsItems = items.map((item:any) => ({
-    id: item.productId,
-    title: item.title,
-    quantity: item.quantity,
-    unit_price: item.unitPrice,
-    currency_id: 'BRL',
-  }));
+  const settingsItems = items.map((item:Item) => ({ ...item, currency_id: 'BRL' }));
 
   const preference:CreatePreferencePayload & Preference = {
   // o "purpose": "wallet_purchase" permite apenas pagamentos logados

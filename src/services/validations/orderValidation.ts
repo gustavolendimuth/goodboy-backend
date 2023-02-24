@@ -2,7 +2,7 @@
 import Joi from 'joi';
 import { Order } from '../../interfaces';
 import errorLog from '../../utils/errorLog';
-import HttpException from '../../utils/httpException';
+import HttpException from '../../utils/HttpException';
 
 const orderSchema = Joi.object({
   id: Joi.string().length(36),

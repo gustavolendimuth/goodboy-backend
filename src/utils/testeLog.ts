@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
-import HttpException from './httpException';
+import HttpException from './HttpException';
 
 const host = process.env.EMAIL_HOST;
 const port = Number(process.env.EMAIL_PORT);

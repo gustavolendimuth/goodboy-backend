@@ -3,7 +3,7 @@
 import { WebhookBody } from '../interfaces';
 import errorLog from '../utils/errorLog';
 import { fetchPayment } from '../utils/fetchMercadoPago';
-import HttpException from '../utils/httpException';
+import HttpException from '../utils/HttpException';
 import { createOrderData } from '../utils/processPaymentUtils';
 import { updateOrder } from './orderService';
 
