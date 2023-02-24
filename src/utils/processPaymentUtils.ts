@@ -54,11 +54,17 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
 
   if (!response || userEmail) {
     params.user = { id: uuidv4(), email: userEmail, name };
+  } else if (response) {
+    params.userId = response.id;
   }
 
-  params.userId = response?.id;
-  const { user, ...rest } = new OrderClass(params);
-  return rest;
+  const randomUser = `indefinido - ${uuidv4()}`;
+
+  // generate random number 6 digits
+
+  if (!userEmail) params.user = { id: uuidv4(), name: randomUser, email: randomUser };
+
+  return new OrderClass(params);
 };
 
 export const createOrderData = async ({ orderData, id, email, items }:CreateOrderParams) => {
