@@ -43,7 +43,8 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
   const userEmail = orderData.payer.email;
   const name = userEmail?.split('@')[0];
 
-  if (!items || !userEmail || !name) throw new HttpException(400, errUser);
+  if (!items || !name) throw new HttpException(400, errUser);
+  if (!userEmail) throw new HttpException(200, 'nothing to update');
 
   try {
     user = await getUser({ email: userEmail });
@@ -62,13 +63,6 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
       const { user: _, ...rest } = new OrderClass(params);
       return rest;
     }
-  }
-
-  const randomUser = uuidv4();
-  if (!userEmail) {
-    params.user = {
-      id: uuidv4(), name: `indefinido-${randomUser}`, email: `indefinido@${randomUser}.com`,
-    };
   }
 
   return new OrderClass(params);
