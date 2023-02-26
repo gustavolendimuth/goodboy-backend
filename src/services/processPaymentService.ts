@@ -12,21 +12,22 @@ import errorLog from '../utils/errorLog';
 import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
 
 export const processPayment = async (body:CreateOrderParams) => {
+  let order;
+  let response;
+  let userEmail;
   const id = uuidv4();
-  const emailValidation = z.string().email().startsWith('string').trim()
-    .max(18)
+
+  const emailValidation = z.string().email().trim()
+    .max(32)
     .min(1);
 
   const { formData, items } = body;
   if (!formData) throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
 
   const { payer: { email } } = formData;
-  const userEmail = emailValidation.parse(email);
-
-  let order;
-  let response;
 
   try {
+    userEmail = emailValidation.parse(email);
     order = await createOrderData({ formData, items, email: userEmail, id });
     validateOrder(order);
     await createOrder(order);
