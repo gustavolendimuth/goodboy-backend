@@ -43,7 +43,7 @@ export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
   const userEmail = orderData.payer.email;
   const name = userEmail?.split('@')[0];
 
-  if (!items || !name) throw new HttpException(400, errUser);
+  if (!items) throw new HttpException(400, errUser);
   if (!userEmail) throw new HttpException(200, 'nothing to update');
 
   try {
@@ -73,17 +73,17 @@ export const createOrderData = async ({ orderData, id, email, items }:CreateOrde
   const userEmail = email || orderData?.payer?.email;
   const name = userEmail?.split('@')[0];
 
-  if (!items || !userEmail || !name) throw new HttpException(400, errUser);
+  if (!items) throw new HttpException(400, errUser);
+  if (!userEmail || !name) throw new HttpException(200, 'nothing to update');
 
   try {
-    if (userEmail) user = await getUser({ email: userEmail });
+    user = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, errUser);
   }
 
   const itemsData = items.map((item:MercadoPagoItem) => new OrderItem(item));
-
   const params:OrderParams = { itemsData, id, orderData };
 
   if (userEmail) {
@@ -100,6 +100,9 @@ export const createOrderData = async ({ orderData, id, email, items }:CreateOrde
 };
 
 export const createOrderWebhook = async ({ orderData }:CreateOrderParams) => {
+  const userEmail = orderData?.payer?.email;
+  if (!userEmail) throw new HttpException(400, 'email missing');
+
   const { user, ...rest } = new OrderClass({ orderData });
   return rest;
 };
