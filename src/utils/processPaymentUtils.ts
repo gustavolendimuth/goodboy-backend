@@ -74,7 +74,7 @@ export const createOrderData = async ({ orderData, id, email, items }:CreateOrde
   const name = userEmail?.split('@')[0];
 
   if (!items) throw new HttpException(400, errUser);
-  if (!userEmail || !name) throw new HttpException(200, 'nothing to update');
+  if (!name) throw new HttpException(400, 'nothing to update');
 
   try {
     user = await getUser({ email: userEmail });

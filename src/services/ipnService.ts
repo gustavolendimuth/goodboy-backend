@@ -9,9 +9,11 @@ import { createOrderIpn } from '../utils/processPaymentUtils';
 import { createOrder, getOrder, updateOrder } from './orderService';
 
 export const ipn = async (id:string, topic:string) => {
-  try {
-    if (topic === 'payment') {
+  if (topic === 'payment') {
+    try {
       const payment = await fetchPayment.get(id);
+      if (!payment.data.payer.email) return { status: 200, message: 'nothing to update' };
+
       const order = await getOrder({ paymentId: Number(id) });
       const orderData = await createOrderIpn({ orderData: payment.data, id: !order ? uuidv4() : undefined });
 
@@ -22,10 +24,10 @@ export const ipn = async (id:string, topic:string) => {
 
       await createOrder(orderData);
       return { message: 'order created' };
+    } catch (error:any) {
+      errorLog(error);
+      throw new HttpException(400, 'Erro ao criar o pedido');
     }
-  } catch (error:any) {
-    errorLog(error);
-    throw new HttpException(400, 'Erro ao criar o pedido');
   }
 
   return { message: 'nothing to update' };
