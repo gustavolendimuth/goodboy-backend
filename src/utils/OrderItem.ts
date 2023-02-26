@@ -1,6 +1,6 @@
 import { Item, MercadoPagoItem } from '../interfaces';
 
-export default class OrderItemClass implements Item {
+export default class OrderItem implements Item {
   productId: number;
   title: string;
   quantity: number;

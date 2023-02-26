@@ -1,7 +1,7 @@
 /* eslint-disable max-params */
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Order, IUser, OrderClassParams, Item } from '../interfaces';
+import { Order, IUser, OrderParams, Item } from '../interfaces';
 
 export default class OrderClass implements Order {
   id?: string;
@@ -15,7 +15,7 @@ export default class OrderClass implements Order {
   user?: IUser;
   userId?: string;
 
-  constructor(params:OrderClassParams) {
+  constructor(params:OrderParams) {
     this.id = params.id;
     this.items = params.itemsData;
     this.status = params.orderData?.status || 'created';

@@ -5,13 +5,13 @@
 import mercadopago from 'mercadopago';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateOrderParams, MercadoPagoItem, OrderClassParams } from '../interfaces';
+import { CreateOrderParams, MercadoPagoItem, OrderParams } from '../interfaces';
 import { getUser } from '../services/usersService';
 import validateKeys from '../services/validations/validateKeys';
 import errorLog from './errorLog';
 import HttpException from './HttpException';
 import OrderClass from './OrderClass';
-import OrderItemClass from './OrderItemClass';
+import OrderItem from './OrderItem';
 
 const errUser = 'Erro ao buscar usuário, tente mais tarde';
 
@@ -32,65 +32,74 @@ export const mercadopagoSave = async (formData:CreatePaymentPayload) => {
 };
 
 export const createOrderIpn = async ({ orderData, id }:CreateOrderParams) => {
-  let response;
+  let user;
 
   if (!orderData || !orderData.additional_info.items) {
     throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
   }
 
   const { items } = orderData.additional_info;
-  const itemsData = items?.map((item) => new OrderItemClass(item));
+  const itemsData = items?.map((item) => new OrderItem(item));
   const userEmail = orderData.payer.email;
   const name = userEmail?.split('@')[0];
 
+  if (!items || !userEmail || !name) throw new HttpException(400, errUser);
+
   try {
-    response = await getUser({ email: userEmail });
+    user = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, errUser);
   }
 
-  const params:OrderClassParams = { itemsData, id, orderData };
+  const params:OrderParams = { itemsData, id, orderData };
 
-  if (!response || userEmail) {
-    params.user = { id: uuidv4(), email: userEmail, name };
-  } else if (response) {
-    params.userId = response.id;
+  if (userEmail) {
+    if (!user) {
+      params.user = { id: uuidv4(), email: userEmail, name };
+    } else {
+      params.userId = user.id;
+      const { user: _, ...rest } = new OrderClass(params);
+      return rest;
+    }
   }
 
-  const randomUser = `indefinido - ${uuidv4()}`;
-
-  // generate random number 6 digits
-
-  if (!userEmail) params.user = { id: uuidv4(), name: randomUser, email: randomUser };
+  const randomUser = uuidv4();
+  if (!userEmail) {
+    params.user = {
+      id: uuidv4(), name: `indefinido-${randomUser}`, email: `indefinido@${randomUser}.com`,
+    };
+  }
 
   return new OrderClass(params);
 };
 
 export const createOrderData = async ({ orderData, id, email, items }:CreateOrderParams) => {
-  let response;
+  let user;
   const userEmail = email || orderData?.payer?.email;
   const name = userEmail?.split('@')[0];
 
   if (!items || !userEmail || !name) throw new HttpException(400, errUser);
 
   try {
-    if (userEmail) response = await getUser({ email: userEmail });
+    if (userEmail) user = await getUser({ email: userEmail });
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, errUser);
   }
 
-  const itemsData = items.map((item:MercadoPagoItem) => new OrderItemClass(item));
+  const itemsData = items.map((item:MercadoPagoItem) => new OrderItem(item));
 
-  const params:OrderClassParams = { itemsData, id, orderData };
+  const params:OrderParams = { itemsData, id, orderData };
 
-  if (!response) {
-    params.user = { id: uuidv4(), email: userEmail, name };
-  } else {
-    params.userId = response.id;
-    const { user, ...rest } = new OrderClass(params);
-    return rest;
+  if (userEmail) {
+    if (!user) {
+      params.user = { id: uuidv4(), email: userEmail, name };
+    } else {
+      params.userId = user.id;
+      const { user: _, ...rest } = new OrderClass(params);
+      return rest;
+    }
   }
 
   return new OrderClass(params);

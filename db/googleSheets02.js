@@ -29,10 +29,10 @@ function getDataFromMySQL() {
   const endTimestamp = endDate ? Math.floor(endDate.getTime() / 1000) : null;
 
   // construct the SQL query with the start and end dates, if specified
-  let sqlQuery = "SELECT o.payment_id, u.email, GROUP_CONCAT(CONCAT(i.title, ' (', i.quantity,' x' ' R$', FORMAT(i.unit_price, 2, 'pt_BR'), ')') SEPARATOR ', '), o.payment_method, FORMAT(o.total_amount, 2, 'pt_BR'), FORMAT(o.fee_amount, 2, 'pt_BR'), FORMAT(net_received_amount, 2, 'pt_BR'), o.status, SUBSTR(DATE_FORMAT(CONVERT_TZ(o.created_at,'+00:00','-03:00'), '%d/%m/%Y %H:%i'), -16) FROM orders AS o INNER JOIN users AS u ON o.user_id = u.id INNER JOIN items AS i ON i.order_id = o.id";
+  let sqlQuery = "SELECT o.payment_id, u.email, GROUP_CONCAT(CONCAT(i.title, ' (', i.quantity,' x' ' R$', FORMAT(i.unit_price, 2, 'pt_BR'), ')') SEPARATOR ', '), o.payment_method, FORMAT(o.total_amount, 2, 'pt_BR'), FORMAT(o.fee_amount, 2, 'pt_BR'), FORMAT(net_received_amount, 2, 'pt_BR'), o.status, SUBSTR(DATE_FORMAT(CONVERT_TZ(o.created_at,'+00:00','-03:00'), '%d/%m/%Y %H:%i'), -16) FROM orders AS o INNER JOIN users AS u ON o.user_id = u.id INNER JOIN items AS i ON i.order_id = o.id WHERE o.status NOT IN ('rejected', 'cancelled', 'created')";
 
   if (startTimestamp && endTimestamp) {
-    sqlQuery += ` WHERE o.created_at BETWEEN FROM_UNIXTIME(${startTimestamp}) AND FROM_UNIXTIME(${endTimestamp})`;
+    sqlQuery += ` AND o.created_at BETWEEN FROM_UNIXTIME(${startTimestamp}) AND FROM_UNIXTIME(${endTimestamp})`;
   }
 
   sqlQuery += ' GROUP BY o.payment_id';
@@ -62,10 +62,16 @@ function getDataFromMySQL() {
   conn.close();
   sheet.autoResizeColumns(1, numCols + 1);
 
-  const maxWidth = 400;
+  const itemsMaxWidth = 400;
+  const emailMaxWidth = 300;
   const itemsColumn = sheet.getColumnWidth(3);
-  if (itemsColumn > maxWidth) {
-    sheet.setColumnWidth(3, maxWidth);
+  const emailColumn = sheet.getColumnWidth(2);
+
+  if (itemsColumn > itemsMaxWidth) {
+    sheet.setColumnWidth(3, itemsMaxWidth);
+  }
+  if (emailColumn > emailMaxWidth) {
+    sheet.setColumnWidth(2, emailMaxWidth);
   }
 
   Logger.log(`${row - 2} rows imported.`);

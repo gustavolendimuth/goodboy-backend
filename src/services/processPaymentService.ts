@@ -3,6 +3,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { v4 as uuidv4 } from 'uuid';
+import * as z from 'zod';
 import { createOrder, updateOrder } from './orderService';
 import { CreateOrderParams } from '../interfaces';
 import { validateOrder } from './validations/orderValidation';
@@ -12,19 +13,21 @@ import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
 
 export const processPayment = async (body:CreateOrderParams) => {
   const id = uuidv4();
-  const { formData, items } = body;
+  const emailValidation = z.string().email().startsWith('string').trim()
+    .max(18)
+    .min(1);
 
+  const { formData, items } = body;
   if (!formData) throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
 
   const { payer: { email } } = formData;
+  const userEmail = emailValidation.parse(email);
+
   let order;
   let response;
 
-  if (!formData) throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
-
   try {
-    order = await createOrderData({ formData, items, email, id });
-
+    order = await createOrderData({ formData, items, email: userEmail, id });
     validateOrder(order);
     await createOrder(order);
   } catch (error:any) {
@@ -40,7 +43,7 @@ export const processPayment = async (body:CreateOrderParams) => {
   }
 
   try {
-    order = await createOrderData({ orderData: response, items, email });
+    order = await createOrderData({ orderData: response, items, email: userEmail });
     validateOrder(order);
     updateOrder({ data: order, id });
     return response;

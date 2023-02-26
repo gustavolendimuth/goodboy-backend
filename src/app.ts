@@ -6,7 +6,7 @@ import { errorMiddleware } from './middlewares/errorMiddleware';
 import router from './routes/routes';
 
 const corsOptions:CorsOptions = {
-  origin: [process.env.FRONTEND_URL || '', 'http://localhost:3000'],
+  origin: [process.env.FRONTEND_URL || ''],
   optionsSuccessStatus: 200,
 };
 

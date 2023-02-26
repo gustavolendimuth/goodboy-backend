@@ -94,7 +94,7 @@ export interface Order {
   login?: LoginPayload,
 }
 
-export interface OrderClassParams {
+export interface OrderParams {
   itemsData?: Item[],
   id?: string,
   orderData?: OrderData,
