@@ -37,7 +37,8 @@ export const processPayment = async (body:CreateOrderParams) => {
   }
 
   try {
-    response = (await mercadopagoSave(formData)).response;
+    response = (await mercadopagoSave(formData))?.response;
+    if (!response) throw new Error();
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, 'Erro ao processar o pagamento no Mercado Pago, tente mais tarde');

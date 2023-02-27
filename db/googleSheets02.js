@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 function getDataFromMySQL() {
-  const server = 'containers-us-west-182.railway.app';
+  const server = '';
   const port = 7255;
-  const dbName = 'railway';
-  const user = 'root';
-  const password = 'dzCumOIaDITLzLnWfVK9';
+  const dbName = '';
+  const user = '';
+  const password = '';
   const url = `jdbc:mysql://${server}:${port}/${dbName}`;
 
   const conn = Jdbc.getConnection(url, user, password);
@@ -13,7 +13,6 @@ function getDataFromMySQL() {
 
   function addMinutes(date, minutes) {
     date.setTime(date.getTime() + minutes * 60000);
-
     return date;
   }
 
@@ -35,7 +34,7 @@ function getDataFromMySQL() {
     sqlQuery += ` AND o.created_at BETWEEN FROM_UNIXTIME(${startTimestamp}) AND FROM_UNIXTIME(${endTimestamp})`;
   }
 
-  sqlQuery += ' GROUP BY o.payment_id';
+  sqlQuery += ' GROUP BY o.payment_id ORDER BY o.created_at ASC';
 
   const results = stmt.executeQuery(sqlQuery);
 

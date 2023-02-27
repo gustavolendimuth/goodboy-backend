@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const server = 'containers-us-west-182.railway.app';
+const server = '';
 const port = 7255;
-const dbName = 'railway';
-const username = 'root';
-const password = 'dzCumOIaDITLzLnWfVK9';
+const dbName = '';
+const username = '';
+const password = '';
 const url = `jdbc:mysql://${server}:${port}/${dbName}`;
 
 function readData() {
