@@ -1,0 +1,134 @@
+{
+  "nota_fiscal": {
+    "tipo": "S",
+    "natureza_operacao": "Venda de Mercadorias",
+    "data_emissao": "20/10/2012",
+    "data_entrada_saida": "22/10/2012",
+    "hora_entrada_saida": "15:30",
+    "cliente": {
+      "codigo": "1235",
+      "nome": "Contato Teste 2",
+      "tipo_pessoa": "F",
+      "cpf_cnpj": "22755777850",
+      "ie": "",
+      "rg": "1234567890",
+      "endereco": "Rua Teste",
+      "numero": "123",
+      "complemento": "sala 2",
+      "bairro": "Teste",
+      "cep": "95700000",
+      "cidade": "Bento Gonçalves",
+      "uf": "RS",
+      "fone": "5430553808",
+      "email": "teste@teste.com.br",
+      "atualizar_cliente": "N"
+    },
+    "itens": [
+      {
+        "item": {
+          "codigo": "1234",
+          "descricao": "Produto Teste 1",
+          "unidade": "UN",
+          "quantidade": "2",
+          "valor_unitario": "50.25",
+          "tipo": "P",
+          "origem": "0",
+          "numero_fci": "B01F70AF-10BF-4B1F-848C-65FF57F616FE",
+          "ncm": "1234567890",
+          "peso_bruto": "1.25",
+          "peso_liquido": "1.15",
+          "gtin_ean": "1234567890",
+          "gtin_ean_embalagem": "",
+          "codigo_lista_servicos": "",
+          "numero_pedido_compra": "2020",
+          "numero_item_pedido_compra": "2020002",
+          "descricao_complementar": "Informação complementar",
+          "codigo_anvisa": "ISENTO",
+          "valor_max": "100.00",
+          "motivo_isencao": "motivo isenção da ANVISA"
+        }
+      },
+      {
+        "item": {
+          "codigo": "1235",
+          "descricao": "Produto Teste 2",
+          "unidade": "UN",
+          "quantidade": "4",
+          "valor_unitario": "15.25",
+          "tipo": "P",
+          "numero_pedido_compra": "2020",
+          "numero_item_pedido_compra": "2020002",
+          "descricao_complementar": "Informação complementar"
+        }
+      }
+    ],
+    "forma_pagamento": "multiplas",
+    "parcelas": [
+      {
+        "parcela": {
+          "dias": "30",
+          "data": "29/11/2012",
+          "valor": "53.84",
+          "obs": "Obs Parcela 1",
+          "forma_pagamento": "dinheiro"
+        }
+      },
+      {
+        "parcela": {
+          "dias": "60",
+          "data": "29/12/2012",
+          "valor": "53.83",
+          "obs": "Obs Parcela 2",
+          "forma_pagamento": "boleto",
+          "meio_pagamento": "Bradesco"
+        }
+      },
+      {
+        "parcela": {
+          "dias": "90",
+          "data": "27/01/2013",
+          "valor": "53.83",
+          "obs": "Obs Parcela 3",
+          "forma_pagamento": "credito",
+          "meio_pagamento": "Gateway 123"
+        }
+      }
+    ],
+    "transportador": {
+      "codigo": "2222",
+      "nome": "Transportador teste",
+      "tipo_pessoa": "J",
+      "cpf_cnpj": "00000000000000",
+      "ie": "123345",
+      "endereco": "rua teste",
+      "cidade": "Bento Gonçalves",
+      "uf": "RS"
+    },
+    "frete_por_conta": "R",
+    "placa_veiculo": "AAA-0000",
+    "uf_veiculo": "RS",
+    "quantidade_volumes": "10",
+    "especie_volumes": "Caixas",
+    "marca_volumes": "",
+    "numero_volumes": "",
+    "valor_desconto": "45.45",
+    "valor_frete": "35.45",
+    "valor_seguro": "4.00",
+    "valor_despesas": "1.00",
+    "nf_produtor_rural": {
+      "serie": "",
+      "numero": "",
+      "ano_mes_emissao": ""
+    },
+    "id_vendedor": "123",
+    "numero_pedido_ecommerce": "123",
+    "obs": "Observações da nota",
+    "finalidade": "3",
+    "refNFe": "186181615165513132135135131213",
+    "intermediador": {
+      "nome": "Intermediador Teste",
+      "cnpj": "00.000.000/0000-00",
+      "cnpjPagamento": "00.000.000/0000-00"
+    }
+  }
+}

@@ -7,11 +7,12 @@ module.exports = {
     await queryInterface.createTable('orders', {
       id: {
         allowNull: false,
+        type: Sequelize.INTEGER,
         primaryKey: true,
-        type: Sequelize.UUID
+        autoIncrement: true,
       },
       userId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id'
@@ -40,10 +41,32 @@ module.exports = {
       paymentMethod: {
         type: Sequelize.STRING,
         field: 'payment_method'
-      },
+      }, 
       status: {
         type: Sequelize.STRING,
         defaultValue: 'pending'
+      },
+      address: Sequelize.STRING,
+      number: Sequelize.STRING,
+      complement: Sequelize.STRING,
+      neighborhood: Sequelize.STRING,
+      postalCode: {
+        type: Sequelize.STRING,
+        field: 'postal_code'
+      },
+      city: Sequelize.STRING,
+      state: Sequelize.STRING,
+      tinyOrderId: {
+        type: Sequelize.INTEGER,
+        field: 'tiny_order_id'
+      },
+      invoiceId: {
+        type: Sequelize.INTEGER,
+        field: 'invoice_id'
+      },
+      invoiceStatus: {
+        type: Sequelize.STRING,
+        field: 'invoice_status'
       },
       createdAt: {
         type: "TIMESTAMP",

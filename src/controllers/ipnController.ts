@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import { Request, Response } from 'express';
-import * as ipnService from '../services/ipnService';
+import { ipnService } from '../services/ipnService';
 
-export const ipn = async (req: Request, res:Response) => {
+export const ipnController = async (req: Request, res:Response) => {
   const { query: { id, topic } } = req as never;
-  const response = await ipnService.ipn(id, topic);
+  const response = await ipnService(id, topic);
   res.status(response.status || 200).json(response.message || response);
 };

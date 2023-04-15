@@ -4,24 +4,42 @@ import OrderModel from '../database/models/OrderModel';
 import UserModel from '../database/models/UserModel';
 import { Order } from '../interfaces';
 
-export const createOrder = async (body:Order) => OrderModel.create({ ...body }, {
-  include: [ItemsModel, UserModel],
+export const createOrderService = async (body:Order) => OrderModel.create({ ...body }, {
+  include: [{ model: UserModel, as: 'user' }, { model: ItemsModel, as: 'items' }],
 });
 
-export const updateOrder = async (body:{ data:Order, id?:string, paymentId?:number }) => {
+export const updateOrderService = async (body:{ data:Order, id?:string, paymentId?:number }) => {
   const { data, id, paymentId } = body;
-
   return OrderModel.update(data, { where: id ? { id } : { paymentId } });
 };
 
-export const getOrder = async (body:{ id?:string, paymentId?:number }) => {
+export const getOrderService = async (body:{ id?:string, paymentId?:number }) => {
   const { paymentId, id } = body;
-  return OrderModel.findOne({ where: id ? { id } : { paymentId } });
+  return OrderModel.findOne({
+    where: id ? { id } : { paymentId },
+    include: [
+      {
+        model: ItemsModel,
+        as: 'items',
+        attributes: {
+          exclude: ['orderId'],
+        },
+      },
+      {
+        model: UserModel,
+        as: 'user',
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'magicLink', 'magicLinkExpired'],
+        },
+      },
+    ],
+    attributes: { exclude: ['userId'] },
+  });
 };
 
-export const getOrders = async (body: Order) => OrderModel.findAll({
+export const getOrdersService = async (body: Order) => OrderModel.findAll({
   attributes: { exclude: ['userId'] },
-  where: { userId: body.login?.data.id },
+  where: { userId: body.userId },
   include: [{ model: ItemsModel, attributes: { exclude: ['id', 'orderId'] } }],
 });
 

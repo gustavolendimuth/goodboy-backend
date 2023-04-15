@@ -4,7 +4,6 @@
 import { Order, IUser, OrderParams, Item } from '../interfaces';
 
 export default class OrderClass implements Order {
-  id?: string;
   items?: Item[];
   status?: string;
   totalAmount?: number;
@@ -13,10 +12,9 @@ export default class OrderClass implements Order {
   paymentId?: number;
   feeAmount?: number;
   user?: IUser;
-  userId?: string;
+  userId?: number;
 
   constructor(params:OrderParams) {
-    this.id = params.id;
     this.items = params.itemsData;
     this.status = params.orderData?.status || 'created';
     this.totalAmount = params.orderData?.transaction_details?.total_paid_amount;

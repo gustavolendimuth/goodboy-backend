@@ -8,12 +8,16 @@ import authMiddleware from '../middlewares/authMiddleware';
 import processPaymentRouter from './processPayment.route';
 import webhookRouter from './webhookRoute';
 import ipnRouter from './ipnRoute';
+import invoiceRouter from './invoiceRoute';
+import tinyOrderRouter from './tinyOrderRoute';
 
 const router = express.Router();
 
 router.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 
 // app.use('/validate_token', loginRouter);
+router.use('/invoice', invoiceRouter);
+router.use('/tiny_order', tinyOrderRouter);
 router.use('/user', userRouter);
 router.use('/preference', preferenceRouter);
 router.use('/process_payment', processPaymentRouter);

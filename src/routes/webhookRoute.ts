@@ -1,8 +1,8 @@
 import express from 'express';
-import { webhook } from '../controllers/webhookController';
+import { webhookController } from '../controllers/webhookController';
 
 const webhookRouter = express.Router();
 
-webhookRouter.post('/', webhook);
+webhookRouter.post('/', webhookController);
 
 export default webhookRouter;

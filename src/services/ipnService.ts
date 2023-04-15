@@ -1,28 +1,31 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/prefer-default-export */
-import { v4 as uuidv4 } from 'uuid';
+
 import errorLog from '../utils/errorLog';
 import { fetchPayment } from '../utils/fetchMercadoPago';
 import HttpException from '../utils/HttpException';
-import { createOrderIpn } from '../utils/processPaymentUtils';
-import { createOrder, getOrder, updateOrder } from './orderService';
+import createOrderIpn from '../utils/createOrderIpn';
+import { createOrderService, getOrderService, updateOrderService } from './orderService';
 
-export const ipn = async (id:string, topic:string) => {
+export const ipnService = async (id:string, topic:string) => {
   if (topic === 'payment') {
     try {
+      // Pega os dados do pagamento no Mercado Pago
       const payment = await fetchPayment.get(id);
       if (!payment.data.payer.email) return { status: 200, message: 'nothing to update' };
 
-      const order = await getOrder({ paymentId: Number(id) });
-      const orderData = await createOrderIpn({ orderData: payment.data, id: !order ? uuidv4() : undefined });
-
+      // Verifica se o pedido já existe
+      const order = await getOrderService({ paymentId: Number(id) });
+      // Cria o objeto do pedido
+      const orderData = await createOrderIpn({ orderData: payment.data });
+      // Atualiza o pedido caso ele já exista
       if (order) {
-        await updateOrder({ data: orderData, paymentId: Number(id) });
+        await updateOrderService({ data: orderData, paymentId: Number(id) });
         return { message: 'order updated' };
       }
-
-      await createOrder(orderData);
+      // Cria o pedido caso ele não exista
+      await createOrderService(orderData);
       return { message: 'order created' };
     } catch (error:any) {
       errorLog(error);

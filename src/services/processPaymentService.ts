@@ -1,56 +1,56 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/prefer-default-export */
-
-import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod';
-import { createOrder, updateOrder } from './orderService';
+import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
+import { createOrderService } from './orderService';
 import { CreateOrderParams } from '../interfaces';
 import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/HttpException';
 import errorLog from '../utils/errorLog';
-import { createOrderData, mercadopagoSave } from '../utils/processPaymentUtils';
+import createOrderData from '../utils/createOrderData';
+import mercadopagoSave from '../utils/mercadopagoSave';
 
-export const processPayment = async (body:CreateOrderParams) => {
-  let order;
-  let response;
-  let userEmail;
-  const id = uuidv4();
+const emailValidation = z
+  .string()
+  .email()
+  .trim()
+  .max(32)
+  .min(1);
 
-  const emailValidation = z.string().email().trim()
-    .max(32)
-    .min(1);
+async function createOrder(body: CreateOrderParams) {
+  const { formData, items, orderData } = body;
 
-  const { formData, items } = body;
-  if (!formData) throw new HttpException(400, 'Erro ao processar o pagamento, tente mais tarde');
+  if (!formData || !items) {
+    throw new Error('There was no data to create the order');
+  }
 
   const { payer: { email } } = formData;
+  const userEmail = emailValidation.parse(email);
 
-  try {
-    userEmail = emailValidation.parse(email);
-    order = await createOrderData({ formData, items, email: userEmail, id });
-    validateOrder(order);
-    await createOrder(order);
-  } catch (error:any) {
-    errorLog(error);
-    throw new HttpException(400, 'Erro ao criar o pedido, tente mais tarde');
-  }
+  const order = await createOrderData({ formData, orderData, items, email: userEmail });
+  validateOrder(order);
+  const response = await createOrderService(order);
 
-  try {
-    response = (await mercadopagoSave(formData))?.response;
-    if (!response) throw new Error();
-  } catch (error:any) {
-    errorLog(error);
-    throw new HttpException(400, 'Erro ao processar o pagamento no Mercado Pago, tente mais tarde');
-  }
+  console.log(JSON.stringify(response, null, 2));
 
+  return response;
+}
+
+async function processMercadopagoPayment(formData:CreatePaymentPayload) {
+  const { response } = await mercadopagoSave(formData);
+  if (!response) throw new Error('Error processing Mercado Pago payment, please try again later');
+
+  return response;
+}
+
+export default async function processPayment(body: CreateOrderParams) {
   try {
-    order = await createOrderData({ orderData: response, items, email: userEmail });
-    validateOrder(order);
-    updateOrder({ data: order, id });
-    return response;
-  } catch (error:any) {
+    if (!body.formData) {
+      throw new Error('There was no formData to create the order');
+    }
+    const orderData = await processMercadopagoPayment(body.formData);
+    return await createOrder({ ...body, orderData });
+  } catch (error: any) {
     errorLog(error);
-    throw new HttpException(400, 'Erro ao criar o pedido, tente mais tarde');
+    throw new HttpException(400, 'Error creating the order, please try again later');
   }
-};
+}

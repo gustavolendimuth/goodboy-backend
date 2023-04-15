@@ -1,10 +1,12 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable max-lines */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ValidationError } from 'joi';
 import { JwtPayload } from 'jsonwebtoken';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
-import UserModel from '../database/models/UserModel';
 
 export interface IProduct {
   id?: number,
@@ -15,10 +17,13 @@ export interface IProduct {
 }
 
 export interface IUser {
-  id?: string,
-  email: string,
-  name: string,
+  id?: number,
+  email?: string,
+  name?: string,
+  cpf?: string,
   role?: string
+  magicLink?: string;
+  magicLinkExpired?: boolean;
 }
 
 export interface IError extends Error {
@@ -65,41 +70,112 @@ export interface IErrType {
 }
 
 export interface MercadoPagoItem {
-  id: number,
+  id: string,
   title: string,
   quantity: number,
   unit_price: number,
   currency_id?: string,
+  ncm?: string,
+  image?: string,
 }
 
 export interface Item {
-  productId: number;
+  id?: number,
+  orderId?: number,
+  productId: string;
   title: string;
   quantity: number;
   unitPrice: number;
+  ncm?: string;
+  image?: string;
+}
+
+export interface SanityProduct {
+  id: string;
+  title: string;
+  price: number;
+  ncm: string;
+  image: string;
+  quantity?: number;
+}
+
+export interface TinyProduct {
+  sequencia: string;
+  codigo: string;
+  nome: string;
+  unidade: string;
+  preco: string;
+  ncm: string;
+  origem: string;
+  situacao: string;
+  tipo: string;
+  anexos: [{ anexo: string }];
+}
+export interface TinyItem {
+  codigo: string;
+  descricao: string;
+  unidade: string;
+  quantidade: string;
+  valor_unitario: string;
+}
+
+export interface TinyClient {
+  codigo?: string,
+  nome?: string,
+  email?: string,
+  tipo_pessoa?: string,
+  cpf_cnpj?: string,
+  endereco?: string,
+  numero?: string,
+  complemento?: string,
+  bairro?: string,
+  cep?: string,
+  cidade?: string,
+  uf?: string
+}
+
+export interface TinyOrder {
+  cliente: TinyClient,
+  itens: { item: TinyItem }[],
+  forma_pagamento: string,
+  meio_pagamento: 'Mercado Pago',
+  frete_por_conta: 'S',
+  numero_pedido_ecommerce: number,
+  situacao: 'Entregue',
+  obs?: string
 }
 
 export interface Order {
-  id?: string,
-  user?: IUser,
-  userId?: string
+  id?: number,
+  userId?: number,
+  name?: string,
+  users?: IUser,
   paymentId?: number,
-  preferenceId?: string,
-  items?: Item[],
   totalAmount?: number,
   feeAmount?: number,
   netReceivedAmount?: number,
   paymentMethod?: string,
   status?: string,
-  login?: LoginPayload,
+  address?: string,
+  number?: string,
+  complement?: string,
+  neighborhood?: string,
+  postalCode?: string,
+  city?: string,
+  state?: string,
+  tinyOrderId?: number,
+  invoiceId?: number,
+  invoiceStatus?: number,
 }
 
 export interface OrderParams {
   itemsData?: Item[],
-  id?: string,
   orderData?: OrderData,
   user?:IUser,
-  userId?:string
+  userId?:number
+  userEmail?:string,
+  name?:string,
+  cpf?:string,
 }
 
 export interface OrderData {
@@ -109,7 +185,12 @@ export interface OrderData {
     net_received_amount?: number;
   };
   additional_info: { items: MercadoPagoItem[] };
-  payer: { email: string }
+  payer: {
+    email: string
+    identification: {
+      number: string
+    },
+  },
   payment_type_id?: string;
   payment_method_id?: string;
   id?: number;
@@ -118,11 +199,10 @@ export interface OrderData {
   }[];
 }
 
-export interface ILoginPayload extends UserModel {
+export interface ILoginPayload extends IUser {
   token: string,
   data: IUser
 }
-// export type UserPayload = UserModel;
 
 export interface IProcessPayment {
   status_detail: string,
@@ -149,12 +229,14 @@ export interface ProcessPaymentBody {
   preferenceId?: string,
 }
 
-export interface CreateOrderParams {
-  formData?:CreatePaymentPayload,
-  orderData?:OrderData,
-  id?:string,
+export interface CreateOrderDataParams {
+  orderData:OrderData,
   items?:MercadoPagoItem[],
   email?:string,
+}
+
+export interface CreateOrderParams extends CreateOrderDataParams {
+  formData:CreatePaymentPayload,
 }
 
 export interface WebhookBody {

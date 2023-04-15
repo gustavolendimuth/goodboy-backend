@@ -5,12 +5,12 @@ import errorLog from '../../utils/errorLog';
 import HttpException from '../../utils/HttpException';
 
 const orderSchema = Joi.object({
-  id: Joi.string().length(36),
-  userId: Joi.string().length(36),
+  userId: Joi.number(),
   user: Joi.object({
-    id: Joi.string().length(36).required(),
+    id: Joi.number(),
     email: Joi.string().email().required(),
     name: Joi.string().min(3).required(),
+    cpf: Joi.string().min(11).required(),
   }),
   paymentId: Joi.number(),
   totalAmount: Joi.number(),
@@ -24,6 +24,8 @@ const orderSchema = Joi.object({
       title: Joi.string().required(),
       quantity: Joi.number().min(1).required(),
       unitPrice: Joi.number().required(),
+      ncm: Joi.string().required(),
+      image: Joi.string().required(),
     }),
   ).required(),
 });

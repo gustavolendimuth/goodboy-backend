@@ -20,7 +20,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      quantity: Sequelize.INTEGER,
+      quantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       unitPrice: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
@@ -28,7 +31,7 @@ module.exports = {
       },
       orderId: {
         allowNull: false,
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
           model: 'orders',
           key: 'id'
@@ -36,7 +39,12 @@ module.exports = {
         field: 'order_id',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
-      }
+      },
+      image: Sequelize.STRING,
+      ncm: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
     });
   },
 

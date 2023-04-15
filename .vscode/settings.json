@@ -4,6 +4,7 @@
     "jdbc",
     "mercadopago",
     "postbuild",
+    "situacao",
     "UNIXTIME",
     "UUIDV",
     "uuidv4"

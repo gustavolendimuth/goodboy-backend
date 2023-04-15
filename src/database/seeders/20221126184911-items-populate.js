@@ -9,7 +9,8 @@ module.exports = {
       title: 'Alimento Nutrópica Porquinho da Índia',
       quantity: 1,
       unit_price: 39.90,
-      order_id: 'f48d8529-5c25-4977-a8d7-0c8294779c83',
+      order_id: 1,
+      ncm: '2309.10.00',
     }], {});
   },
 

@@ -1,19 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/prefer-default-export */
 import { WebhookBody } from '../interfaces';
+import createOrderWebhook from '../utils/createOrderWebhook';
 import errorLog from '../utils/errorLog';
 import { fetchPayment } from '../utils/fetchMercadoPago';
 import HttpException from '../utils/HttpException';
-import { createOrderWebhook } from '../utils/processPaymentUtils';
-import { updateOrder } from './orderService';
+import { createOrderService, getOrderService, updateOrderService } from './orderService';
 
-export const webhook = async (body:WebhookBody) => {
+export const webhookService = async (body:WebhookBody) => {
+  console.log('webhook', body);
   try {
     if (body.action === 'payment.updated') {
       const response = await fetchPayment.get(body.data.id);
+      const order = await getOrderService({ paymentId: response.data.id });
+      const orderData = await createOrderWebhook({ orderData: response.data });
 
-      const result = await createOrderWebhook({ orderData: response.data });
-      await updateOrder({ data: result, paymentId: response.data.id });
+      if (!order) {
+        await createOrderService(orderData);
+        return { message: 'order created' };
+      }
+      await updateOrderService({ data: orderData, paymentId: response.data.id });
       return { message: 'order updated' };
     }
 

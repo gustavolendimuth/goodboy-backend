@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import Joi from 'joi';
 import { IErrType, IUser, JoiError } from '../../interfaces';
 
 const schema = Joi.object({
   email: Joi.string().email().required(),
-  name: Joi.string().allow(null).allow(''),
+  name: Joi.string().required(),
+  cpf: Joi.string().required(),
   magicLink: Joi.string().length(36),
 });
 
 const validateUser = (body: IUser): void => {
   const { error } = schema.validate(body);
-  
+
   const err = error as JoiError;
   if (err) {
     const errType:string = err.details[0].type;
