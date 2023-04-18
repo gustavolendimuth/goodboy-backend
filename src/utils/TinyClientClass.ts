@@ -5,6 +5,8 @@ import OrderModel from '../database/models/OrderModel';
 import { TinyClient } from '../interfaces';
 
 export default class TinyClientClass implements TinyClient {
+  sequencia: number;
+  situacao: string;
   nome?: string;
   email?: string;
   tipo_pessoa: string;
@@ -18,6 +20,8 @@ export default class TinyClientClass implements TinyClient {
   uf?: string;
 
   constructor(order:OrderModel) {
+    this.sequencia = 1;
+    this.situacao = 'A';
     this.nome = order.user.name;
     this.email = order.user.email;
     this.tipo_pessoa = 'F';

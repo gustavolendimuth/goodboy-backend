@@ -4,7 +4,7 @@
 0 verbose cli   'exec',
 0 verbose cli   '--',
 0 verbose cli   'sequelize-cli',
-0 verbose cli   'db:create'
+0 verbose cli   'db:drop'
 0 verbose cli ]
 1 info using npm@8.5.0
 2 info using node@v16.14.2
@@ -21,19 +21,19 @@
 13 timing config:load:global Completed in 0ms
 14 timing config:load:validate Completed in 1ms
 15 timing config:load:credentials Completed in 1ms
-16 timing config:load:setEnvs Completed in 1ms
-17 timing config:load Completed in 10ms
-18 timing npm:load:configload Completed in 10ms
+16 timing config:load:setEnvs Completed in 0ms
+17 timing config:load Completed in 9ms
+18 timing npm:load:configload Completed in 9ms
 19 timing npm:load:setTitle Completed in 0ms
 20 timing config:load:flatten Completed in 3ms
-21 timing npm:load:display Completed in 5ms
-22 verbose logfile /home/node/.npm/_logs/2023-04-14T19_28_15_409Z-debug-0.log
-23 timing npm:load:logFile Completed in 4ms
+21 timing npm:load:display Completed in 4ms
+22 verbose logfile /home/node/.npm/_logs/2023-04-18T21_27_51_995Z-debug-0.log
+23 timing npm:load:logFile Completed in 5ms
 24 timing npm:load:timers Completed in 0ms
 25 timing npm:load:configScope Completed in 0ms
-26 timing npm:load Completed in 20ms
+26 timing npm:load Completed in 19ms
 27 silly logfile start cleaning logs, removing 1 files
-28 timing command:exec Completed in 421ms
+28 timing command:exec Completed in 451ms
 29 verbose exit 0
-30 timing npm Completed in 600ms
+30 timing npm Completed in 637ms
 31 info ok

@@ -138,7 +138,7 @@ export interface TinyOrder {
   cliente: TinyClient,
   itens: { item: TinyItem }[],
   forma_pagamento: string,
-  meio_pagamento: 'Mercado Pago',
+  meio_pagamento: 'Mercado Pago' | 'Brix Mercado Pago',
   frete_por_conta: 'S',
   numero_pedido_ecommerce: number,
   situacao: 'Entregue',

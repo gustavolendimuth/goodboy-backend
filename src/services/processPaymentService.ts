@@ -8,6 +8,7 @@ import HttpException from '../utils/HttpException';
 import errorLog from '../utils/errorLog';
 import createOrderData from '../utils/createOrderData';
 import mercadopagoSave from '../utils/mercadopagoSave';
+import { tinyOrderService } from './tinyOrderService';
 
 const emailValidation = z
   .string()
@@ -48,7 +49,9 @@ export default async function processPayment(body: CreateOrderParams) {
       throw new Error('There was no formData to create the order');
     }
     const orderData = await processMercadopagoPayment(body.formData);
-    return await createOrder({ ...body, orderData });
+    await createOrder({ ...body, orderData });
+    tinyOrderService({ paymentId: orderData.id });
+    return orderData;
   } catch (error: any) {
     errorLog(error);
     throw new HttpException(400, 'Error creating the order, please try again later');
