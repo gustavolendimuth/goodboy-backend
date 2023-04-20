@@ -149,6 +149,7 @@ export interface Order {
   id?: number,
   userId?: number,
   name?: string,
+  cpf?: string,
   users?: IUser,
   paymentId?: number,
   totalAmount?: number,

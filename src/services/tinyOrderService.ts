@@ -105,8 +105,9 @@ async function updateOrderAddress(order: OrderModel, orderData: Partial<Order>) 
   order.save();
 }
 
-async function updateUserName(order: OrderModel, name: string) {
-  order.user.name = name;
+async function updateUser(order: OrderModel, data: { name:string, cpf?:string }) {
+  order.user.name = data.name;
+  if (data.cpf) order.user.cpf = data.cpf;
   await order.user.save();
 }
 
@@ -152,7 +153,7 @@ async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
 }
 
 export async function tinyOrderService(body: Order): Promise<{ message: string }> {
-  const { paymentId, name, ...orderData } = body;
+  const { paymentId, name, cpf, ...orderData } = body;
 
   try {
     if (!paymentId) throw new Error('PaymentId is required');
@@ -166,7 +167,7 @@ export async function tinyOrderService(body: Order): Promise<{ message: string }
     if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
 
     // Update user name if exists
-    if (name) await updateUserName(order, name);
+    if (name) await updateUser(order, { name, cpf });
 
     // Add order items to tiny
     await addOrderItemsToTiny(order.items);

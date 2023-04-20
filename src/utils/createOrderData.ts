@@ -41,9 +41,6 @@ export default async function createOrderData({ formData, orderData, email, item
   const userEmail = email || formData?.payer?.email;
 
   const cpf = formData?.payer?.identification?.number;
-  if (!cpf) {
-    throw new HttpException(400, 'CPF is required');
-  }
 
   const name = userEmail?.split('@')[0];
   if (!name) {

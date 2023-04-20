@@ -20,10 +20,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      cpf: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
+      cpf: Sequelize.STRING,
       magicLink: {
         type: Sequelize.UUID,
         allowNull: true,

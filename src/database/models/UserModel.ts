@@ -28,10 +28,7 @@ UserModel.init(
       type: STRING,
       allowNull: false,
     },
-    cpf: {
-      type: STRING,
-      allowNull: false,
-    },
+    cpf: STRING,
     magicLink: {
       type: UUIDV4,
       allowNull: true,

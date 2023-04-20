@@ -10,6 +10,7 @@ import { createOrderService, getOrderService, updateOrderService } from './order
 import { tinyOrderService } from './tinyOrderService';
 
 export const ipnService = async (id:string, topic:string) => {
+  console.log('ipn', topic);
   if (topic === 'payment') {
     try {
       const paymentId = Number(id);

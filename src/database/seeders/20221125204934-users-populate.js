@@ -7,7 +7,7 @@ module.exports = {
     await queryInterface.bulkInsert('users', [{
       email: 'gustavolendimuth@gmail.com',
       name: 'Gustavo Lendimuth',
-      cpf: '123.456.789-81',
+      cpf: '315.982.828-08',
       role: 'admin',
     }], {});
   },

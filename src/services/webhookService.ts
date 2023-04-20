@@ -22,10 +22,9 @@ export const webhookService = async (body:WebhookBody) => {
       await updateOrderService({ data: orderData, paymentId: response.data.id });
       return { message: 'order updated' };
     }
-
-    return { message: 'nothing to update' };
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, 'Erro ao atualizar pedido');
   }
+  return { message: 'nothing to update' };
 };
