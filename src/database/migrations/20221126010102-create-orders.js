@@ -68,6 +68,14 @@ module.exports = {
         type: Sequelize.STRING,
         field: 'invoice_status'
       },
+      invoiceNumber: {
+        type: Sequelize.INTEGER,
+        field: 'invoice_number'
+      },
+      invoiceUrl: {
+        type: Sequelize.STRING,
+        field: 'invoice_url'
+      },
       createdAt: {
         type: "TIMESTAMP",
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),

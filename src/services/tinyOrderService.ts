@@ -8,7 +8,7 @@ import querystring from 'querystring';
 import HttpException from '../utils/HttpException';
 import TinyProductClass from '../utils/TinyProductClass';
 import ItemsModel from '../database/models/ItemsModel';
-import { getOrderService, updateOrderService } from './orderService';
+import { getOrderService } from './orderService';
 import fetchTiny from '../utils/fetchTiny';
 import { Order } from '../interfaces';
 import TinyOrderClass from '../utils/TinyOrderClass';
@@ -100,9 +100,9 @@ export const tinyUpdateUserService = async (order:OrderModel) => {
   return fetchTiny(url, data);
 };
 
-async function updateOrderAddress(paymentId: number, orderData: Partial<Order>) {
-  const orderUpdated = await updateOrderService({ paymentId, data: orderData });
-  if (orderUpdated[0] === 0) throw new Error('Order not updated');
+async function updateOrderAddress(order: OrderModel, orderData: Partial<Order>) {
+  order.set(orderData);
+  order.save();
 }
 
 async function updateUserName(order: OrderModel, name: string) {
@@ -129,22 +129,25 @@ async function createTinyOrder(order: OrderModel) {
 
 async function updateTinyUser(order: OrderModel) {
   const orderResult = await tinyUpdateUserService(order);
-  console.log(JSON.stringify(orderResult, null, 2));
+  // console.log(JSON.stringify(orderResult, null, 2));
   if (orderResult.retorno.status === 'Erro') throw new Error('Order not updated');
 }
 
 async function generateTinyInvoice(tinyOrderId: number, order: OrderModel) {
   const invoice = await tinyCreateInvoiceService(tinyOrderId);
   if (invoice.retorno.status === 'Erro') throw new Error('Invoice not created');
-  const { idNotaFiscal } = invoice.retorno.registros.registro;
+  const { idNotaFiscal, numero } = invoice.retorno.registros.registro;
   order.invoiceId = idNotaFiscal;
+  order.invoiceNumber = numero;
   await order.save();
   return idNotaFiscal;
 }
 
 async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
   const invoiceEmit = await tinyEmitInvoiceService(idNotaFiscal);
+  if (invoiceEmit.retorno.status === 'Erro') throw new Error('Invoice not created');
   order.invoiceStatus = Number(invoiceEmit.retorno.status_processamento);
+  order.invoiceUrl = invoiceEmit.retorno.nota_fiscal.link_acesso;
   await order.save();
 }
 
@@ -152,13 +155,15 @@ export async function tinyOrderService(body: Order): Promise<{ message: string }
   const { paymentId, name, ...orderData } = body;
 
   try {
-    // Update order address
     if (!paymentId) throw new Error('PaymentId is required');
-    if (Object.keys(orderData).length) await updateOrderAddress(paymentId, orderData);
 
     // Get Order
     const order = await getOrderService({ paymentId });
     if (!order) throw new Error('Order not found');
+    if (order.status !== 'approved') throw new Error('Order payment not approved');
+
+    // Update order address
+    if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
 
     // Update user name if exists
     if (name) await updateUserName(order, name);
@@ -173,8 +178,7 @@ export async function tinyOrderService(body: Order): Promise<{ message: string }
     } else {
       await updateTinyUser(order);
     }
-
-    if (!tinyOrderId) throw new Error('Order not created');
+    if (!tinyOrderId) throw new Error('Missing tinyOrderId');
 
     if (!Object.keys(orderData).length) {
       return { message: 'Pedido criado' };

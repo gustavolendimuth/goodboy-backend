@@ -166,6 +166,8 @@ export interface Order {
   tinyOrderId?: number,
   invoiceId?: number,
   invoiceStatus?: number,
+  invoiceNumber?: number,
+  invoiceUrl?: string,
 }
 
 export interface OrderParams {

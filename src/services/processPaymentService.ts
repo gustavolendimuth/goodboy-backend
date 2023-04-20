@@ -31,8 +31,6 @@ async function createOrder(body: CreateOrderParams) {
   validateOrder(order);
   const response = await createOrderService(order);
 
-  console.log(JSON.stringify(response, null, 2));
-
   return response;
 }
 

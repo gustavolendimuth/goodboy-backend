@@ -27,6 +27,8 @@ class OrderModel extends Model<Order> implements Order {
   public tinyOrderId?: number;
   public invoiceId?: number;
   public invoiceStatus?: number;
+  public invoiceNumber?: number;
+  public invoiceUrl?: string;
 }
 
 OrderModel.init(
@@ -73,6 +75,8 @@ OrderModel.init(
     tinyOrderId: INTEGER,
     invoiceStatus: INTEGER,
     invoiceId: INTEGER,
+    invoiceNumber: INTEGER,
+    invoiceUrl: STRING,
   },
   {
     underscored: true,
