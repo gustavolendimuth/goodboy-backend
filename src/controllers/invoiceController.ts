@@ -2,7 +2,6 @@
 import { Request, Response } from 'express';
 import querystring from 'querystring';
 import invoiceService from '../services/invoiceService';
-// import invoice from '../utils/invoice.json';
 
 const invoiceController = async (req: Request, res: Response) => {
   const { body } = req;

@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { getOrderService, getOrdersService, createOrderService } from '../services/orderService';
 
 export const getOrder = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const response = await getOrderService({ paymentId: Number(id) });
+  const paymentId = Number(req.params.paymentId);
+  const response = await getOrderService({ paymentId });
   res.status(200).json(response);
 };
 

@@ -10,19 +10,20 @@ import webhookRouter from './webhookRoute';
 import ipnRouter from './ipnRoute';
 import invoiceRouter from './invoiceRoute';
 import tinyOrderRouter from './tinyOrderRoute';
+import validateToken from '../middlewares/validateToken';
 
 const router = express.Router();
 
 router.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 
-// app.use('/validate_token', loginRouter);
+router.use('/webhook', webhookRouter);
+router.use('/ipn', ipnRouter);
+router.use(validateToken);
 router.use('/invoice', invoiceRouter);
 router.use('/tiny_order', tinyOrderRouter);
 router.use('/user', userRouter);
 router.use('/preference', preferenceRouter);
 router.use('/process_payment', processPaymentRouter);
-router.use('/webhook', webhookRouter);
-router.use('/ipn', ipnRouter);
 router.use('/login', loginRouter);
 router.use('/order', orderRouter);
 router.use(authMiddleware);

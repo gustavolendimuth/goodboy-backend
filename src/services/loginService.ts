@@ -2,10 +2,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import UserModel from '../database/models/UserModel';
 import { ILogin } from '../interfaces';
-import { createToken } from '../utils/jwtUtils';
+import { createJwtToken, validateJwtToken } from '../utils/jwtUtils';
 // import validateLogin from './validations/loginValidation';
 import sendMagicLink from '../utils/sendMagicLink';
-import * as jwtUtils from '../utils/jwtUtils';
 import HttpException from '../utils/HttpException';
 
 const login = async (body: ILogin) => {
@@ -13,7 +12,7 @@ const login = async (body: ILogin) => {
   const { email, magicLink, token } = body;
 
   if (token) {
-    jwtUtils.validateToken(token);
+    validateJwtToken(token);
     return { message: 'Login efetuado com sucesso' };
   }
 
@@ -37,7 +36,7 @@ const login = async (body: ILogin) => {
 
   response.set({ magicLinkExpired: true });
   await response.save();
-  const result = createToken({ name: response.name, email: response.email, role: response.role, id: response.id });
+  const result = createJwtToken({ name: response.name, email: response.email, role: response.role, id: response.id });
   return { token: result };
 };
 

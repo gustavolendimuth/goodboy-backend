@@ -1,18 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { IError } from '../interfaces';
-// import { getUser } from '../services/users.service';
-import * as jwtUtils from '../utils/jwtUtils';
+import { validateJwtToken } from '../utils/jwtUtils';
+import HttpException from '../utils/HttpException';
 
-export default async (req: Request, _res:Response, next: NextFunction) => {
+export default (req: Request, _res:Response, next: NextFunction) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    const err:IError = new Error('Você precisa estar logado para acessar essa rota');
-    err.statusCode = 401;
-    throw err;
+    throw new HttpException(401, 'Você precisa estar logado para acessar essa rota');
   }
-  req.body.login = jwtUtils.validateToken(authorization);
+  req.body.login = validateJwtToken(authorization);
 
-  // await getUser(req.body.login.data);
-
-  return next();
+  next();
 };

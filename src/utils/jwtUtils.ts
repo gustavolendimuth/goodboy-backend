@@ -2,7 +2,7 @@ import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { IError, IUser } from '../interfaces';
 
-export const createToken = (data:IUser):string => {
+export const createJwtToken = (data:IUser):string => {
   const jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) throw new Error('JWT_SECRET not found');
 
@@ -14,7 +14,7 @@ export const createToken = (data:IUser):string => {
   return token;
 };
 
-export const validateToken = (token: string) => {
+export const validateJwtToken = (token: string) => {
   try {
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) throw new Error('JWT_SECRET not found');
