@@ -87,14 +87,12 @@ export const tinyCreateOrderService = async (order:OrderModel) => {
 
 export const tinyUpdateUserService = async (order:OrderModel) => {
   const url = 'https://api.tiny.com.br/api2/contato.alterar.php';
-  const id = order.tinyOrderId;
   const tinyClient = new TinyClientClass(order);
 
   const data:string = querystring.stringify({
     token,
     contato: JSON.stringify({ contatos: [{ contato: tinyClient }] }),
     formato: 'JSON',
-    id,
   });
 
   return fetchTiny(url, data);
@@ -130,7 +128,7 @@ async function createTinyOrder(order: OrderModel) {
 
 async function updateTinyUser(order: OrderModel) {
   const orderResult = await tinyUpdateUserService(order);
-  // console.log(JSON.stringify(orderResult, null, 2));
+  console.log(JSON.stringify(orderResult, null, 2));
   if (orderResult.retorno.status === 'Erro') throw new Error('Order not updated');
 }
 

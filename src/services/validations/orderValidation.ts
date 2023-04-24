@@ -10,7 +10,7 @@ const orderSchema = Joi.object({
     id: Joi.number(),
     email: Joi.string().email().required(),
     name: Joi.string().min(3).required(),
-    cpf: Joi.string().min(11).required(),
+    cpf: Joi.string().length(11),
   }),
   paymentId: Joi.number(),
   totalAmount: Joi.number(),
@@ -30,7 +30,7 @@ const orderSchema = Joi.object({
   ).required(),
 });
 
-export const validateOrder = (body: Order): void => {
+export const validateOrder = (body:Order): void => {
   const { error } = orderSchema.validate(body);
   if (error) {
     errorLog(error);

@@ -2552,10 +2552,10 @@
     "next-tick" "^1.1.0"
     "timers-ext" "^0.1.7"
 
-"mercadopago@^1.5.14":
-  "integrity" "sha512-NDia+KtydY+bER6bOiGRnmp6Bg9ek8H1aq01mURjXiuM3dM7CEfI3nU65kHvLBdPY1mPLTAntQeSQ1RriMaYXA=="
-  "resolved" "https://registry.npmjs.org/mercadopago/-/mercadopago-1.5.14.tgz"
-  "version" "1.5.14"
+"mercadopago@^1.5.15":
+  "integrity" "sha512-FsZ31XVMCRcZRRzV07WwZL9R5xYxSLhOILxwSxGlIVfxHV3fSrRgVtERpzGxMpZNxwzv5JJ8ioaSnmwK0+DqtA=="
+  "resolved" "https://registry.npmjs.org/mercadopago/-/mercadopago-1.5.15.tgz"
+  "version" "1.5.15"
   dependencies:
     "ajv" "^6.12.3"
     "bluebird" "3.4.7"
