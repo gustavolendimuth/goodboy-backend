@@ -18,15 +18,17 @@ export default async ({ orderData }:CreateOrderDataParams) => {
   let itemsData;
   let name;
   let userEmail;
-  let cpf;
+  // let cpf;
+
+  console.log(JSON.stringify(orderData, null, 2));
 
   try {
-    if (!orderData || !orderData.additional_info.items) {
-      throw new HttpException(400, errOrder);
+    if (!orderData.additional_info.items) {
+      throw new Error('No items');
     }
     const { items } = orderData.additional_info;
     const itemsIds = items?.map((item:MercadoPagoItem) => item.id);
-    if (!itemsIds) throw new Error();
+    if (!itemsIds) throw new Error('No items ids');
 
     const sanityProducts = (await getSanityProductsService(itemsIds)).map((item:SanityProduct) => ({
       ...item,
@@ -36,10 +38,10 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     itemsData = sanityProducts?.map((item) => new OrderSanityProductClass(item));
     userEmail = orderData.payer.email;
     name = userEmail?.split('@')[0];
-    cpf = orderData.payer.identification.number;
+    // cpf = orderData.payer.identification.number;
 
     if (!items) throw new Error();
-    if (!userEmail) throw new HttpException(200, 'nothing to update');
+    if (!userEmail) throw new Error('nothing to update');
   } catch (error:any) {
     errorLog(error);
     throw new HttpException(400, errOrder);
@@ -52,7 +54,7 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     throw new HttpException(400, errUser);
   }
 
-  const params:OrderParams = { itemsData, orderData, name, cpf };
+  const params:OrderParams = { itemsData, orderData, name };
 
   if (userEmail) {
     if (!user) {
