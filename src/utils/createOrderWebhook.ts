@@ -2,45 +2,24 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CreateOrderDataParams, MercadoPagoItem, OrderParams, SanityProduct } from '../interfaces';
+import { CreateOrderDataParams, OrderParams } from '../interfaces';
 import { getUser } from '../services/usersService';
 import errorLog from './errorLog';
 import HttpException from './HttpException';
 import OrderClass from './OrderClass';
-import { getSanityProductsService } from '../services/itemsService';
-import OrderSanityProductClass from './OrderSanityProductClass';
 
 const errUser = 'Erro ao buscar usuário, tente mais tarde';
 const errOrder = 'Erro ao criar o pedido, tente mais tarde';
 
 export default async ({ orderData }:CreateOrderDataParams) => {
   let user;
-  let itemsData;
   let name;
   let userEmail;
-  // let cpf;
-
-  console.log(JSON.stringify(orderData, null, 2));
 
   try {
-    if (!orderData.additional_info.items) {
-      throw new Error('No items');
-    }
-    const { items } = orderData.additional_info;
-    const itemsIds = items?.map((item:MercadoPagoItem) => item.id);
-    if (!itemsIds) throw new Error('No items ids');
-
-    const sanityProducts = (await getSanityProductsService(itemsIds)).map((item:SanityProduct) => ({
-      ...item,
-      quantity: items?.find((i:MercadoPagoItem) => i.id === item.id)?.quantity,
-    }));
-
-    itemsData = sanityProducts?.map((item) => new OrderSanityProductClass(item));
     userEmail = orderData.payer.email;
     name = userEmail?.split('@')[0];
-    // cpf = orderData.payer.identification.number;
 
-    if (!items) throw new Error();
     if (!userEmail) throw new Error('nothing to update');
   } catch (error:any) {
     errorLog(error);
@@ -54,7 +33,7 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     throw new HttpException(400, errUser);
   }
 
-  const params:OrderParams = { itemsData, orderData, name };
+  const params:OrderParams = { orderData, name };
 
   if (userEmail) {
     if (!user) {
