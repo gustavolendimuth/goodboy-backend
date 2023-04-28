@@ -9,13 +9,12 @@ import createOrderIpn from '../utils/createOrderIpn';
 import { createOrderService, getOrderService, updateOrderService } from './orderService';
 import { tinyOrderService } from './tinyOrderService';
 
-export const ipnService = async (id:string, topic:string) => {
+export const ipnService = async (paymentId:string, topic:string) => {
   console.log('ipn', topic);
   if (topic === 'payment') {
     try {
-      const paymentId = Number(id);
       // Pega os dados do pagamento no Mercado Pago
-      const payment = await fetchPayment.get(id);
+      const payment = await fetchPayment.get(paymentId);
       if (!payment.data.payer.email) return { status: 200, message: 'nothing to update' };
 
       // Verifica se o pedido já existe
@@ -24,12 +23,12 @@ export const ipnService = async (id:string, topic:string) => {
       const orderData = await createOrderIpn({ orderData: payment.data });
       // Atualiza o pedido caso ele já exista
       if (order) {
-        await updateOrderService({ data: orderData, paymentId });
+        await updateOrderService({ data: orderData, paymentId: Number(paymentId) });
         return { message: 'order updated' };
       }
       // Cria o pedido caso ele não exista
       await createOrderService(orderData);
-      tinyOrderService({ paymentId });
+      tinyOrderService({ paymentId: Number(paymentId) });
       return { message: 'order created' };
     } catch (error:any) {
       errorLog(error);

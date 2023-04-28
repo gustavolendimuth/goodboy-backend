@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { ipnService } from '../services/ipnService';
 
 export const ipnController = async (req: Request, res:Response) => {
-  const { query: { id, topic } } = req as never;
-  const response = await ipnService(id, topic);
+  const { query: { id: paymentId, topic } } = req as never;
+  const response = await ipnService(paymentId, topic);
   res.status(response.status || 200).json(response.message || response);
 };
