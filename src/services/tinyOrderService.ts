@@ -150,14 +150,43 @@ async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
   await order.save();
 }
 
-export async function tinyOrderService(body: Order): Promise<{ message: string }> {
+async function fetchTinyOrder(order:OrderModel, orderData:Order) {
+  // Add order items to tiny
+  await addOrderItemsToTiny(order.items);
+
+  // Create tiny order
+  let { tinyOrderId } = order;
+  if (!tinyOrderId) {
+    tinyOrderId = await createTinyOrder(order);
+  } else {
+    await updateTinyUser(order);
+  }
+  if (!tinyOrderId) throw new Error('Missing tinyOrderId');
+
+  if (!Object.keys(orderData).length) {
+    return { message: 'Pedido criado' };
+  }
+
+  // Generate tiny invoice
+  let idNotaFiscal = order.invoiceId;
+  if (!idNotaFiscal) {
+    idNotaFiscal = await generateTinyInvoice(tinyOrderId, order);
+  }
+
+  // Emit tiny invoice
+  if ((!order.invoiceStatus || order.invoiceStatus !== 3) && idNotaFiscal) {
+    await emitTinyInvoice(idNotaFiscal, order);
+  }
+}
+
+export async function tinyOrderService(body:Order): Promise<{ message: string }> {
   const { paymentId, name, cpf, ...orderData } = body;
 
   try {
     if (!paymentId) throw new Error('PaymentId is required');
 
     // Get Order
-    const order = await getOrderService({ paymentId });
+    const order = await getOrderService({ paymentId: paymentId.toString() });
     if (!order) throw new Error('Order not found');
     if (order.status !== 'approved') throw new Error('Order payment not approved');
 
@@ -167,32 +196,7 @@ export async function tinyOrderService(body: Order): Promise<{ message: string }
     // Update user name if exists
     if (name) await updateUser(order, { name, cpf });
 
-    // Add order items to tiny
-    await addOrderItemsToTiny(order.items);
-
-    // Create tiny order
-    let { tinyOrderId } = order;
-    if (!tinyOrderId) {
-      tinyOrderId = await createTinyOrder(order);
-    } else {
-      await updateTinyUser(order);
-    }
-    if (!tinyOrderId) throw new Error('Missing tinyOrderId');
-
-    if (!Object.keys(orderData).length) {
-      return { message: 'Pedido criado' };
-    }
-
-    // Generate tiny invoice
-    let idNotaFiscal = order.invoiceId;
-    if (!idNotaFiscal) {
-      idNotaFiscal = await generateTinyInvoice(tinyOrderId, order);
-    }
-
-    // Emit tiny invoice
-    if ((!order.invoiceStatus || order.invoiceStatus !== 3) && idNotaFiscal) {
-      await emitTinyInvoice(idNotaFiscal, order);
-    }
+    fetchTinyOrder(order, orderData);
 
     return { message: 'Nota Fiscal gerada' };
   } catch (error: any) {

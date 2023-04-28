@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
-import { createOrderService } from './orderService';
+import { createOrderService, getOrderService } from './orderService';
 import { CreateOrderParams } from '../interfaces';
 import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/HttpException';
@@ -30,8 +30,10 @@ async function createOrder(body: CreateOrderParams) {
   const order = await createOrderData({ formData, orderData, items, email: userEmail });
   validateOrder(order);
   const response = await createOrderService(order);
+  const result = await getOrderService({ id: response.id?.toString() });
+  console.log(result);
 
-  return response;
+  return result;
 }
 
 async function processMercadopagoPayment(formData:CreatePaymentPayload) {
@@ -47,9 +49,10 @@ export default async function processPayment(body: CreateOrderParams) {
       throw new Error('There was no formData to create the order');
     }
     const orderData = await processMercadopagoPayment(body.formData);
-    await createOrder({ ...body, orderData });
+    const order = await createOrder({ ...body, orderData });
+    console.log('order', order);
     tinyOrderService({ paymentId: orderData.id });
-    return orderData;
+    return order;
   } catch (error: any) {
     errorLog(error);
     throw new HttpException(400, 'Error creating the order, please try again later');

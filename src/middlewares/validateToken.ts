@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import HttpException from '../utils/HttpException';
 
-export default (req:Request, _res:Response, next: NextFunction) => {
+export const validateToken = (req:Request, _res:Response, next: NextFunction) => {
   const { token: frontEndToken } = req.headers;
   const token = process.env.TOKEN;
 
@@ -11,3 +11,5 @@ export default (req:Request, _res:Response, next: NextFunction) => {
 
   next();
 };
+
+export default validateToken;

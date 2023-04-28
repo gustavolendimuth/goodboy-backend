@@ -13,7 +13,7 @@ export const updateOrderService = async (body:{ data:Order, id?:string, paymentI
   return OrderModel.update(data, { where: id ? { id } : { paymentId } });
 };
 
-export const getOrderService = async (body:{ id?:number, paymentId?:number }) => {
+export const getOrderService = async (body:{ id?:string, paymentId?:string }) => {
   const { paymentId, id } = body;
   return OrderModel.findOne({
     where: id ? { id } : { paymentId },
