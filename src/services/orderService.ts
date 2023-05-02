@@ -37,10 +37,10 @@ export const getOrderService = async (body:{ id?:string, paymentId?:string }) =>
   });
 };
 
-export const getOrdersService = async (body: Order) => OrderModel.findAll({
+export const getOrdersService = async (userId:string) => OrderModel.findAll({
   attributes: { exclude: ['userId'] },
-  where: { userId: body.userId },
-  include: [{ model: ItemsModel, attributes: { exclude: ['id', 'orderId'] } }],
+  where: { userId },
+  include: [{ model: ItemsModel, as: 'items', attributes: { exclude: ['orderId'] } }],
 });
 
 export const deleteOrder = async (id:string) => OrderModel.destroy({ where: { id } });

@@ -11,7 +11,7 @@ import ipnRouter from './ipnRoute';
 import invoiceRouter from './invoiceRoute';
 import tinyOrderRouter from './tinyOrderRoute';
 import paymentRouter from './paymentRoute';
-import validateToken from '../middlewares/validateToken';
+import { validateToken } from '../middlewares/validateToken';
 
 const router = express.Router();
 

@@ -14,6 +14,7 @@ export const createOrder = async (req: Request, res: Response) => {
 };
 
 export const getOrders = async (req: Request, res: Response) => {
-  const response = await getOrdersService(req.body);
+  const userId = req.body.login.data.id;
+  const response = await getOrdersService(userId);
   res.status(200).json(response);
 };

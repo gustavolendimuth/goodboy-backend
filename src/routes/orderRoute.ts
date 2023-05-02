@@ -6,7 +6,6 @@ const orderRouter = express.Router();
 
 orderRouter.post('/', createOrder);
 orderRouter.get('/:paymentId', getOrder);
-orderRouter.use(authMiddleware);
-orderRouter.get('/', getOrders);
+orderRouter.get('/', authMiddleware, getOrders);
 
 export default orderRouter;
