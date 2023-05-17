@@ -31,7 +31,6 @@ async function createOrder(body: CreateOrderParams) {
   validateOrder(order);
   const response = await createOrderService(order);
   const result = await getOrderService({ id: response.id?.toString() });
-  console.log(result);
 
   return result;
 }
@@ -44,17 +43,18 @@ async function processMercadopagoPayment(formData:CreatePaymentPayload) {
 }
 
 export default async function processPayment(body: CreateOrderParams) {
+  let orderData;
+  let order;
   try {
     if (!body.formData) {
       throw new Error('There was no formData to create the order');
     }
-    const orderData = await processMercadopagoPayment(body.formData);
-    const order = await createOrder({ ...body, orderData });
-    console.log('order', order);
+    orderData = await processMercadopagoPayment(body.formData);
+    order = await createOrder({ ...body, orderData });
     tinyOrderService({ paymentId: orderData.id });
     return order;
   } catch (error: any) {
-    errorLog(error);
+    errorLog({ error, variables: { order, orderData, body } });
     throw new HttpException(400, 'Error creating the order, please try again later');
   }
 }

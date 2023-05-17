@@ -6,14 +6,18 @@ import errorLog from '../utils/errorLog';
 import { fetchPayment } from '../utils/fetchMercadoPago';
 import HttpException from '../utils/HttpException';
 import { createOrderService, getOrderService, updateOrderService } from './orderService';
+import { tinyOrderService } from './tinyOrderService';
 
 export const webhookService = async (body:WebhookBody) => {
-  console.log('webhook', body);
+  let response;
+  let order;
+  let orderData;
+
   try {
     if (body.action === 'payment.updated') {
-      const response = await fetchPayment.get(body.data.id);
-      const order = await getOrderService({ paymentId: response.data.id });
-      const orderData = await createOrderWebhook({ orderData: response.data });
+      response = await fetchPayment.get(body.data.id);
+      order = await getOrderService({ paymentId: response.data.id });
+      orderData = await createOrderWebhook({ orderData: response.data });
 
       if (!order) {
         await createOrderService(orderData);
@@ -22,8 +26,9 @@ export const webhookService = async (body:WebhookBody) => {
       await updateOrderService({ data: orderData, paymentId: response.data.id });
       return { message: 'order updated' };
     }
+    tinyOrderService({ paymentId: Number(body.data.id) });
   } catch (error:any) {
-    errorLog(error);
+    errorLog({ error, variables: { response, order, orderData, body } });
     throw new HttpException(400, 'Erro ao atualizar pedido');
   }
   return { message: 'nothing to update' };
