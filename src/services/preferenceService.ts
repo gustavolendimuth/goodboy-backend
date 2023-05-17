@@ -9,7 +9,7 @@ import HttpException from '../utils/HttpException';
 
 export default async (body:any) => {
   const { items } = body;
-  const backUrl = 'https://goodboy.net.br/checkout/compra';
+  const backUrl = `${process.env.BACKEND_URL}/checkout/compra`;
 
   mercadopago.configure({
     access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN || '',
