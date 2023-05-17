@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/naming-convention */
 import querystring from 'querystring';
-import HttpException from '../utils/HttpException';
 import TinyProductClass from '../utils/TinyProductClass';
 import ItemsModel from '../database/models/ItemsModel';
 import { getOrderService } from './orderService';
@@ -13,7 +12,6 @@ import fetchTiny from '../utils/fetchTiny';
 import { Order } from '../interfaces';
 import TinyOrderClass from '../utils/TinyOrderClass';
 import OrderModel from '../database/models/OrderModel';
-import errorLog from '../utils/errorLog';
 import TinyClientClass from '../utils/TinyClientClass';
 
 const token = process.env.TINY_TOKEN;
@@ -182,25 +180,20 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
 export async function tinyOrderService(body:Order): Promise<{ message: string }> {
   const { paymentId, name, cpf, ...orderData } = body;
 
-  try {
-    if (!paymentId) throw new Error('PaymentId is required');
+  if (!paymentId) throw new Error('PaymentId is required');
 
-    // Get Order
-    const order = await getOrderService({ paymentId: paymentId.toString() });
-    if (!order) throw new Error('Order not found');
-    if (order.status !== 'approved') throw new Error('Order payment not approved');
+  // Get Order
+  const order = await getOrderService({ paymentId: paymentId.toString() });
+  if (!order) throw new Error('Order not found');
+  if (order.status !== 'approved') throw new Error('Order payment not approved');
 
-    // Update order address
-    if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
+  // Update order address
+  if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
 
-    // Update user name if exists
-    if (name) await updateUser(order, { name, cpf });
+  // Update user name if exists
+  if (name) await updateUser(order, { name, cpf });
 
-    fetchTinyOrder(order, orderData);
+  fetchTinyOrder(order, orderData);
 
-    return { message: 'Nota Fiscal gerada' };
-  } catch (error: any) {
-    errorLog({ error });
-    throw new HttpException(400, error.message);
-  }
+  return { message: 'Nota Fiscal gerada' };
 }
