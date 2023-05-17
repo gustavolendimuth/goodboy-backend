@@ -33,7 +33,7 @@ const orderSchema = Joi.object({
 export const validateOrder = (body:Order): void => {
   const { error } = orderSchema.validate(body);
   if (error) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(400, error.message);
   }
 };

@@ -11,9 +11,9 @@ export const getAllOrders = async () => {
   });
 
   if (!response) {
-    const err = new HttpException(404, 'Nenhum pedido encontrado');
-    errorLog(err);
-    throw err;
+    const error = new HttpException(404, 'Nenhum pedido encontrado');
+    errorLog({ error });
+    throw error;
   }
 
   return response;

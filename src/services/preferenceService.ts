@@ -37,7 +37,7 @@ export default async (body:any) => {
   return mercadopago.preferences.create(preference)
     .then((response) => response.body.id)
     .catch((error) => {
-      errorLog(error);
+      errorLog({ error });
       throw new HttpException(400, 'Erro ao criar preferência de pagamento');
     });
 };

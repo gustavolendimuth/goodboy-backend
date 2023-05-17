@@ -10,7 +10,7 @@ export const paymentService = async (paymentId:string) => {
     const response = await fetchPayment.get(paymentId);
     return response.data;
   } catch (error:any) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(400, 'Ops... não encontramos dados sobre este pagamento');
   }
 };

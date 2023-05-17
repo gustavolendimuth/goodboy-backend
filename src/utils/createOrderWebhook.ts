@@ -22,14 +22,14 @@ export default async ({ orderData }:CreateOrderDataParams) => {
 
     if (!userEmail) throw new Error('nothing to update');
   } catch (error:any) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(400, errOrder);
   }
 
   try {
     user = await getUser({ email: userEmail });
   } catch (error:any) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(400, errUser);
   }
 

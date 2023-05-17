@@ -200,7 +200,7 @@ export async function tinyOrderService(body:Order): Promise<{ message: string }>
 
     return { message: 'Nota Fiscal gerada' };
   } catch (error: any) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(400, error.message);
   }
 }
