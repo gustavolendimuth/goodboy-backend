@@ -55,6 +55,6 @@ export default async function processPayment(body: CreateOrderParams) {
     return order;
   } catch (error: any) {
     errorLog({ error, variables: { order, orderData, body } });
-    throw new HttpException(400, 'Error creating the order, please try again later');
+    throw new HttpException(400, 'Erro ao criar o pedido, tente novamente mais tarde');
   }
 }
