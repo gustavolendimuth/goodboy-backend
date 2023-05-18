@@ -179,13 +179,14 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
 
 export async function tinyOrderService(body:Order) {
   const { paymentId, name, cpf, ...orderData } = body;
+  console.log('body', JSON.stringify(body, null, 2));
 
-  if (!paymentId) throw new Error('PaymentId is required');
+  if (!paymentId) return { error: new Error('PaymentId is required') };
 
   // Get Order
   const order = await getOrderService({ paymentId: paymentId.toString() });
-  if (!order) throw new Error('Order not found');
-  if (order.status !== 'approved') return { error: new Error('Order payment not approved') };
+  if (!order) return { error: new Error('Order not found') };
+  if (order.status !== 'approved') return { error: new Error('Order not found') };
 
   // Update order address
   if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
@@ -193,7 +194,9 @@ export async function tinyOrderService(body:Order) {
   // Update user name if exists
   if (name) await updateUser(order, { name, cpf });
 
+  console.log('order', JSON.stringify(order, null, 2));
+
   fetchTinyOrder(order, orderData);
 
-  return { message: 'Nota Fiscal gerada' };
+  return { error: null };
 }
