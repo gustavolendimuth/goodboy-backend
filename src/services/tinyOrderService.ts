@@ -177,7 +177,7 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
   }
 }
 
-export async function tinyOrderService(body:Order): Promise<{ message: string }> {
+export async function tinyOrderService(body:Order) {
   const { paymentId, name, cpf, ...orderData } = body;
 
   if (!paymentId) throw new Error('PaymentId is required');
@@ -185,7 +185,7 @@ export async function tinyOrderService(body:Order): Promise<{ message: string }>
   // Get Order
   const order = await getOrderService({ paymentId: paymentId.toString() });
   if (!order) throw new Error('Order not found');
-  if (order.status !== 'approved') throw new Error('Order payment not approved');
+  if (order.status !== 'approved') return { error: new Error('Order payment not approved') };
 
   // Update order address
   if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
