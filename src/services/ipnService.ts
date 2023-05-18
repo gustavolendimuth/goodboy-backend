@@ -28,7 +28,7 @@ export const ipnService = async (paymentId:string, topic:string) => {
       }
       // Cria o pedido caso ele não exista
       await createOrderService(orderData);
-      tinyOrderService({ paymentId: Number(paymentId) });
+      await tinyOrderService({ paymentId: Number(paymentId) });
       return { message: 'order created' };
     } catch (error:any) {
       errorLog({ error });

@@ -159,11 +159,9 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
   } else {
     await updateTinyUser(order);
   }
-  if (!tinyOrderId) throw new Error('Missing tinyOrderId');
+  if (!tinyOrderId) return new Error('Missing tinyOrderId');
 
-  if (!Object.keys(orderData).length) {
-    return { message: 'Pedido criado' };
-  }
+  if (!Object.keys(orderData).length) return;
 
   // Generate tiny invoice
   let idNotaFiscal = order.invoiceId;
@@ -175,18 +173,20 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
   if ((!order.invoiceStatus || order.invoiceStatus !== 3) && idNotaFiscal) {
     await emitTinyInvoice(idNotaFiscal, order);
   }
+
+  return null;
 }
 
 export async function tinyOrderService(body:Order) {
   const { paymentId, name, cpf, ...orderData } = body;
   console.log('body', JSON.stringify(body, null, 2));
 
-  if (!paymentId) return { error: new Error('PaymentId is required') };
+  if (!paymentId) return new Error('PaymentId is required');
 
   // Get Order
   const order = await getOrderService({ paymentId: paymentId.toString() });
-  if (!order) return { error: new Error('Order not found') };
-  if (order.status !== 'approved') return { error: new Error('Order not found') };
+  if (!order) return new Error('Order not found');
+  if (order.status !== 'approved') return new Error('Order not found');
 
   // Update order address
   if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
@@ -196,7 +196,6 @@ export async function tinyOrderService(body:Order) {
 
   console.log('order', JSON.stringify(order, null, 2));
 
-  fetchTinyOrder(order, orderData);
-
-  return { error: null };
+  const error = await fetchTinyOrder(order, orderData);
+  return error;
 }

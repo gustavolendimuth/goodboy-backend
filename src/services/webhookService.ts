@@ -26,7 +26,7 @@ export const webhookService = async (body:WebhookBody) => {
       await updateOrderService({ data: orderData, paymentId: response.data.id });
       return { message: 'order updated' };
     }
-    tinyOrderService({ paymentId: Number(body.data.id) });
+    await tinyOrderService({ paymentId: Number(body.data.id) });
   } catch (error:any) {
     errorLog({ error, variables: { response, order, orderData, body } });
     throw new HttpException(400, 'Erro ao atualizar pedido');
