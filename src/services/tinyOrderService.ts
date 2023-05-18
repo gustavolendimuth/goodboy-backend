@@ -186,7 +186,7 @@ export async function tinyOrderService(body:Order) {
   // Get Order
   const order = await getOrderService({ paymentId: paymentId.toString() });
   if (!order) return new Error('Order not found');
-  if (order.status !== 'approved') return new Error('Order not found');
+  // if (order.status !== 'approved') return new Error('Order not found');
 
   // Update order address
   if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
