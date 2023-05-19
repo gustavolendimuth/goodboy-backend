@@ -8,7 +8,7 @@ import HttpException from '../utils/HttpException';
 import errorLog from '../utils/errorLog';
 import createOrderData from '../utils/createOrderData';
 import mercadopagoSave from '../utils/mercadopagoSave';
-import { tinyOrderService } from './tinyOrderService';
+// import { tinyOrderService } from './tinyOrderService';
 
 const emailValidation = z
   .string()
@@ -51,8 +51,8 @@ export default async function processPayment(body: CreateOrderParams) {
     }
     orderData = await processMercadopagoPayment(body.formData);
     order = await createOrder({ ...body, orderData });
-    const error = await tinyOrderService({ paymentId: orderData.id });
-    if (error) throw error;
+    // const error = await tinyOrderService({ paymentId: orderData.id });
+    // if (error) throw error;
     return order;
   } catch (error: any) {
     errorLog({ error, variables: { order, orderData, body } });
