@@ -9,7 +9,7 @@ import HttpException from './HttpException';
 import OrderClass from './OrderClass';
 
 const errUser = 'Erro ao buscar usuário, tente mais tarde';
-const errOrder = 'Erro ao criar o pedido, tente mais tarde';
+const errOrder = 'Nothing to update';
 
 export default async ({ orderData }:CreateOrderDataParams) => {
   let user;
