@@ -13,18 +13,11 @@ const errOrder = 'Erro ao criar o pedido, tente mais tarde';
 
 export default async ({ orderData }:CreateOrderDataParams) => {
   let user;
-  let name;
-  let userEmail;
 
-  try {
-    userEmail = orderData.payer.email;
-    name = userEmail?.split('@')[0];
+  const userEmail = orderData.payer.email;
+  const name = userEmail?.split('@')[0];
 
-    if (!userEmail) throw new Error('nothing to update');
-  } catch (error:any) {
-    errorLog({ error });
-    throw new HttpException(400, errOrder);
-  }
+  if (!userEmail) throw new HttpException(200, errOrder);
 
   try {
     user = await getUser({ email: userEmail });

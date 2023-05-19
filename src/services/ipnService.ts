@@ -31,7 +31,7 @@ export const ipnService = async (paymentId:string, topic:string) => {
       const error = await tinyOrderService({ paymentId: Number(paymentId) });
       if (error) throw error;
     } catch (error:any) {
-      errorLog({ error });
+      errorLog({ error, variables: { paymentId, topic } });
       throw new HttpException(400, 'Erro ao criar o pedido');
     }
   }
