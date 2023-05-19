@@ -13,6 +13,8 @@ export const webhookService = async (body:WebhookBody) => {
   let order;
   let orderData;
 
+  console.log('webhook', body);
+
   try {
     if (body.action === 'payment.updated') {
       response = await fetchPayment.get(body.data.id);
@@ -26,7 +28,8 @@ export const webhookService = async (body:WebhookBody) => {
       await updateOrderService({ data: orderData, paymentId: response.data.id });
       return { message: 'order updated' };
     }
-    await tinyOrderService({ paymentId: Number(body.data.id) });
+    const error = await tinyOrderService({ paymentId: Number(body.data.id) });
+    if (error) throw error;
   } catch (error:any) {
     errorLog({ error, variables: { response, order, orderData, body } });
     throw new HttpException(400, 'Erro ao atualizar pedido');

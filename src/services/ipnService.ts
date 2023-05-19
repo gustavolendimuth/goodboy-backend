@@ -15,7 +15,7 @@ export const ipnService = async (paymentId:string, topic:string) => {
     try {
       // Pega os dados do pagamento no Mercado Pago
       const payment = await fetchPayment.get(paymentId);
-      if (!payment.data.payer.email) return { status: 200, message: 'nothing to update' };
+      if (!payment.data.payer.email) return;
 
       // Verifica se o pedido já existe
       const order = await getOrderService({ paymentId });
@@ -24,17 +24,15 @@ export const ipnService = async (paymentId:string, topic:string) => {
       // Atualiza o pedido caso ele já exista
       if (order) {
         await updateOrderService({ data: orderData, paymentId: Number(paymentId) });
-        return { message: 'order updated' };
+        return;
       }
       // Cria o pedido caso ele não exista
       await createOrderService(orderData);
-      await tinyOrderService({ paymentId: Number(paymentId) });
-      return { message: 'order created' };
+      const error = await tinyOrderService({ paymentId: Number(paymentId) });
+      if (error) throw error;
     } catch (error:any) {
       errorLog({ error });
       throw new HttpException(400, 'Erro ao criar o pedido');
     }
   }
-
-  return { message: 'nothing to update' };
 };
