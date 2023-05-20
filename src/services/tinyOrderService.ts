@@ -1,9 +1,4 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-/* eslint-disable complexity */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/naming-convention */
 import querystring from 'querystring';
 import TinyProductClass from '../utils/TinyProductClass';
 import ItemsModel from '../database/models/ItemsModel';
@@ -126,7 +121,6 @@ async function createTinyOrder(order: OrderModel) {
 
 async function updateTinyUser(order: OrderModel) {
   const orderResult = await tinyUpdateUserService(order);
-  console.log(JSON.stringify(orderResult, null, 2));
   if (orderResult.retorno.status === 'Erro') throw new Error('Order not updated');
 }
 
@@ -179,7 +173,6 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
 
 export async function tinyOrderService(body:Order) {
   const { paymentId, name, cpf, ...orderData } = body;
-  console.log('body', JSON.stringify(body, null, 2));
 
   if (!paymentId) return new Error('PaymentId is required');
 
@@ -193,8 +186,6 @@ export async function tinyOrderService(body:Order) {
 
   // Update user name if exists
   if (name) await updateUser(order, { name, cpf });
-
-  console.log('order', JSON.stringify(order, null, 2));
 
   const error = await fetchTinyOrder(order, orderData);
   return error;

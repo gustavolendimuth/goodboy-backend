@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable max-lines-per-function */
 import mercadopago from 'mercadopago';
 import { CreatePreferencePayload } from 'mercadopago/models/preferences/create-payload.model';
 import { Item, Preference } from '../interfaces';

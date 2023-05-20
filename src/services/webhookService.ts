@@ -16,7 +16,6 @@ export const webhookService = async (body:WebhookBody) => {
   console.log('webhook', body);
 
   try {
-    // if (body.action === 'payment.updated') {
     response = await fetchPayment.get(body.data.id);
     order = await getOrderService({ paymentId: response.data.id });
     orderData = await createOrderWebhook({ orderData: response.data });
@@ -26,7 +25,6 @@ export const webhookService = async (body:WebhookBody) => {
       return;
     }
     await updateOrderService({ data: orderData, paymentId: response.data.id });
-    // }
     const error = await tinyOrderService({ paymentId: Number(body.data.id) });
     if (error) throw error;
   } catch (error:any) {

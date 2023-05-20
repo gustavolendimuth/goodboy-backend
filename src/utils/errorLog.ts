@@ -13,11 +13,11 @@ if (!host) throw new HttpException(401, 'EMAIL_HOST not found');
 
 export default async ({ error, variables }: { error:Error, variables?:unknown }) => {
   const { message, stack } = error;
-  const errMessage = JSON.stringify(
-    `<h1>${message}</h1><p>${stack?.replace(/\n/g, '<br />')}</p><p>${JSON.stringify(variables, null, 2)}</p>`,
-  );
+  const errMessage = `<h1>${message}</h1>
+    <p>${stack?.replace(/\n/g, '<br />')}</p>
+    <p>${JSON.stringify(variables, null, 2)}</p>`;
 
-  console.log(error);
+  console.log(errMessage);
 
   const transporter = nodemailer.createTransport({
     host,
