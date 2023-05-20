@@ -15,7 +15,7 @@ export default async ({ error, variables }: { error:Error, variables?:unknown })
   const { message, stack } = error;
   const errMessage = `<h1>${message}</h1>
     <p>${stack?.replace(/\n/g, '<br />')}</p>
-    <p>${JSON.stringify(variables, null, 2)}</p>`;
+    <p>${variables}</p>`;
 
   console.log(errMessage);
 
