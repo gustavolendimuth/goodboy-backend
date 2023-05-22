@@ -18,12 +18,12 @@ async function getUserOrThrow(email:string) {
 }
 
 function buildOrderParams(params: OrderParams) {
-  const { user, userEmail, name, cpf } = params;
+  const { user, userEmail, cpf } = params;
   const updatedParams = { ...params };
 
   if (userEmail) {
     if (!user) {
-      updatedParams.user = { email: userEmail, name, cpf };
+      updatedParams.user = { email: userEmail, cpf };
     } else {
       updatedParams.userId = user.id;
       const { user: _, ...order } = new OrderClass(updatedParams);
@@ -53,7 +53,7 @@ export default async function createOrderData({ formData, orderData, email, item
 
   const user = await getUserOrThrow(userEmail);
   const itemsData = processItems(items);
-  const params: OrderParams = { itemsData, orderData, user, userEmail, name, cpf };
+  const params: OrderParams = { itemsData, orderData, user, userEmail, cpf };
 
   return buildOrderParams(params);
 }

@@ -15,8 +15,6 @@ export default async ({ orderData }:CreateOrderDataParams) => {
   let user;
 
   const userEmail = orderData.payer.email;
-  const name = userEmail?.split('@')[0];
-
   if (!userEmail) throw new HttpException(200, errOrder);
 
   try {
@@ -26,11 +24,11 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     throw new HttpException(400, errUser);
   }
 
-  const params:OrderParams = { orderData, name };
+  const params:OrderParams = { orderData };
 
   if (userEmail) {
     if (!user) {
-      params.user = { email: userEmail, name };
+      params.user = { email: userEmail };
     } else {
       params.userId = user.id;
       const { user: _, ...rest } = new OrderClass(params);

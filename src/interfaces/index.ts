@@ -177,7 +177,6 @@ export interface OrderParams {
   user?:IUser,
   userId?:number
   userEmail?:string,
-  name?:string,
   cpf?:string,
 }
 

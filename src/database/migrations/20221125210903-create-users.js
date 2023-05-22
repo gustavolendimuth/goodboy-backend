@@ -18,7 +18,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       cpf: Sequelize.STRING,
       magicLink: {

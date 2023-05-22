@@ -16,7 +16,6 @@ const errOrder = 'Erro ao criar o pedido, tente mais tarde';
 export default async ({ orderData }:CreateOrderDataParams) => {
   let user;
   let itemsData;
-  let name;
   let cpf;
 
   const userEmail = orderData.payer.email;
@@ -39,7 +38,6 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     }));
 
     itemsData = sanityProducts?.map((item) => new OrderSanityProductClass(item));
-    name = userEmail?.split('@')[0];
     cpf = orderData.payer.identification.number;
   } catch (error:any) {
     errorLog({ error, variables: { itemsData, orderData, userEmail } });
@@ -53,11 +51,11 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     throw new HttpException(400, errUser);
   }
 
-  const params:OrderParams = { itemsData, orderData, name, cpf };
+  const params:OrderParams = { itemsData, orderData, cpf };
 
   if (userEmail) {
     if (!user) {
-      params.user = { email: userEmail, name };
+      params.user = { email: userEmail };
     } else {
       params.userId = user.id;
       const { user: _, ...rest } = new OrderClass(params);

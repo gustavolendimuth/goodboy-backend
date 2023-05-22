@@ -22,7 +22,7 @@ UserModel.init(
     },
     name: {
       type: STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: STRING,
