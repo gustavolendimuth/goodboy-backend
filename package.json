@@ -6,10 +6,10 @@
   "scripts": {
     "prestart": "npm run build",
     "build": "npx -y tsc",
-    "postbuild": "if-env DATABASE_RESET=true && npm run db:setup",
+    "postbuild": "if-env DATABASE_RESET=true && npm run db:setup || echo 'Skipping db setup'",
     "start": "node .",
     "db:setup": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
-    "predev": "npm run build",
+    "predev": "DATABASE_RESET=true npm run build",
     "dev": "tsnd ./src/index.ts",
     "compose:up": "docker-compose up -d --build",
     "compose:down": "docker-compose down --remove-orphans",
