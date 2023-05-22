@@ -39,6 +39,7 @@
     "mercadopago": "^1.5.15",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.8.0",
+    "npm-run-all": "^4.1.5",
     "sequelize": "^6.25.6",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
@@ -63,7 +64,6 @@
     "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-sonarjs": "^0.16.0",
     "mocha": "^10.2.0",
-    "npm-run-all": "^4.1.5",
     "sequelize-cli": "^6.5.2",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
