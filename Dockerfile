@@ -3,4 +3,4 @@ WORKDIR /api
 COPY package*.json .
 RUN yarn install
 COPY . .
-ENTRYPOINT [ "npm", "run", "setup" ]
+ENTRYPOINT [ "npm", "run", "start" ]

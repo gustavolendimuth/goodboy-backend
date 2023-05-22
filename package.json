@@ -4,7 +4,7 @@
   "description": "API for Mercado Pago checkout",
   "main": "./build/index.js",
   "scripts": {
-    "setup": "npm run build && npm start",
+    "prestart": "npm run build",
     "build": "npx -y tsc",
     "postbuild": "if-env DATABASE_RESET=true && npm run db:setup",
     "start": "node .",
