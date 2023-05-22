@@ -96,7 +96,7 @@ async function updateOrderAddress(order: OrderModel, orderData: Partial<Order>) 
   order.save();
 }
 
-async function updateUser(order: OrderModel, data: { name:string, cpf?:string }) {
+async function updateUser(order: OrderModel, data: { name?:string, cpf?:string }) {
   order.user.name = data.name;
   if (data.cpf) order.user.cpf = data.cpf;
   await order.user.save();
@@ -185,7 +185,7 @@ export async function tinyOrderService(body:Order) {
   if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
 
   // Update user name if exists
-  if (name) await updateUser(order, { name, cpf });
+  if (name || cpf) await updateUser(order, { name, cpf });
 
   const error = await fetchTinyOrder(order, orderData);
   return error;
