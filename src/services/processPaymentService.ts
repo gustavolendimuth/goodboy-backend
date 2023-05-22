@@ -3,7 +3,7 @@ import * as z from 'zod';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import { createOrderService, getOrderService } from './orderService';
 import { CreateOrderParams } from '../interfaces';
-import { validateOrder } from './validations/orderValidation';
+// import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/HttpException';
 import errorLog from '../utils/errorLog';
 import createOrderData from '../utils/createOrderData';

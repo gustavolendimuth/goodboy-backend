@@ -22,7 +22,7 @@ export default class TinyClientClass implements TinyClient {
   constructor(order:OrderModel) {
     this.sequencia = 1;
     this.situacao = 'A';
-    this.nome = order.user.name;
+    this.nome = order.user.name || order.user.email?.split('@')[0];
     this.email = order.user.email;
     this.tipo_pessoa = 'F';
     this.cpf_cnpj = order.user.cpf;
