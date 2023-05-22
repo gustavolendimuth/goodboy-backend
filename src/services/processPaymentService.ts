@@ -28,7 +28,7 @@ async function createOrder(body: CreateOrderParams) {
   const userEmail = emailValidation.parse(email);
 
   const order = await createOrderData({ formData, orderData, items, email: userEmail });
-  validateOrder(order);
+  // validateOrder(order);
   const response = await createOrderService(order);
   const result = await getOrderService({ id: response.id?.toString() });
 
