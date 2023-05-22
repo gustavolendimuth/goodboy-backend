@@ -31,7 +31,7 @@ export default async (body:any) => {
     auto_return: 'all',
     installments: 1,
     statement_descriptor: 'Good Boy',
-    // notification_url: `${process.env.BACKEND_URL}/ipn?source_news=ipn`,
+    notification_url: `${process.env.BACKEND_URL}/ipn?source_news=ipn`,
   };
 
   return mercadopago.preferences.create(preference)

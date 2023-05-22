@@ -17,7 +17,7 @@ export default async ({ error, variables }: { error:Error, variables?:unknown })
     <p>${stack?.replace(/\n/g, '<br />')}</p>
     <p>${variables}</p>`;
 
-  console.log(errMessage);
+  console.log(error);
 
   const transporter = nodemailer.createTransport({
     host,

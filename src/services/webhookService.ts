@@ -18,6 +18,8 @@ export const webhookService = async (body:WebhookBody) => {
   try {
     response = await fetchPayment.get(body.data.id);
     order = await getOrderService({ paymentId: response.data.id });
+    console.log('order', order);
+
     orderData = await createOrderWebhook({ orderData: response.data });
 
     if (!order) {
