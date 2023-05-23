@@ -133,7 +133,7 @@ async function createTinyOrder(order: OrderModel) {
   const orderResult = await tinyCreateOrderService(order);
   if (orderResult.retorno.status === 'Erro') throw new Error('Order not created');
 
-  const { id: tinyClientId } = clientResult.retorno.registros.registro;
+  const { id: tinyClientId } = clientResult.retorno.registros[0].registro;
   const { id: tinyOrderId } = orderResult.retorno.registros.registro;
 
   order.tinyOrderId = tinyOrderId;
