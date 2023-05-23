@@ -11,6 +11,11 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
+      tinyClientId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        field: 'tiny_client_id'
+      },
       email: {
         allowNull: false,
         type: Sequelize.STRING,

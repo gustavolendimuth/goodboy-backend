@@ -4,6 +4,7 @@ import { IUser } from '../../interfaces';
 
 class UserModel extends Model<IUser> implements IUser {
   declare id?: number;
+  declare tinyClientId?: number;
   declare email?: string;
   declare name?: string;
   declare cpf?: string;
@@ -19,6 +20,10 @@ UserModel.init(
       type: INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    tinyClientId: {
+      type: INTEGER,
+      allowNull: true,
     },
     name: {
       type: STRING,

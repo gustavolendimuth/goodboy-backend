@@ -91,15 +91,30 @@ export const tinyUpdateUserService = async (order:OrderModel) => {
   return fetchTiny(url, data);
 };
 
+export const tinyCreateUserService = async (order:OrderModel) => {
+  const url = 'https://api.tiny.com.br/api2/contato.incluir.php';
+  const tinyClient = new TinyClientClass(order);
+
+  const data:string = querystring.stringify({
+    token,
+    contato: JSON.stringify({ contatos: [{ contato: tinyClient }] }),
+    formato: 'JSON',
+  });
+
+  return fetchTiny(url, data);
+};
+
 async function updateOrderAddress(order: OrderModel, orderData: Partial<Order>) {
   order.set(orderData);
-  order.save();
+  await order.save();
+  return order;
 }
 
 async function updateUser(order: OrderModel, data: { name?:string, cpf?:string }) {
   order.user.name = data.name;
   if (data.cpf) order.user.cpf = data.cpf;
   await order.user.save();
+  return order;
 }
 
 async function addOrderItemsToTiny(orderItems: ItemsModel[]) {
@@ -111,12 +126,22 @@ async function addOrderItemsToTiny(orderItems: ItemsModel[]) {
 }
 
 async function createTinyOrder(order: OrderModel) {
+  const clientResult = await tinyCreateUserService(order);
+  console.log('clientResult', clientResult);
+  if (clientResult.retorno.status === 'Erro') throw new Error('Client not created');
+
   const orderResult = await tinyCreateOrderService(order);
   if (orderResult.retorno.status === 'Erro') throw new Error('Order not created');
-  const { id } = orderResult.retorno.registros.registro;
-  order.tinyOrderId = id;
+
+  const { id: tinyClientId } = clientResult.retorno.registros.registro;
+  const { id: tinyOrderId } = orderResult.retorno.registros.registro;
+
+  order.tinyOrderId = tinyOrderId;
+  order.user.tinyClientId = tinyClientId;
+
   await order.save();
-  return id;
+  await order.user.save();
+  return tinyOrderId;
 }
 
 async function updateTinyUser(order: OrderModel) {
@@ -158,7 +183,7 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
   if (!Object.keys(orderData).length) return;
 
   // Generate tiny invoice
-  let idNotaFiscal = order.invoiceId;
+  let { invoiceId: idNotaFiscal } = order;
   if (!idNotaFiscal) {
     idNotaFiscal = await generateTinyInvoice(tinyOrderId, order);
   }
@@ -177,15 +202,15 @@ export async function tinyOrderService(body:Order) {
   if (!paymentId) return new Error('PaymentId is required');
 
   // Get Order
-  const order = await getOrderService({ paymentId: paymentId.toString() });
+  let order = await getOrderService({ paymentId: paymentId.toString() });
   if (!order) return new Error('Order not found');
   if (order.status !== 'approved') return;
 
   // Update order address
-  if (Object.keys(orderData).length) updateOrderAddress(order, orderData);
+  if (Object.keys(orderData).length) order = await updateOrderAddress(order, orderData);
 
   // Update user name if exists
-  if (name || cpf) await updateUser(order, { name, cpf });
+  if (name || cpf) order = await updateUser(order, { name, cpf });
 
   const error = await fetchTinyOrder(order, orderData);
   return error;

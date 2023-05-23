@@ -18,6 +18,7 @@ export interface IProduct {
 
 export interface IUser {
   id?: number,
+  tinyClientId?: number,
   email?: string,
   name?: string,
   cpf?: string,

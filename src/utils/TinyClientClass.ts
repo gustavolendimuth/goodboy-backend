@@ -7,6 +7,7 @@ import { TinyClient } from '../interfaces';
 export default class TinyClientClass implements TinyClient {
   sequencia: number;
   situacao: string;
+  id?: number;
   nome?: string;
   email?: string;
   tipo_pessoa: string;
@@ -22,6 +23,7 @@ export default class TinyClientClass implements TinyClient {
   constructor(order:OrderModel) {
     this.sequencia = 1;
     this.situacao = 'A';
+    this.id = order.user.id;
     this.nome = order.user.name || order.user.email?.split('@')[0];
     this.email = order.user.email;
     this.tipo_pessoa = 'F';
