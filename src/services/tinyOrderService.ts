@@ -159,7 +159,8 @@ async function updateTinyUser(order: OrderModel) {
 
   if (orderResult.retorno.status === 'Erro') {
     throw new Error(
-      orderResult.retorno.registros[0].erros.reduce((acc: string, curr:{ erro:string }) => `${acc},  ${curr.erro}`, ''),
+      orderResult.retorno.registros[0].registro.erros
+        .reduce((acc: string, curr:{ erro:string }) => `${acc},  ${curr.erro}`, ''),
     );
   }
 }
