@@ -26,3 +26,24 @@
 25 timing npm:load:configScope Completed in 0ms
 26 timing npm:load Completed in 20ms
 27 silly logfile start cleaning logs, removing 1 files
+28 timing command:run Completed in 154588235ms
+29 verbose stack Error: command failed
+29 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/index.js:64:27)
+29 verbose stack     at ChildProcess.emit (node:events:526:28)
+29 verbose stack     at maybeClose (node:internal/child_process:1092:16)
+29 verbose stack     at Process.ChildProcess._handle.onexit (node:internal/child_process:302:5)
+30 verbose pkgid goodboy-backend@1.0.0
+31 verbose cwd /home/node/app
+32 verbose Linux 5.15.90.1-microsoft-standard-WSL2
+33 verbose argv "/usr/local/bin/node" "/usr/local/bin/npm" "run" "dev" "dev"
+34 verbose node v16.14.2
+35 verbose npm  v8.5.0
+36 error path /home/node
+37 error command failed
+38 error signal SIGABRT
+39 error command sh -c tsnd ./src/index.ts "dev"
+40 verbose exit 1
+41 timing npm Completed in 154588403ms
+42 verbose code 1
+43 error A complete log of this run can be found in:
+43 error     /home/node/.npm/_logs/2023-05-22T19_46_11_450Z-debug-0.log
