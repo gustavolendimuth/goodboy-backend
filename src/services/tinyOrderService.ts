@@ -81,6 +81,7 @@ export const tinyCreateOrderService = async (order:OrderModel) => {
 export const tinyUpdateUserService = async (order:OrderModel) => {
   const url = 'https://api.tiny.com.br/api2/contato.alterar.php';
   const tinyClient = new TinyClientClass(order);
+  console.log(JSON.stringify(tinyClient, null, 2));
 
   const data:string = querystring.stringify({
     token,
@@ -154,7 +155,6 @@ async function createTinyOrder(order: OrderModel) {
 async function updateTinyUser(order: OrderModel) {
   if (!order.tinyOrderId) return;
   const orderResult = await tinyUpdateUserService(order);
-  console.log('order', JSON.stringify(order, null, 2));
   console.log('orderResult', JSON.stringify(orderResult, null, 2));
 
   if (orderResult.retorno.status === 'Erro') {
@@ -185,10 +185,12 @@ async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
 
 async function fetchTinyOrder(order:OrderModel, orderData:Order) {
   // Add order items to tiny
-  await addOrderItemsToTiny(order.items);
+  if (!order.tinyOrderId) await addOrderItemsToTiny(order.items);
 
-  // Create tiny order
+  // Update tiny if exists
   await updateTinyUser(order);
+
+  // Create tiny order if not exists
   order = await createTinyUser(order);
   const tinyOrderId = await createTinyOrder(order);
   if (!tinyOrderId) return new Error('Missing tinyOrderId');
