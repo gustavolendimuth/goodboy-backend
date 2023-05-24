@@ -32,6 +32,7 @@ export const webhookService = async (body:WebhookBody) => {
 
     // Update order if exists
     await updateOrderService({ data: orderData, paymentId: response.data.id });
+    if (body.action === 'payment.created') return;
     const error = await tinyOrderService({ paymentId: Number(body.data.id) });
     if (error) throw error;
   } catch (error:any) {

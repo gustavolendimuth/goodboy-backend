@@ -125,28 +125,34 @@ async function addOrderItemsToTiny(orderItems: ItemsModel[]) {
   }
 }
 
-async function createTinyOrder(order: OrderModel) {
+async function createTinyUser(order:OrderModel) {
+  if (order.tinyOrderId) return order;
   const clientResult = await tinyCreateUserService(order);
   console.log('order', JSON.stringify(order, null, 2));
   console.log('clientResult', clientResult);
-
   if (clientResult.retorno.status === 'Erro') throw new Error('Client not created');
+  const { id: tinyClientId } = clientResult.retorno.registros[0].registro;
+  order.user.tinyClientId = tinyClientId;
+  await order.user.save();
+  return order;
+}
+
+async function createTinyOrder(order: OrderModel) {
+  if (order.tinyOrderId) return order.tinyOrderId;
 
   const orderResult = await tinyCreateOrderService(order);
   if (orderResult.retorno.status === 'Erro') throw new Error('Order not created');
 
-  const { id: tinyClientId } = clientResult.retorno.registros[0].registro;
   const { id: tinyOrderId } = orderResult.retorno.registros.registro;
 
   order.tinyOrderId = tinyOrderId;
-  order.user.tinyClientId = tinyClientId;
 
   await order.save();
-  await order.user.save();
   return tinyOrderId;
 }
 
 async function updateTinyUser(order: OrderModel) {
+  if (!order.tinyOrderId) return;
   const orderResult = await tinyUpdateUserService(order);
   console.log('orderResult', JSON.stringify(orderResult, null, 2));
 
@@ -180,12 +186,9 @@ async function fetchTinyOrder(order:OrderModel, orderData:Order) {
   await addOrderItemsToTiny(order.items);
 
   // Create tiny order
-  let { tinyOrderId } = order;
-  if (!tinyOrderId) {
-    tinyOrderId = await createTinyOrder(order);
-  } else {
-    await updateTinyUser(order);
-  }
+  await updateTinyUser(order);
+  order = await createTinyUser(order);
+  const tinyOrderId = await createTinyOrder(order);
   if (!tinyOrderId) return new Error('Missing tinyOrderId');
 
   if (!Object.keys(orderData).length) return;
