@@ -19,7 +19,7 @@ export default async ({ orderData }:CreateOrderDataParams) => {
   let cpf;
 
   const userEmail = orderData.payer.email;
-  if (!userEmail) throw new HttpException(200, 'payer email is missing');
+  if (!userEmail) return;
 
   try {
     if (!orderData || !orderData.additional_info.items) {

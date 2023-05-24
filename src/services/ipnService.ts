@@ -21,6 +21,7 @@ export const ipnService = async (paymentId:string, topic:string) => {
       const order = await getOrderService({ paymentId });
       // Cria o objeto do pedido
       const orderData = await createOrderIpn({ orderData: payment.data });
+      if (!orderData) return;
       // Atualiza o pedido caso ele já exista
       if (order) {
         await updateOrderService({ data: orderData, paymentId: Number(paymentId) });

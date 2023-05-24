@@ -21,6 +21,7 @@ export const webhookService = async (body:WebhookBody) => {
     console.log('order', order);
 
     orderData = await createOrderWebhook({ orderData: response.data });
+    if (!orderData) return;
 
     if (!order) {
       await createOrderService(orderData);

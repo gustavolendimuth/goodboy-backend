@@ -9,13 +9,12 @@ import HttpException from './HttpException';
 import OrderClass from './OrderClass';
 
 const errUser = 'Erro ao buscar usuário, tente mais tarde';
-const errOrder = 'Nothing to update';
 
 export default async ({ orderData }:CreateOrderDataParams) => {
   let user;
 
   const userEmail = orderData.payer.email;
-  if (!userEmail) throw new HttpException(200, errOrder);
+  if (!userEmail) return;
 
   try {
     user = await getUser({ email: userEmail });
