@@ -128,12 +128,12 @@ async function addOrderItemsToTiny(orderItems: ItemsModel[]) {
 async function createTinyUser(order:OrderModel) {
   if (order.tinyOrderId) return order;
   const clientResult = await tinyCreateUserService(order);
-  console.log('order', JSON.stringify(order, null, 2));
-  console.log('clientResult', clientResult);
   if (clientResult.retorno.status === 'Erro') throw new Error('Client not created');
   const { id: tinyClientId } = clientResult.retorno.registros[0].registro;
   order.user.tinyClientId = tinyClientId;
   await order.user.save();
+  console.log('clientResult', clientResult);
+  console.log('order', JSON.stringify(order, null, 2));
   return order;
 }
 
@@ -154,11 +154,12 @@ async function createTinyOrder(order: OrderModel) {
 async function updateTinyUser(order: OrderModel) {
   if (!order.tinyOrderId) return;
   const orderResult = await tinyUpdateUserService(order);
+  console.log('order', JSON.stringify(order, null, 2));
   console.log('orderResult', JSON.stringify(orderResult, null, 2));
 
   if (orderResult.retorno.status === 'Erro') {
     throw new Error(
-      orderResult.retorno.registros[0].erros.reduce((acc: string, curr:{ error:string }) => acc + curr.error, ''),
+      orderResult.retorno.registros[0].erros.reduce((acc: string, curr:{ erro:string }) => `${acc},  ${curr.erro}`, ''),
     );
   }
 }
