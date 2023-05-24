@@ -146,7 +146,9 @@ async function createTinyOrder(order: OrderModel) {
 
 async function updateTinyUser(order: OrderModel) {
   const orderResult = await tinyUpdateUserService(order);
-  if (orderResult.retorno.status === 'Erro') throw new Error('Order not updated');
+  console.log('orderResult', orderResult);
+
+  if (orderResult.retorno.status === 'Erro') throw new Error('User not updated');
 }
 
 async function generateTinyInvoice(tinyOrderId: number, order: OrderModel) {

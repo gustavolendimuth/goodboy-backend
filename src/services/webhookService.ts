@@ -16,17 +16,21 @@ export const webhookService = async (body:WebhookBody) => {
   console.log('webhook', body);
 
   try {
+    // Get payment data from mercado pago and get order data
     response = await fetchPayment.get(body.data.id);
     order = await getOrderService({ paymentId: response.data.id });
-    console.log('order', order);
 
+    // Create order object
     orderData = await createOrderWebhook({ orderData: response.data });
     if (!orderData) return;
 
+    // Create order if It doesn't exists
     if (!order) {
       await createOrderService(orderData);
       return;
     }
+
+    // Update order if exists
     await updateOrderService({ data: orderData, paymentId: response.data.id });
     const error = await tinyOrderService({ paymentId: Number(body.data.id) });
     if (error) throw error;
