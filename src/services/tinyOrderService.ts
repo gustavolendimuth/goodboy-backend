@@ -127,7 +127,9 @@ async function addOrderItemsToTiny(orderItems: ItemsModel[]) {
 
 async function createTinyOrder(order: OrderModel) {
   const clientResult = await tinyCreateUserService(order);
+  console.log('order', JSON.stringify(order, null, 2));
   console.log('clientResult', clientResult);
+
   if (clientResult.retorno.status === 'Erro') throw new Error('Client not created');
 
   const orderResult = await tinyCreateOrderService(order);
@@ -146,7 +148,7 @@ async function createTinyOrder(order: OrderModel) {
 
 async function updateTinyUser(order: OrderModel) {
   const orderResult = await tinyUpdateUserService(order);
-  console.log('orderResult', orderResult);
+  console.log('orderResult', JSON.stringify(orderResult, null, 2));
 
   if (orderResult.retorno.status === 'Erro') throw new Error('User not updated');
 }
