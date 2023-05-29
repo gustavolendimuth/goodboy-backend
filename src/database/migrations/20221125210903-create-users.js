@@ -25,7 +25,41 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      cpf: Sequelize.STRING,
+      cpf: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      address: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      number: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      complement: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      neighborhood: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      postalCode: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        field: 'postal_code'
+      },
+      city: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: 'São Paulo'
+      },
+      state: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: 'SP'
+      },
       magicLink: {
         type: Sequelize.UUID,
         allowNull: true,

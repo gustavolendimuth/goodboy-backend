@@ -6,7 +6,6 @@ import errorLog from '../utils/errorLog';
 import { fetchPayment } from '../utils/fetchMercadoPago';
 import HttpException from '../utils/HttpException';
 import { createOrderService, getOrderService, updateOrderService } from './orderService';
-import { tinyOrderService } from './tinyOrderService';
 
 export const webhookService = async (body:WebhookBody) => {
   let response;
@@ -32,9 +31,9 @@ export const webhookService = async (body:WebhookBody) => {
 
     // Update order if exists
     await updateOrderService({ data: orderData, paymentId: response.data.id });
-    if (body.action === 'payment.created') return;
-    const error = await tinyOrderService({ paymentId: Number(body.data.id) });
-    if (error) throw error;
+    // if (body.action === 'payment.created') return;
+    // const error = await tinyOrderService({ paymentId: Number(body.data.id) });
+    // if (error) throw error;
   } catch (error:any) {
     errorLog({ error, variables: { response, order, orderData, body } });
     throw new HttpException(400, 'Erro ao atualizar pedido');

@@ -42,11 +42,6 @@ export default async function createOrderData({ formData, orderData, email, item
 
   const cpf = formData?.payer?.identification?.number;
 
-  const name = userEmail?.split('@')[0];
-  if (!name) {
-    throw new HttpException(400, 'Nothing to update');
-  }
-
   if (!items) {
     throw new HttpException(400, ERROR_USER);
   }

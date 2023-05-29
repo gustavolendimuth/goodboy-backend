@@ -12,7 +12,7 @@ export default class TinyClientClass implements TinyClient {
   email?: string;
   tipo_pessoa: string;
   cpf_cnpj?: string;
-  endereco?: string;
+  endereco?: string | null;
   numero?: string;
   complemento?: string;
   bairro?: string;
@@ -20,20 +20,20 @@ export default class TinyClientClass implements TinyClient {
   cep?: string;
   uf?: string;
 
-  constructor(order:OrderModel) {
-    this.sequencia = 1;
+  constructor(order:OrderModel, index:number) {
+    this.sequencia = index + 1;
     this.situacao = 'A';
     this.id = order.user.tinyClientId;
     this.nome = order.user.name || order.user.email?.split('@')[0];
     this.email = order.user.email;
     this.tipo_pessoa = 'F';
     this.cpf_cnpj = order.user.cpf;
-    this.endereco = order.address;
-    this.numero = order.number;
-    this.complemento = order.complement;
-    this.bairro = order.neighborhood;
-    this.cidade = order.city;
-    this.cep = order.postalCode;
-    this.uf = order.state;
+    this.endereco = order.user.address;
+    this.numero = order.user.number;
+    this.complemento = order.user.complement;
+    this.bairro = order.user.neighborhood;
+    this.cidade = order.user.city;
+    this.cep = order.user.postalCode;
+    this.uf = order.user.state;
   }
 }
