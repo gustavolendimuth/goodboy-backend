@@ -8,10 +8,14 @@ const config: Options = {
   host: process.env.MYSQLHOST_CONTAINER || process.env.MYSQLHOST || 'localhost',
   port: Number(process.env.MYSQLPORT) || 3306,
   dialect: 'mysql',
-  // dialectOptions: {
-  //   timezone: 'Z',
-  // },
-  // logging: false,
+  define: {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_general_ci',
+  },
+  dialectOptions: {
+    timezone: 'America/Sao_Paulo',
+  },
+  logging: false,
 };
 
 export = config;
