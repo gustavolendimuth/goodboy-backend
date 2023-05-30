@@ -27,7 +27,9 @@ export const tinyCreateProductsService = async (body:ItemsModel[]) => {
     produto: JSON.stringify({ produtos }),
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Create product response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 export const tinyUpdateProductsService = async (body:ItemsModel[]) => {
@@ -42,7 +44,9 @@ export const tinyUpdateProductsService = async (body:ItemsModel[]) => {
     produto: JSON.stringify({ produtos }),
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Update products response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 export const tinyCreateInvoiceService = async (id:number) => {
@@ -56,7 +60,9 @@ export const tinyCreateInvoiceService = async (id:number) => {
     modelo: 'NFe',
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Create invoice response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 export const tinyEmitInvoiceService = async (id:number) => {
@@ -68,7 +74,9 @@ export const tinyEmitInvoiceService = async (id:number) => {
     enviarEmail: 'S',
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Emit invoice response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 export const tinyCreateOrderService = async (order:OrderModel) => {
@@ -81,7 +89,9 @@ export const tinyCreateOrderService = async (order:OrderModel) => {
     formato: 'JSON',
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Create order response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 export const tinyUpdateUserService = async (orders:OrderModel[]) => {
@@ -98,7 +108,9 @@ export const tinyUpdateUserService = async (orders:OrderModel[]) => {
     formato: 'JSON',
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Update user response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 export const tinyCreateUserService = async (orders:OrderModel[]) => {
@@ -107,7 +119,7 @@ export const tinyCreateUserService = async (orders:OrderModel[]) => {
     contatos: orders.map((order, index) => ({
       contato: new TinyClientClass(order, index),
     })) };
-  console.log('Update User', JSON.stringify(contatos, null, 2));
+  console.log('Create User', JSON.stringify(contatos, null, 2));
 
   const data:string = querystring.stringify({
     token,
@@ -115,7 +127,9 @@ export const tinyCreateUserService = async (orders:OrderModel[]) => {
     formato: 'JSON',
   });
 
-  return fetchTiny(url, data);
+  const response = await fetchTiny(url, data);
+  console.log('Create user response', JSON.stringify(response, null, 2));
+  return response;
 };
 
 async function updateOrderAddress(order: OrderModel, orderData: Partial<Order>) {
@@ -142,18 +156,6 @@ async function addOrderItemsToTiny(orderItems: ItemsModel[]) {
   }
 }
 
-// async function createTinyUser(order:OrderModel) {
-//   if (order.tinyOrderId) return order;
-//   const clientResult = await tinyCreateUserService(order);
-//   if (clientResult.retorno.status === 'Erro') throw new Error('Client not created');
-//   const { id: tinyClientId } = clientResult.retorno.registros[0].registro;
-//   order.user.tinyClientId = tinyClientId;
-//   await order.user.save();
-//   console.log('clientResult', clientResult);
-//   console.log('order', JSON.stringify(order, null, 2));
-//   return order;
-// }
-
 async function createTinyOrder(order: OrderModel) {
   if (order.tinyOrderId) return order.tinyOrderId;
 
@@ -172,7 +174,6 @@ async function createTinyOrder(order: OrderModel) {
 async function updateTinyUser(orders:OrderModel[]) {
   if (orders.length === 0) return;
   const orderResult = await tinyUpdateUserService(orders);
-  // console.log('orderResult', JSON.stringify(orderResult, null, 2));
   return orderResult.retorno.status;
 }
 
@@ -188,9 +189,6 @@ async function createOrUpdateTinyUser(orders: OrderModel[]) {
       ordersPromises.push(orders[i].user.save());
     }
     await Promise.all(ordersPromises);
-
-    // console.log('clientResult', clientResult);
-    // console.log('order', JSON.stringify(orders, null, 2));
   }
   return orders;
 }
@@ -200,7 +198,7 @@ async function generateTinyInvoice(order:OrderModel) {
   if (!tinyOrderId) return;
 
   const invoice = await tinyCreateInvoiceService(tinyOrderId);
-  console.log('Invoice', JSON.stringify(invoice, null, 2));
+  console.log('Create invoice', JSON.stringify(invoice, null, 2));
   if (!invoice.retorno.registros?.registro) return;
   const { idNotaFiscal, numero } = invoice.retorno.registros.registro;
   order.invoiceId = idNotaFiscal;
@@ -211,6 +209,7 @@ async function generateTinyInvoice(order:OrderModel) {
 
 async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
   const invoiceEmit = await tinyEmitInvoiceService(idNotaFiscal);
+  console.log('Emit invoice', JSON.stringify(invoiceEmit, null, 2));
   order.invoiceStatus = Number(invoiceEmit.retorno?.status_processamento);
   order.invoiceUrl = invoiceEmit.retorno.nota_fiscal?.link_acesso;
   await order.save();
@@ -227,7 +226,6 @@ export async function createTinyOrdersTask() {
 
   // Add or update tiny user
   const ordersUpdated = await createOrUpdateTinyUser(orders);
-  if (!ordersUpdated) return;
 
   console.log(JSON.stringify(ordersUpdated, null, 2));
 
@@ -239,7 +237,6 @@ export async function createTinyOrdersTask() {
 
 async function createTinyInvoice(orders:OrderModel[]) {
   updateTinyUser(orders);
-  // console.log('orders', JSON.stringify(orders, null, 2));
 
   orders.forEach(async (order) => {
   // Generate tiny invoice
@@ -266,34 +263,6 @@ export async function createTinyInvoiceTask() {
   }
 }
 
-// export async function fetchTinyOrder(order:OrderModel, orderData:Order) {
-//   // Add order items to tiny
-//   if (!order.tinyOrderId) await addOrderItemsToTiny(order.items);
-
-//   // Update tiny if exists
-//   await updateTinyUser(order);
-
-//   // Create tiny order if not exists
-//   order = await createTinyUser(order);
-//   const tinyOrderId = await createTinyOrder(order);
-//   if (!tinyOrderId) return new Error('Missing tinyOrderId');
-
-//   if (!Object.keys(orderData).length) return;
-
-//   // Generate tiny invoice
-//   let { invoiceId: idNotaFiscal } = order;
-//   if (!idNotaFiscal) {
-//     idNotaFiscal = await generateTinyInvoice(tinyOrderId, order);
-//   }
-
-//   // Emit tiny invoice
-//   if ((!order.invoiceStatus || order.invoiceStatus !== 3) && idNotaFiscal) {
-//     await emitTinyInvoice(idNotaFiscal, order);
-//   }
-
-//   return null;
-// }
-
 export async function tinyOrderService(body:Order) {
   const { paymentId, name, cpf, ...orderData } = body;
 
@@ -309,7 +278,4 @@ export async function tinyOrderService(body:Order) {
 
   // Update user name if exists
   if (name || cpf) order = await updateUser(order, { name, cpf });
-
-  // const error = await fetchTinyOrder(order, orderData);
-  // return error;
 }

@@ -35,6 +35,7 @@ export const getAllOrdersToInvoice = async () => OrderModel.findAll({
 export const getAllOrdersToTiny = async () => OrderModel.findAll({
   where: {
     tinyOrderId: { [sequelize.Op.is]: null },
+    status: 'approved',
   },
   include: [
     {
