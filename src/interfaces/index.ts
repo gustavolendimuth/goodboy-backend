@@ -18,9 +18,17 @@ export interface IProduct {
 
 export interface IUser {
   id?: number,
+  tinyClientId?: number,
   email?: string,
   name?: string,
   cpf?: string,
+  address?: string | null;
+  number?: string;
+  complement?: string;
+  neighborhood?: string;
+  postalCode?: string;
+  city?: string;
+  state?: string;
   role?: string
   magicLink?: string;
   magicLinkExpired?: boolean;
@@ -125,7 +133,7 @@ export interface TinyClient {
   email?: string,
   tipo_pessoa?: string,
   cpf_cnpj?: string,
-  endereco?: string,
+  endereco?: string | null,
   numero?: string,
   complemento?: string,
   bairro?: string,
@@ -157,17 +165,17 @@ export interface Order {
   netReceivedAmount?: number,
   paymentMethod?: string,
   status?: string,
-  address?: string,
+  address?: string | null,
   number?: string,
   complement?: string,
   neighborhood?: string,
   postalCode?: string,
   city?: string,
   state?: string,
-  tinyOrderId?: number,
-  invoiceId?: number,
-  invoiceStatus?: number,
-  invoiceNumber?: number,
+  tinyOrderId?: number | null,
+  invoiceId?: number | null | undefined,
+  invoiceStatus?: number | null,
+  invoiceNumber?: number | null | undefined,
   invoiceUrl?: string,
 }
 
@@ -177,7 +185,6 @@ export interface OrderParams {
   user?:IUser,
   userId?:number
   userEmail?:string,
-  name?:string,
   cpf?:string,
 }
 

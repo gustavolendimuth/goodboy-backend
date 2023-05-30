@@ -1,7 +1,7 @@
 import { Model, STRING, BIGINT, DECIMAL, INTEGER } from 'sequelize';
 import db from '.';
 import ItemsModel from './ItemsModel';
-import { IUser, Order } from '../../interfaces';
+import { Order } from '../../interfaces';
 import UserModel from './UserModel';
 
 class OrderModel extends Model<Order> implements Order {
@@ -9,25 +9,23 @@ class OrderModel extends Model<Order> implements Order {
   public user!: UserModel;
   public items!: ItemsModel[];
   public userId?: number;
-  public name?: string;
-  public users?: IUser;
   public paymentId?: number;
   public totalAmount?: number;
   public feeAmount?: number;
   public netReceivedAmount?: number;
   public paymentMethod?: string;
   public status?: string;
-  public address?: string;
+  public address?: string | null;
   public number?: string;
   public complement?: string;
   public neighborhood?: string;
   public postalCode?: string;
   public city?: string;
   public state?: string;
-  public tinyOrderId?: number;
-  public invoiceId?: number;
-  public invoiceStatus?: number;
-  public invoiceNumber?: number;
+  public tinyOrderId?: number | null;
+  public invoiceId: number | null | undefined;
+  public invoiceStatus?: number | null;
+  public invoiceNumber?: number | null | undefined;
   public invoiceUrl?: string;
 }
 
@@ -74,8 +72,14 @@ OrderModel.init(
     },
     tinyOrderId: INTEGER,
     invoiceStatus: INTEGER,
-    invoiceId: INTEGER,
-    invoiceNumber: INTEGER,
+    invoiceId: {
+      type: INTEGER,
+      allowNull: true,
+    },
+    invoiceNumber: {
+      type: INTEGER,
+      allowNull: true,
+    },
     invoiceUrl: STRING,
   },
   {

@@ -18,7 +18,7 @@ export default async (formData:CreatePaymentPayload) => {
     }
     return result;
   } catch (error:any) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(401, errOrder);
   }
 };

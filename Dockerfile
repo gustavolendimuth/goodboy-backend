@@ -1,6 +1,6 @@
 FROM node:16.14-alpine
 WORKDIR /api
 COPY package*.json .
-RUN npm install
+RUN yarn install
 COPY . .
-ENTRYPOINT [ "npm", "run", "setup" ]
+ENTRYPOINT [ "npm", "run", "start" ]

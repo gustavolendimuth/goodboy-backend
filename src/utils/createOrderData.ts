@@ -12,18 +12,18 @@ async function getUserOrThrow(email:string) {
   try {
     return await getUser({ email }) || undefined;
   } catch (error: any) {
-    errorLog(error);
+    errorLog({ error });
     throw new HttpException(400, ERROR_USER);
   }
 }
 
 function buildOrderParams(params: OrderParams) {
-  const { user, userEmail, name, cpf } = params;
+  const { user, userEmail, cpf } = params;
   const updatedParams = { ...params };
 
   if (userEmail) {
     if (!user) {
-      updatedParams.user = { email: userEmail, name, cpf };
+      updatedParams.user = { email: userEmail, cpf };
     } else {
       updatedParams.userId = user.id;
       const { user: _, ...order } = new OrderClass(updatedParams);
@@ -42,18 +42,13 @@ export default async function createOrderData({ formData, orderData, email, item
 
   const cpf = formData?.payer?.identification?.number;
 
-  const name = userEmail?.split('@')[0];
-  if (!name) {
-    throw new HttpException(400, 'Nothing to update');
-  }
-
   if (!items) {
     throw new HttpException(400, ERROR_USER);
   }
 
   const user = await getUserOrThrow(userEmail);
   const itemsData = processItems(items);
-  const params: OrderParams = { itemsData, orderData, user, userEmail, name, cpf };
+  const params: OrderParams = { itemsData, orderData, user, userEmail, cpf };
 
   return buildOrderParams(params);
 }

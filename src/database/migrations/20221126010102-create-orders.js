@@ -62,7 +62,8 @@ module.exports = {
       },
       invoiceId: {
         type: Sequelize.INTEGER,
-        field: 'invoice_id'
+        field: 'invoice_id',
+        allowNull: true
       },
       invoiceStatus: {
         type: Sequelize.STRING,
@@ -70,7 +71,8 @@ module.exports = {
       },
       invoiceNumber: {
         type: Sequelize.INTEGER,
-        field: 'invoice_number'
+        field: 'invoice_number',
+        allowNull: true
       },
       invoiceUrl: {
         type: Sequelize.STRING,

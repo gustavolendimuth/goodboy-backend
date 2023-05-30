@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable max-lines-per-function */
 import mercadopago from 'mercadopago';
 import { CreatePreferencePayload } from 'mercadopago/models/preferences/create-payload.model';
 import { Item, Preference } from '../interfaces';
@@ -9,7 +9,7 @@ import HttpException from '../utils/HttpException';
 
 export default async (body:any) => {
   const { items } = body;
-  const backUrl = `${process.env.BACKEND_URL}/checkout/compra`;
+  const backUrl = `${process.env.FRONTEND_URL}/checkout/compra`;
 
   mercadopago.configure({
     access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN || '',
@@ -37,7 +37,7 @@ export default async (body:any) => {
   return mercadopago.preferences.create(preference)
     .then((response) => response.body.id)
     .catch((error) => {
-      errorLog(error);
+      errorLog({ error });
       throw new HttpException(400, 'Erro ao criar preferência de pagamento');
     });
 };

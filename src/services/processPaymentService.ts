@@ -3,12 +3,12 @@ import * as z from 'zod';
 import { CreatePaymentPayload } from 'mercadopago/models/payment/create-payload.model';
 import { createOrderService, getOrderService } from './orderService';
 import { CreateOrderParams } from '../interfaces';
-import { validateOrder } from './validations/orderValidation';
+// import { validateOrder } from './validations/orderValidation';
 import HttpException from '../utils/HttpException';
 import errorLog from '../utils/errorLog';
 import createOrderData from '../utils/createOrderData';
 import mercadopagoSave from '../utils/mercadopagoSave';
-import { tinyOrderService } from './tinyOrderService';
+// import { tinyOrderService } from './tinyOrderService';
 
 const emailValidation = z
   .string()
@@ -28,10 +28,9 @@ async function createOrder(body: CreateOrderParams) {
   const userEmail = emailValidation.parse(email);
 
   const order = await createOrderData({ formData, orderData, items, email: userEmail });
-  validateOrder(order);
+  // validateOrder(order);
   const response = await createOrderService(order);
   const result = await getOrderService({ id: response.id?.toString() });
-  console.log(result);
 
   return result;
 }
@@ -44,17 +43,19 @@ async function processMercadopagoPayment(formData:CreatePaymentPayload) {
 }
 
 export default async function processPayment(body: CreateOrderParams) {
+  let orderData;
+  let order;
   try {
     if (!body.formData) {
       throw new Error('There was no formData to create the order');
     }
-    const orderData = await processMercadopagoPayment(body.formData);
-    const order = await createOrder({ ...body, orderData });
-    console.log('order', order);
-    tinyOrderService({ paymentId: orderData.id });
+    orderData = await processMercadopagoPayment(body.formData);
+    order = await createOrder({ ...body, orderData });
+    // const error = await tinyOrderService({ paymentId: orderData.id });
+    // if (error) throw error;
     return order;
   } catch (error: any) {
-    errorLog(error);
-    throw new HttpException(400, 'Error creating the order, please try again later');
+    errorLog({ error, variables: { order, orderData, body } });
+    throw new HttpException(400, 'Erro ao criar o pedido, tente novamente mais tarde');
   }
 }
