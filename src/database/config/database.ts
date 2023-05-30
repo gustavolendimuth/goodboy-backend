@@ -13,7 +13,7 @@ const config: Options = {
     collate: 'utf8mb4_general_ci',
   },
   dialectOptions: {
-    timezone: 'America/Sao_Paulo',
+    timezone: '-03:00',
   },
   logging: false,
 };
