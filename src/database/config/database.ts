@@ -12,9 +12,6 @@ const config: Options = {
     charset: 'utf8mb4',
     collate: 'utf8mb4_general_ci',
   },
-  dialectOptions: {
-    timezone: '-03:00',
-  },
   logging: false,
 };
 
