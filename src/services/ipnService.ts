@@ -7,7 +7,6 @@ import { fetchPayment } from '../utils/fetchMercadoPago';
 import HttpException from '../utils/HttpException';
 import createOrderIpn from '../utils/createOrderIpn';
 import { createOrderService, getOrderService, updateOrderService } from './orderService';
-import { tinyOrderService } from './tinyOrderService';
 
 export const ipnService = async (paymentId:string, topic:string) => {
   console.log('ipn', topic);
@@ -19,20 +18,20 @@ export const ipnService = async (paymentId:string, topic:string) => {
 
       // Verifica se o pedido já existe
       const order = await getOrderService({ paymentId });
+
       // Cria o objeto do pedido
       const orderData = await createOrderIpn({ orderData: payment.data });
       if (!orderData) return;
-      // Atualiza o pedido caso ele já exista
-      if (order) {
-        await updateOrderService({ data: orderData, paymentId: Number(paymentId) });
+
+      // Cria o pedido caso ele não exista
+      if (!order) {
+        await createOrderService(orderData);
         return;
       }
-      // Cria o pedido caso ele não exista
-      await createOrderService(orderData);
-      const error = await tinyOrderService({ paymentId: Number(paymentId) });
-      if (error) throw error;
+      // Atualiza o pedido caso ele já exista
+      await updateOrderService({ data: orderData, paymentId: Number(paymentId) });
     } catch (error:any) {
-      errorLog({ error, variables: { paymentId, topic } });
+      errorLog({ error, variables: JSON.stringify({ paymentId, topic }, null, 2) });
       throw new HttpException(400, 'Erro ao criar o pedido');
     }
   }
