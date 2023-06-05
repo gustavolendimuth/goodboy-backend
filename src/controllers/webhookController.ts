@@ -5,5 +5,5 @@ import { webhookService } from '../services/webhookService';
 export const webhookController = async (req: Request, res:Response) => {
   const { body } = req as never;
   await webhookService(body);
-  return res.status(200);
+  return res.status(200).send();
 };
