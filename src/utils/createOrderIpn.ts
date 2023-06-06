@@ -34,7 +34,7 @@ export default async ({ orderData }:CreateOrderDataParams) => {
 
     const sanityProducts = (await getSanityProductsService(itemsIds)).map((item:SanityProduct) => ({
       ...item,
-      quantity: items?.find((i:MercadoPagoItem) => i.id === item.id)?.quantity,
+      quantity: items?.find((i:MercadoPagoItem) => i.id === item._id)?.quantity,
     }));
 
     itemsData = sanityProducts?.map((item) => new OrderSanityProductClass(item));

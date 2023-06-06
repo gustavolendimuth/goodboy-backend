@@ -9,7 +9,7 @@ export const getSanityProductsService = async (id:string[]):Promise<SanityProduc
   const params = { id };
   return sanity.fetch(
     `*[_type == "products" && _id in $id]{
-      "id": _id,
+      "_id,
       title,
       price,
       ncm,

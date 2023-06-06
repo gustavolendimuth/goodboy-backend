@@ -9,7 +9,7 @@ export default class OrderSanityProductClass implements Item {
   ncm?: string;
 
   constructor(item:SanityProduct) {
-    this.productId = item.id;
+    this.productId = item._id;
     this.title = item.title;
     this.quantity = Number(item.quantity);
     this.unitPrice = Number(item.price);

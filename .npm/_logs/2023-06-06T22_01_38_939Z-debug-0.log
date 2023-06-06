@@ -1,7 +1,7 @@
 0 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'run', 'build' ]
 1 info using npm@8.5.0
 2 info using node@v16.14.2
-3 timing npm:load:whichnode Completed in 0ms
+3 timing npm:load:whichnode Completed in 1ms
 4 timing config:load:defaults Completed in 2ms
 5 timing config:load:file:/usr/local/lib/node_modules/npm/npmrc Completed in 1ms
 6 timing config:load:builtin Completed in 1ms
@@ -19,14 +19,14 @@
 18 timing npm:load:configload Completed in 10ms
 19 timing npm:load:setTitle Completed in 0ms
 20 timing config:load:flatten Completed in 3ms
-21 timing npm:load:display Completed in 6ms
-22 verbose logfile /home/node/.npm/_logs/2023-06-02T21_38_26_822Z-debug-0.log
+21 timing npm:load:display Completed in 5ms
+22 verbose logfile /home/node/.npm/_logs/2023-06-06T22_01_38_939Z-debug-0.log
 23 timing npm:load:logFile Completed in 5ms
 24 timing npm:load:timers Completed in 0ms
 25 timing npm:load:configScope Completed in 0ms
-26 timing npm:load Completed in 22ms
+26 timing npm:load Completed in 21ms
 27 silly logfile start cleaning logs, removing 1 files
-28 timing command:run Completed in 7991ms
-29 verbose exit 0
-30 timing npm Completed in 8122ms
-31 info ok
+28 timing command:run Completed in 4208ms
+29 verbose exit 2
+30 timing npm Completed in 4337ms
+31 verbose code 2
