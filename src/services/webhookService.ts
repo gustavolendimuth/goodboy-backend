@@ -34,6 +34,6 @@ export const webhookService = async (body:WebhookBody) => {
     await updateOrderService({ data: orderData, paymentId: response.data.id });
   } catch (error:any) {
     errorLog({ error, variables: JSON.stringify({ response, order, orderData, body }) });
-    throw new HttpException(400, 'Erro ao atualizar pedido');
+    throw new HttpException(400, 'Webhook service error');
   }
 };

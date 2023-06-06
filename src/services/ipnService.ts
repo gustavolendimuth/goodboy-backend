@@ -32,7 +32,7 @@ export const ipnService = async (paymentId:string, topic:string) => {
       await updateOrderService({ data: orderData, paymentId: Number(paymentId) });
     } catch (error:any) {
       errorLog({ error, variables: JSON.stringify({ paymentId, topic }, null, 2) });
-      throw new HttpException(400, 'Erro ao criar o pedido');
+      throw new HttpException(400, 'IPN service error');
     }
   }
 };

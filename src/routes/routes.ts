@@ -28,6 +28,7 @@ router.use('/process_payment', processPaymentRouter);
 router.use('/login', loginRouter);
 router.use('/payment', paymentRouter);
 router.use('/order', orderRouter);
+
 router.use(authMiddleware);
 router.use('/orders', ordersRouter);
 

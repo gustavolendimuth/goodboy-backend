@@ -99,7 +99,7 @@ export interface Item {
 }
 
 export interface SanityProduct {
-  id: string;
+  _id: string;
   title: string;
   price: number;
   ncm: string;
@@ -119,9 +119,10 @@ export interface TinyProduct {
   tipo: string;
   anexos: [{ anexo: string }];
 }
+
 export interface TinyItem {
   codigo: string;
-  descricao: string;
+  descricao?: string;
   unidade: string;
   quantidade: string;
   valor_unitario: string;
