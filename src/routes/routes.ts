@@ -12,6 +12,7 @@ import invoiceRouter from './invoiceRoute';
 import tinyOrderRouter from './tinyOrderRoute';
 import paymentRouter from './paymentRoute';
 import { validateToken } from '../middlewares/validateToken';
+import sanityProductUpdateRouter from './sanityProductUpdateRoute';
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.use('/process_payment', processPaymentRouter);
 router.use('/login', loginRouter);
 router.use('/payment', paymentRouter);
 router.use('/order', orderRouter);
-
+router.use('/sanity-product-update', sanityProductUpdateRouter);
 router.use(authMiddleware);
 router.use('/orders', ordersRouter);
 

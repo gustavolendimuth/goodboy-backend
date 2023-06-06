@@ -4,3 +4,5 @@ import { sanityProductUpdateController } from '../controllers/sanityProductUpdat
 const sanityProductUpdateRouter = express.Router();
 
 sanityProductUpdateRouter.post('/', sanityProductUpdateController);
+
+export default sanityProductUpdateRouter;
