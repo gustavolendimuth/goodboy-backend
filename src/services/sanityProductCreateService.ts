@@ -6,8 +6,8 @@ import SanityProductClass from '../utils/SanityProductClass';
 
 const token = process.env.TINY_TOKEN;
 
-export const sanityProductUpdateService = async (body:SanityProduct) => {
-  const url = 'https://api.tiny.com.br/api2/produto.alterar.php';
+export const sanityProductCreateService = async (body:SanityProduct) => {
+  const url = 'https://api.tiny.com.br/api2/produto.incluir.php';
 
   const produtos = [{
     produto: new SanityProductClass(body),
@@ -20,5 +20,5 @@ export const sanityProductUpdateService = async (body:SanityProduct) => {
   });
 
   const response = await fetchTiny(url, data);
-  console.log('Update product response', JSON.stringify(response, null, 2));
+  console.log('Create product response', JSON.stringify(response, null, 2));
 };
