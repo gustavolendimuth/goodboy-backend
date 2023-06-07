@@ -8,7 +8,6 @@ const token = process.env.TINY_TOKEN;
 
 export const fetchTinyInvoiceCreate = async (id:number) => {
   const url = 'https://api.tiny.com.br/api2/gerar.nota.fiscal.pedido.php';
-  console.log('Create Invoice', id);
 
   const data: string = querystring.stringify({
     token,
@@ -17,6 +16,7 @@ export const fetchTinyInvoiceCreate = async (id:number) => {
     modelo: 'NFe',
   });
 
+  console.log('Create Invoice', id);
   const response = await fetchTiny(url, data);
   console.log('Create invoice response', JSON.stringify(response, null, 2));
   return response;
@@ -31,6 +31,7 @@ export const fetchTinyInvoiceEmit = async (id:number) => {
     enviarEmail: 'S',
   });
 
+  console.log('Emit invoice id', JSON.stringify(id, null, 2));
   const response = await fetchTiny(url, data);
   console.log('Emit invoice response', JSON.stringify(response, null, 2));
   return response;
@@ -46,6 +47,7 @@ export const fetchTinyOrderCreate = async (order:OrderModel) => {
     formato: 'JSON',
   });
 
+  console.log('Create order', JSON.stringify(tinyOrder, null, 2));
   const response = await fetchTiny(url, data);
   console.log('Create order response', JSON.stringify(response, null, 2));
   return response;
@@ -57,7 +59,6 @@ export const fetchTinyUserUpdate = async (orders:OrderModel[]) => {
     contatos: orders.map((order, index) => ({
       contato: new TinyClientClass(order, index),
     })) };
-  console.log('Update User', JSON.stringify(contatos, null, 2));
 
   const data:string = querystring.stringify({
     token,
@@ -65,6 +66,7 @@ export const fetchTinyUserUpdate = async (orders:OrderModel[]) => {
     formato: 'JSON',
   });
 
+  console.log('Update User', JSON.stringify(contatos, null, 2));
   const response = await fetchTiny(url, data);
   console.log('Update user response', JSON.stringify(response, null, 2));
   return response;
@@ -76,7 +78,6 @@ export const fetchTinyUserCreate = async (orders:OrderModel[]) => {
     contatos: orders.map((order, index) => ({
       contato: new TinyClientClass(order, index),
     })) };
-  console.log('Create User', JSON.stringify(contatos, null, 2));
 
   const data:string = querystring.stringify({
     token,
@@ -84,6 +85,7 @@ export const fetchTinyUserCreate = async (orders:OrderModel[]) => {
     formato: 'JSON',
   });
 
+  console.log('Create User', JSON.stringify(contatos, null, 2));
   const response = await fetchTiny(url, data);
   console.log('Create user response', JSON.stringify(response, null, 2));
   return response;
