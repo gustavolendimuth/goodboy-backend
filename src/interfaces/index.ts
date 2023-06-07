@@ -83,10 +83,10 @@ export interface MercadoPagoItem {
   quantity: number,
   unit_price: number,
   currency_id?: string,
-  // ncm?: string,
-  // image?: string,
-  // originCode?: number,
-  // slug?: string
+  ncm?: string,
+  image?: string,
+  originCode?: number,
+  slug?: string
 }
 
 export interface Item {
