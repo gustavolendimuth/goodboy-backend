@@ -7,6 +7,8 @@ export default class OrderSanityProductClass implements Item {
   unitPrice: number;
   image?: string;
   ncm?: string;
+  originCode: number;
+  slug: string;
 
   constructor(item:SanityProduct) {
     this.productId = item._id;
@@ -15,5 +17,7 @@ export default class OrderSanityProductClass implements Item {
     this.unitPrice = Number(item.price);
     this.image = item.image;
     this.ncm = item.ncm;
+    this.originCode = item.originCode;
+    this.slug = item.slug;
   }
 }

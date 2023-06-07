@@ -51,8 +51,6 @@ export default async function processPayment(body: CreateOrderParams) {
     }
     orderData = await processMercadopagoPayment(body.formData);
     order = await createOrder({ ...body, orderData });
-    // const error = await tinyOrderService({ paymentId: orderData.id });
-    // if (error) throw error;
     return order;
   } catch (error: any) {
     errorLog({ error, variables: { order, orderData, body } });

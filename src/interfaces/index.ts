@@ -83,8 +83,10 @@ export interface MercadoPagoItem {
   quantity: number,
   unit_price: number,
   currency_id?: string,
-  ncm?: string,
-  image?: string,
+  // ncm?: string,
+  // image?: string,
+  // originCode?: number,
+  // slug?: string
 }
 
 export interface Item {
@@ -96,6 +98,8 @@ export interface Item {
   unitPrice: number;
   ncm?: string;
   image?: string;
+  originCode?: number;
+  slug?: string;
 }
 
 export interface SanityProduct {
@@ -105,6 +109,9 @@ export interface SanityProduct {
   ncm: string;
   image: string;
   quantity?: number;
+  originCode: number;
+  slug: string;
+  situation: string;
 }
 
 export interface TinyProduct {

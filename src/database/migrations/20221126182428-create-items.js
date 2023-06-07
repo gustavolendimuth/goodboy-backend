@@ -45,6 +45,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      originCode: {
+        type: Sequelize.STRING,
+        field: 'origin_code',
+      },
+      slug: Sequelize.STRING,
     });
   },
 

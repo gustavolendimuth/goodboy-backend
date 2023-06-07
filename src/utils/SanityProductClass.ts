@@ -21,8 +21,8 @@ export default class SanityProductClass implements TinyProduct {
     this.unidade = 'UN';
     this.preco = item.price.toString();
     this.ncm = item.ncm;
-    this.origem = '0';
-    this.situacao = 'A';
+    this.origem = item.originCode.toString();
+    this.situacao = item.situation;
     this.tipo = 'P';
     this.anexos = [{ anexo: item.image }];
   }

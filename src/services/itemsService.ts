@@ -13,7 +13,9 @@ export const getSanityProductsService = async (id:string[]):Promise<SanityProduc
       title,
       price,
       ncm,
-      "image": photo.image.asset->url
+      "image": photo.image.asset->url,
+      originCode,
+      slug
     }`,
     params,
   );

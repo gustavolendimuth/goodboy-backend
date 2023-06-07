@@ -7,6 +7,8 @@ export default class OrderItemClass implements Item {
   unitPrice: number;
   ncm?: string;
   image?: string;
+  originCode?: number;
+  slug?: string;
 
   constructor(item:MercadoPagoItem) {
     this.productId = item.id.toString();
@@ -15,5 +17,7 @@ export default class OrderItemClass implements Item {
     this.unitPrice = Number(item.unit_price);
     this.ncm = item.ncm;
     this.image = item.image;
+    this.originCode = item.originCode;
+    this.slug = item.slug;
   }
 }
