@@ -10,6 +10,7 @@ import { createOrderService, getOrderService, updateOrderService } from './order
 
 export const ipnService = async (paymentId:string, topic:string) => {
   console.log('ipn', topic);
+
   if (topic === 'payment') {
     try {
       // Pega os dados do pagamento no Mercado Pago

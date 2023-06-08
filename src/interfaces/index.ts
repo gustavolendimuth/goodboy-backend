@@ -124,6 +124,7 @@ export interface TinyProduct {
   origem: string;
   situacao: string;
   tipo: string;
+  seo: { slug: string };
   anexos: [{ anexo: string }];
 }
 

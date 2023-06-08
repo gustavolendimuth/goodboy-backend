@@ -22,7 +22,7 @@ async function createOrUpdateTinyUser(orders: OrderModel[]) {
   if (createTinyUserResult === 'Erro') {
     const clientResult = await fetchTinyUserCreate(orders);
 
-    const ordersPromises = orders.map((_order, i) => {
+    const ordersPromises = orders.map((_, i) => {
       orders[i].user.tinyClientId = clientResult.retorno.registros[i].registro?.id;
       return orders[i].user.save();
     });
@@ -48,7 +48,6 @@ async function generateTinyInvoice(order:OrderModel) {
   if (!tinyOrderId) return;
 
   const invoice = await fetchTinyInvoiceCreate(tinyOrderId);
-  console.log('Create invoice', JSON.stringify(invoice, null, 2));
   if (!invoice.retorno.registros?.registro) return;
 
   const { idNotaFiscal, numero } = invoice.retorno.registros.registro;
@@ -60,7 +59,6 @@ async function generateTinyInvoice(order:OrderModel) {
 
 async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
   const invoiceEmit = await fetchTinyInvoiceEmit(idNotaFiscal);
-  console.log('Emit invoice', JSON.stringify(invoiceEmit, null, 2));
 
   order.invoiceStatus = Number(invoiceEmit.retorno?.status_processamento);
   order.invoiceUrl = invoiceEmit.retorno.nota_fiscal?.link_acesso;

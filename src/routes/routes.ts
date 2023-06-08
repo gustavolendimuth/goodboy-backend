@@ -8,12 +8,10 @@ import authMiddleware from '../middlewares/authMiddleware';
 import processPaymentRouter from './processPaymentRoute';
 import webhookRouter from './webhookRoute';
 import ipnRouter from './ipnRoute';
-import invoiceRouter from './invoiceRoute';
 import tinyOrderRouter from './tinyOrderRoute';
 import paymentRouter from './paymentRoute';
 import { validateToken } from '../middlewares/validateToken';
-import sanityProductUpdateRouter from './sanityProductUpdateRoute';
-import sanityProductCreateRouter from './sanityProductCreateRoute';
+import sanityProductRouter from './sanityProductRoute';
 
 const router = express.Router();
 
@@ -22,7 +20,6 @@ router.get('/', (_req:Request, res:Response) => res.send('Good Boy API'));
 router.use('/webhook', webhookRouter);
 router.use('/ipn', ipnRouter);
 router.use(validateToken);
-router.use('/invoice', invoiceRouter);
 router.use('/tiny_order', tinyOrderRouter);
 router.use('/user', userRouter);
 router.use('/preference', preferenceRouter);
@@ -30,8 +27,7 @@ router.use('/process_payment', processPaymentRouter);
 router.use('/login', loginRouter);
 router.use('/payment', paymentRouter);
 router.use('/order', orderRouter);
-router.use('/sanity-product-update', sanityProductUpdateRouter);
-router.use('/sanity-product-create', sanityProductCreateRouter);
+router.use('/sanity-product', sanityProductRouter);
 router.use(authMiddleware);
 router.use('/orders', ordersRouter);
 
