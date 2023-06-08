@@ -40,7 +40,7 @@ export default async ({ orderData }:CreateOrderDataParams) => {
     itemsData = sanityProducts?.map((item) => new OrderSanityProductClass(item));
     cpf = orderData.payer.identification.number;
   } catch (error:any) {
-    errorLog({ error, variables: { itemsData, orderData, userEmail } });
+    errorLog({ error, variables: JSON.stringify({ itemsData, orderData, userEmail }, null, 2) });
     throw new HttpException(400, errOrder);
   }
 
