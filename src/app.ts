@@ -5,7 +5,7 @@ import { CronJob } from 'cron';
 
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import router from './routes/routes';
-import { createTinyInvoiceTask, createTinyOrdersTask } from './services/tinyOrderService';
+import { createTinyInvoiceTask, createTinyOrdersTask } from './services/tinyTasksService';
 
 const task1 = new CronJob('1-59/2 * * * *', () => {
   createTinyOrdersTask().catch((error) => {
