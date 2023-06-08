@@ -18,6 +18,6 @@ export default class OrderSanityProductClass implements Item {
     this.image = item.image;
     this.ncm = item.ncm;
     this.originCode = item.originCode;
-    this.slug = item.slug;
+    this.slug = item.slug.current;
   }
 }
