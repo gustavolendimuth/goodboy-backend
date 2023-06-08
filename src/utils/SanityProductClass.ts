@@ -24,7 +24,7 @@ export default class SanityProductClass implements TinyProduct {
     this.ncm = item.ncm;
     this.origem = item.originCode.toString();
     this.situacao = item.situation;
-    this.seo = { slug: item.slug };
+    this.seo = { slug: item.slug.current };
     this.tipo = 'P';
     this.anexos = [{ anexo: item.image }];
   }

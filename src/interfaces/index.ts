@@ -110,7 +110,7 @@ export interface SanityProduct {
   image: string;
   quantity?: number;
   originCode: number;
-  slug: string;
+  slug: { current:string };
   situation: string;
 }
 
