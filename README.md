@@ -1,15 +1,12 @@
 # Good Boy - Backend
 Good Boy é uma plataforma de e-commerce para produtos de animais de estimação, projetada para ser simples, fácil e prática para uso em lojas físicas sem vendedor. Visite [Good Boy](https://goodboy.net.br) para ver o deploy do projeto.
 
-O backend do Good Boy é dividido em duas partes. A primeira parte contém as informações dos produtos que são armazenadas no banco de dados do Sanity.io. A segunda parte guarda as informações sobre as vendas, que é construída com ExpressJs e usa o banco de dados MySQL.
+O backend do Good Boy é dividido em duas partes. A primeira parte contém as informações dos produtos que são armazenadas no banco de dados do CMS da [Sanity](https://sanity.io). A segunda parte guarda as informações sobre as vendas, que é construída com ExpressJs e usa o banco de dados MySQL.
 
 ## Front-end
 [Repositório do Frontend](https://github.com/gustavolendimuth/good-boy)
 
 ## Configuração do Projeto
-
-O backend do Good Boy é dividido em duas partes. A primeira parte contém as informações dos produtos que são armazenadas no banco de dados do Sanity.io. A segunda parte guarda as informações sobre as vendas, que é construída com Express e usa o banco de dados MySQL.
-
 Para configurar o projeto, siga as etapas abaixo:
 
 1. **Instale as Dependências**: Execute o comando `npm install` para instalar todas as dependências necessárias listadas no arquivo `package.json`.
