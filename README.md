@@ -1,38 +1,28 @@
-# Good Boy
+# Good Boy - Backend
+Good Boy é uma plataforma de e-commerce para produtos de animais de estimação, projetada para ser simples, fácil e prática para uso em lojas físicas sem vendedor. Visite [Good Boy](https://goodboy.net.br) para ver o deploy do projeto.
 
-#### E-commerce de produtos para pet simples, fácil e prática para venda em loja física, sem vendedor. Acesse https://goodboy.net.br para ver o projeto rodando.
+O backend do Good Boy é dividido em duas partes. A primeira parte contém as informações dos produtos que são armazenadas no banco de dados do Sanity.io. A segunda parte guarda as informações sobre as vendas, que é construída com ExpressJs e usa o banco de dados MySQL.
 
-### Repositório do backend
- https://github.com/gustavolendimuth/goodboy-api
-### Repositório do frontend
-https://github.com/gustavolendimuth/good-boy
+## Front-end
+[Repositório do Frontend](https://github.com/gustavolendimuth/good-boy)
 
-## Instalação
-Para instalar o projeto, use ` npm run goodboy `.
+## Configuração do Projeto
 
-## Organização do projeto
-### Frontend 
-Na pasta ` site ` estão os arquivos relacionados com o frontend do projeto. Na pasta ` src `, temos as pastas components, context, css, pages, services e tests.
-#### Components
-A pasta components contém os componentes que são usados nas páginas localizadas na pasta ` pages `.
+O backend do Good Boy é dividido em duas partes. A primeira parte contém as informações dos produtos que são armazenadas no banco de dados do Sanity.io. A segunda parte guarda as informações sobre as vendas, que é construída com Express e usa o banco de dados MySQL.
 
-#### Context
-A pasta ` context ` contém os arquivos de configurações do hooks context api.
+Para configurar o projeto, siga as etapas abaixo:
 
-#### Pages
-A pasta de ` pages ` contém os arquivos que representam páginas. Cada arquivo dentro desta pasta, corresponde a uma rota no arquivo ` App.js `.
+1. **Instale as Dependências**: Execute o comando `npm install` para instalar todas as dependências necessárias listadas no arquivo `package.json`.
+2. **Configure as Variáveis de Ambiente**: Se necessário, configure as variáveis de ambiente relevantes para o projeto, como detalhes do banco de dados e outras configurações específicas.
+3. **Preparação do Banco de Dados**: Se você estiver usando a opção de redefinição de banco de dados, certifique-se de ter a variável de ambiente `DATABASE_RESET` configurada como `true`.
 
-#### Services
-A pasta ` services ` contém funções que são reaproveitadas por todo o projeto.
+## Iniciando o Projeto
 
-## Configurações do projeto
-### Backend (studio)
-O backend foi construído utilizando o CMS sanity.io. Para criar o backend do projeto, é necessário uma conta no sanity.io. Dentro da pasta studio, renomeie o arquivo ` ./studio/.env.development.exemple ` para ` ./studio/.env.development ` e configure as variáveis de ambiente referentes ao projeto ID e a dataset do Sanity.io.
-### Frontend
-Dentro da pasta site, configurar as variáveis de ambiente em um arquivo ` ./site/.env `. Configurar as variáveis referentes ao projeto ID e a dataset do Sanity.io para queries GROQ utilizadas no frontend.
+Aqui estão os principais comandos para iniciar e gerenciar o projeto:
 
-## Como iniciar o projeto
-### Frontend
-Para inicializar o frontend, use o comando ` npm start `.
-### Backend (studio)
-Para inicializar o studio para ter acesso aos formulários do backend, use o comando ` npm run sanity `.
+- **Build**: Execute `npm run build` para compilar o projeto usando o TypeScript.
+- **Iniciar o Projeto**: Execute `npm start` para iniciar o projeto. Isso executará os scripts de pré-início e pós-construção conforme definido no `package.json`.
+- **Modo de Desenvolvimento**: Execute `npm run dev` para iniciar o projeto em modo de desenvolvimento com o `ts-node-dev`.
+- **Gerenciamento de Banco de Dados**: Use `npm run db:setup` para configurar o banco de dados, incluindo a criação, migração e semeadura.
+- **Docker Compose**: Utilize os comandos `npm run compose:up`, `npm run compose:down`, `npm run compose:up:dev`, e `npm run compose:down:dev` para gerenciar os contêineres Docker conforme necessário.
+- **Logs**: Execute `npm run logs` para visualizar os logs do Docker Compose.

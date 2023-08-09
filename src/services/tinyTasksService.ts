@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
-import { getAllOrdersToInvoice, getAllOrdersToTiny } from './ordersService';
+import OrderModel from '../database/models/OrderModel';
 import errorLog from '../utils/errorLog';
 import {
   fetchTinyInvoiceCreate,
@@ -9,9 +9,9 @@ import {
   fetchTinyUserCreate,
   fetchTinyUserUpdate,
 } from '../utils/fetchTinyData';
-import OrderModel from '../database/models/OrderModel';
+import { getAllOrdersToInvoice, getAllOrdersToTiny } from './ordersService';
 
-async function updateTinyUser(orders:OrderModel[]) {
+async function updateTinyUser(orders: OrderModel[]) {
   if (orders.length === 0) return;
   const orderResult = await fetchTinyUserUpdate(orders);
   return orderResult.retorno.status;
@@ -43,7 +43,7 @@ async function createTinyOrder(order: OrderModel) {
   return tinyOrderId;
 }
 
-async function generateTinyInvoice(order:OrderModel) {
+async function generateTinyInvoice(order: OrderModel) {
   const { tinyOrderId } = order;
   if (!tinyOrderId) return;
 
@@ -65,11 +65,11 @@ async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
   await order.save();
 }
 
-async function createTinyInvoice(orders:OrderModel[]) {
+async function createTinyInvoice(orders: OrderModel[]) {
   updateTinyUser(orders);
 
   orders.forEach(async (order) => {
-  // Generate tiny invoice
+    // Generate tiny invoice
     let { invoiceId: idNotaFiscal } = order;
     if (!idNotaFiscal) {
       idNotaFiscal = await generateTinyInvoice(order);
@@ -101,7 +101,7 @@ export async function createTinyInvoiceTask() {
     if (!orders) return;
 
     await createTinyInvoice(orders);
-  } catch (error:any) {
+  } catch (error: any) {
     errorLog({ error });
   }
 }
