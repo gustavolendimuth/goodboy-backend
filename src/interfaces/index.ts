@@ -77,31 +77,7 @@ export interface IErrType {
   [key: string]: number
 }
 
-export interface MercadoPagoItem {
-  id: string,
-  title: string,
-  quantity: number,
-  unit_price: number,
-  currency_id?: string,
-  ncm?: string,
-  image?: string,
-  originCode?: number,
-  slug?: string
-}
-
-export interface Item {
-  id?: number,
-  orderId?: number,
-  productId: string;
-  title: string;
-  quantity: number;
-  unitPrice: number;
-  ncm?: string;
-  image?: string;
-  originCode?: number;
-  slug?: string;
-}
-
+// Produto do banco de dados
 export interface SanityProduct {
   _id: string;
   title: string;
@@ -114,13 +90,57 @@ export interface SanityProduct {
   situation: string;
 }
 
+export interface MercadoPagoItem {
+  id: string,
+  title: string,
+  description: string,
+  quantity: number,
+  unit_price: number,
+  currency_id?: string,
+  ncm?: string,
+  image?: string,
+  originCode?: number,
+  slug?: string
+}
+
+// Item da ordem de serviço do banco de dados MySQL
+export interface Item {
+  id?: number,
+  orderId?: number,
+  productId: string;
+  title: string;
+  description?: string;
+  ncm?: string;
+  image?: string;
+  originCode?: number;
+  slug?: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+// Produto para ser adicionado na ordem de serviço
+export interface Product {
+  id?: number,
+  orderId?: number,
+  productId: string;
+  title: string;
+  description: string;
+  ncm?: string;
+  image?: string;
+  originCode?: number;
+  slug?: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+// Produto para cadastrar no Tiny
 export interface TinyProduct {
   sequencia: string;
   codigo: string;
   nome: string;
   unidade: string;
   preco: string;
-  ncm: string;
+  ncm?: string;
   origem: string;
   situacao: string;
   tipo: string;
@@ -128,9 +148,10 @@ export interface TinyProduct {
   anexos: [{ anexo: string }];
 }
 
+// Item da ordem de serviço para cadastrar no Tiny
 export interface TinyItem {
   codigo: string;
-  descricao?: string;
+  descricao: string;
   unidade: string;
   quantidade: string;
   valor_unitario: string;
@@ -165,9 +186,10 @@ export interface TinyOrder {
 export interface Order {
   id?: number,
   userId?: number,
+  items?: Item[],
   name?: string,
   cpf?: string,
-  users?: IUser,
+  user?: IUser,
   paymentId?: number,
   totalAmount?: number,
   feeAmount?: number,

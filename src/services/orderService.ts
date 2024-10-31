@@ -4,7 +4,7 @@ import OrderModel from '../database/models/OrderModel';
 import UserModel from '../database/models/UserModel';
 import { Order } from '../interfaces';
 
-export const createOrderService = async (body:Order) => OrderModel.create({ ...body }, {
+export const createOrderService = async (order:Order) => OrderModel.create({ ...order }, {
   include: [{ model: UserModel, as: 'user' }, { model: ItemsModel, as: 'items' }],
 });
 

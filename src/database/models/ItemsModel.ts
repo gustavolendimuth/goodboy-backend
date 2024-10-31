@@ -11,9 +11,9 @@ class ItemsModel extends Model<Item> implements Item {
   declare title: string;
   declare quantity: number;
   declare unitPrice: number;
-  declare description: string;
+  declare description?: string;
   declare orderId: number;
-  declare ncm: string;
+  declare ncm?: string;
   declare image: string;
   declare originCode: number;
   declare slug: string;
@@ -35,6 +35,10 @@ ItemsModel.init(
       type: STRING,
       allowNull: false,
     },
+    description: {
+      type: STRING,
+      allowNull: true,
+    },
     quantity: {
       type: INTEGER,
       allowNull: false,
@@ -49,7 +53,7 @@ ItemsModel.init(
     },
     ncm: {
       type: STRING,
-      allowNull: false,
+      allowNull: true,
     },
     image: STRING,
     originCode: {

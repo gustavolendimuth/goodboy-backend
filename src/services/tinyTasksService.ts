@@ -5,6 +5,7 @@ import errorLog from '../utils/errorLog';
 import {
   fetchTinyInvoiceCreate,
   fetchTinyInvoiceEmit,
+  fetchTinyItemsCreate,
   fetchTinyOrderCreate,
   fetchTinyUserCreate,
   fetchTinyUserUpdate,
@@ -29,6 +30,10 @@ async function createOrUpdateTinyUser(orders: OrderModel[]) {
     await Promise.all(ordersPromises);
   }
   return orders;
+}
+
+async function createTinyItems(orders: OrderModel[]) {
+  await fetchTinyItemsCreate(orders);
 }
 
 async function createTinyOrder(order: OrderModel) {
@@ -66,7 +71,7 @@ async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
 }
 
 async function createTinyInvoice(orders: OrderModel[]) {
-  updateTinyUser(orders);
+  await updateTinyUser(orders);
 
   orders.forEach(async (order) => {
     // Generate tiny invoice
@@ -88,7 +93,9 @@ export async function createTinyOrdersTask() {
 
   // Add or update tiny user
   const ordersUpdated = await createOrUpdateTinyUser(orders);
-  console.log('Orders updated', JSON.stringify(ordersUpdated, null, 2));
+
+  // Add tiny products
+  await createTinyItems(ordersUpdated);
 
   // Create tiny order
   const ordersPromises = ordersUpdated.map((order) => createTinyOrder(order));
@@ -98,6 +105,7 @@ export async function createTinyOrdersTask() {
 export async function createTinyInvoiceTask() {
   try {
     const orders = await getAllOrdersToInvoice();
+
     if (!orders) return;
 
     await createTinyInvoice(orders);

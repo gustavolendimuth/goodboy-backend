@@ -20,6 +20,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      description: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false
@@ -43,7 +47,7 @@ module.exports = {
       image: Sequelize.STRING,
       ncm: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       originCode: {
         type: Sequelize.STRING,

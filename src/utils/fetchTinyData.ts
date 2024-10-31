@@ -3,6 +3,8 @@ import OrderModel from '../database/models/OrderModel';
 import TinyClientClass from './TinyClientClass';
 import TinyOrderClass from './TinyOrderClass';
 import fetchTiny from './fetchTiny';
+import ItemsModel from '../database/models/ItemsModel';
+import TinyProductClass from './TinyProductClass';
 
 const token = process.env.TINY_TOKEN;
 
@@ -47,9 +49,9 @@ export const fetchTinyOrderCreate = async (order:OrderModel) => {
     formato: 'JSON',
   });
 
-  console.log('Create order', JSON.stringify(tinyOrder, null, 2));
+  // console.log('Create order', JSON.stringify(tinyOrder, null, 2));
   const response = await fetchTiny(url, data);
-  console.log('Create order response', JSON.stringify(response, null, 2));
+  // console.log('Create order response', JSON.stringify(response, null, 2));
   return response;
 };
 
@@ -66,9 +68,34 @@ export const fetchTinyUserUpdate = async (orders:OrderModel[]) => {
     formato: 'JSON',
   });
 
-  console.log('Update User', JSON.stringify(contatos, null, 2));
+  // console.log('Update User', JSON.stringify(contatos, null, 2));
   const response = await fetchTiny(url, data);
-  console.log('Update user response', JSON.stringify(response, null, 2));
+  // console.log('Update user response', JSON.stringify(response, null, 2));
+  return response;
+};
+
+export const fetchTinyItemsCreate = async (orders:OrderModel[]) => {
+  const url = 'https://api.tiny.com.br/api2/produto.incluir.php';
+
+  const items = orders.reduce((acc:ItemsModel[], order) => {
+    acc.push(...order.items);
+    return acc;
+  }, []);
+
+  const produtos = {
+    produtos: items.map((order, index) => ({
+      produto: new TinyProductClass(order, index),
+    })) };
+
+  const data:string = querystring.stringify({
+    token,
+    produto: JSON.stringify(produtos),
+    formato: 'JSON',
+  });
+
+  console.log('Create Product', JSON.stringify(produtos, null, 2));
+  const response = await fetchTiny(url, data);
+  console.log('Create product response', JSON.stringify(response, null, 2));
   return response;
 };
 
@@ -85,8 +112,8 @@ export const fetchTinyUserCreate = async (orders:OrderModel[]) => {
     formato: 'JSON',
   });
 
-  console.log('Create User', JSON.stringify(contatos, null, 2));
+  // console.log('Create User', JSON.stringify(contatos, null, 2));
   const response = await fetchTiny(url, data);
-  console.log('Create user response', JSON.stringify(response, null, 2));
+  // console.log('Create user response', JSON.stringify(response, null, 2));
   return response;
 };

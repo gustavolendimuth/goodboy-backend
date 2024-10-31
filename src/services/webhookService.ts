@@ -12,8 +12,6 @@ export const webhookService = async (body:WebhookBody) => {
   let order;
   let orderData;
 
-  console.log('webhook', body);
-
   try {
     // Get payment data from mercado pago and get order data
     response = await fetchPayment.get(body.data.id);

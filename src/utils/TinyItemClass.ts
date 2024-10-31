@@ -4,15 +4,13 @@ import ItemsModel from '../database/models/ItemsModel';
 import { TinyItem } from '../interfaces';
 
 export default class TinyItemClass implements TinyItem {
-  sequencia: string;
   codigo: string;
   descricao: string;
   unidade: string;
   quantidade: string;
   valor_unitario: string;
 
-  constructor(item:ItemsModel, index:number) {
-    this.sequencia = index.toString();
+  constructor(item:ItemsModel) {
     this.codigo = item.productId;
     this.descricao = item.title;
     this.unidade = 'UN';

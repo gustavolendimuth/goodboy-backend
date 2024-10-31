@@ -24,7 +24,7 @@ export default class TinyOrderClass implements TinyOrder {
 
   constructor(order:OrderModel) {
     this.cliente = new TinyClientClass(order, 0);
-    this.itens = order.items.map((item, index) => ({ item: new TinyItemClass(item, index) }));
+    this.itens = order.items.map((item) => ({ item: new TinyItemClass(item) }));
     this.forma_pagamento = paymentMethod[order.paymentMethod || 'credito'];
     this.meio_pagamento = order.paymentMethod ? 'Mercado Pago' : 'Brix Mercado Pago';
     this.frete_por_conta = 'S';
