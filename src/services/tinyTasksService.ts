@@ -5,7 +5,7 @@ import errorLog from '../utils/errorLog';
 import {
   fetchTinyInvoiceCreate,
   fetchTinyInvoiceEmit,
-  fetchTinyItemsCreate,
+  // fetchTinyItemsCreate,
   fetchTinyOrderCreate,
   fetchTinyUserCreate,
   fetchTinyUserUpdate,
@@ -32,9 +32,9 @@ async function createOrUpdateTinyUser(orders: OrderModel[]) {
   return orders;
 }
 
-async function createTinyItems(orders: OrderModel[]) {
-  await fetchTinyItemsCreate(orders);
-}
+// async function createTinyItems(orders: OrderModel[]) {
+//   await fetchTinyItemsCreate(orders);
+// }
 
 async function createTinyOrder(order: OrderModel) {
   if (order.tinyOrderId) return order.tinyOrderId;
@@ -94,8 +94,8 @@ export async function createTinyOrdersTask() {
   // Add or update tiny user
   const ordersUpdated = await createOrUpdateTinyUser(orders);
 
-  // Add tiny products
-  await createTinyItems(ordersUpdated);
+  // // Add tiny products
+  // await createTinyItems(ordersUpdated);
 
   // Create tiny order
   const ordersPromises = ordersUpdated.map((order) => createTinyOrder(order));
