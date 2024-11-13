@@ -88,18 +88,22 @@ async function createTinyInvoice(orders: OrderModel[]) {
 }
 
 export async function createTinyOrdersTask() {
-  const orders = await getAllOrdersToTiny();
-  if (orders.length === 0) return;
+  try {
+    const orders = await getAllOrdersToTiny();
+    if (orders.length === 0) return;
 
-  // Add or update tiny user
-  const ordersUpdated = await createOrUpdateTinyUser(orders);
+    // Add or update tiny user
+    const ordersUpdated = await createOrUpdateTinyUser(orders);
 
-  // // Add tiny products
-  // await createTinyItems(ordersUpdated);
+    // // Add tiny products
+    // await createTinyItems(ordersUpdated);
 
-  // Create tiny order
-  const ordersPromises = ordersUpdated.map((order) => createTinyOrder(order));
-  await Promise.all(ordersPromises);
+    // Create tiny order
+    const ordersPromises = ordersUpdated.map((order) => createTinyOrder(order));
+    await Promise.all(ordersPromises);
+  } catch (error: any) {
+    errorLog({ error });
+  }
 }
 
 export async function createTinyInvoiceTask() {
