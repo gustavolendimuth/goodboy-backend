@@ -10,13 +10,17 @@ export const createOrderService = async (order:Order) => OrderModel.create({ ...
 
 export const updateOrderService = async (body:{ data:Order, id?:string, paymentId?:number }) => {
   const { data, id, paymentId } = body;
-  return OrderModel.update(data, { where: id ? { id } : { paymentId } });
+  const where = id ? { id } : { paymentId: String(paymentId) };
+  
+  return OrderModel.update(data, { where });
 };
 
 export const getOrderService = async (body:{ id?:string, paymentId?:string }) => {
   const { paymentId, id } = body;
+  const where = id ? { id } : { paymentId: String(paymentId) };
+  
   return OrderModel.findOne({
-    where: id ? { id } : { paymentId },
+    where,
     include: [
       {
         model: ItemsModel,

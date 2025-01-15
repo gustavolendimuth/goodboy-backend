@@ -22,11 +22,27 @@ async function createOrUpdateTinyUser(orders: OrderModel[]) {
   const createTinyUserResult = await updateTinyUser(orders);
   if (createTinyUserResult === 'Erro') {
     const clientResult = await fetchTinyUserCreate(orders);
+    console.log('Tiny User Create Response:', JSON.stringify(clientResult, null, 2));
 
-    const ordersPromises = orders.map((_, i) => {
-      orders[i].user.tinyClientId = clientResult.retorno.registros[i].registro?.id;
-      return orders[i].user.save();
-    });
+    if (!clientResult.retorno?.registros) {
+      console.log('No registros in response');
+      return orders;
+    }
+
+    const registros = Array.isArray(clientResult.retorno.registros) 
+      ? clientResult.retorno.registros 
+      : [clientResult.retorno.registros];
+
+    const ordersPromises = orders.map((order, i) => {
+      const registro = registros[i]?.registro;
+      if (registro?.id) {
+        order.user.tinyClientId = registro.id;
+        return order.user.save();
+      }
+      console.log(`No registro.id for order ${i}`);
+      return null;
+    }).filter(Boolean);
+
     await Promise.all(ordersPromises);
   }
   return orders;
@@ -73,18 +89,18 @@ async function emitTinyInvoice(idNotaFiscal: number, order: OrderModel) {
 async function createTinyInvoice(orders: OrderModel[]) {
   await updateTinyUser(orders);
 
-  orders.forEach(async (order) => {
-    // Generate tiny invoice
+  const invoicePromises = orders.map(async (order) => {
     let { invoiceId: idNotaFiscal } = order;
     if (!idNotaFiscal) {
       idNotaFiscal = await generateTinyInvoice(order);
     }
 
-    // Emit tiny invoice
     if ((!order.invoiceStatus || order.invoiceStatus !== 3) && idNotaFiscal) {
       await emitTinyInvoice(idNotaFiscal, order);
     }
   });
+
+  await Promise.all(invoicePromises);
 }
 
 export async function createTinyOrdersTask() {
